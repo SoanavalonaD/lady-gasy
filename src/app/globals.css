@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #33450d;
+  --color-on-primary: #ffffff;
+  --color-secondary: #8e4d33;
+  --color-on-secondary: #ffffff;
+  --color-tertiary: #413f39;
+  --color-on-tertiary: #ffffff;
+  --color-background: #fff8f5;
+  --color-on-background: #1e1b18;
+  --color-surface: #fff8f5;
+  --color-on-surface: #1e1b18;
+  --color-outline: #76786b;
+  --color-outline-variant: #c6c8b8;
+  --color-primary-container: #4a5d23;
+  --color-on-primary-container: #bed58e;
+  --color-secondary-container: #feaa8a;
+  --color-on-secondary-container: #783c24;
+  --color-tertiary-container: #59564f;
+  --color-on-tertiary-container: #d1cbc3;
+  --color-surface-variant: #e9e1dc;
+  --color-on-surface-variant: #45483c;
+  --color-surface-container: #f5ece7;
+  --color-surface-container-low: #fbf2ed;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-high: #efe6e2;
+  --color-surface-container-highest: #e9e1dc;
+  --color-surface-dim: #e1d8d4;
+  --color-surface-bright: #fff8f5;
+  --color-surface-tint: #52652a;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  --color-primary-fixed: #d4eca2;
+  --color-on-primary-fixed: #141f00;
+  --color-primary-fixed-dim: #b8cf88;
+  --color-on-primary-fixed-variant: #3b4d14;
+  --color-secondary-fixed: #ffdbce;
+  --color-on-secondary-fixed: #380d00;
+  --color-secondary-fixed-dim: #ffb59a;
+  --color-on-secondary-fixed-variant: #71361e;
+  --color-tertiary-fixed: #e7e2d9;
+  --color-on-tertiary-fixed: #1d1b16;
+  --color-tertiary-fixed-dim: #cbc6bd;
+  --color-on-tertiary-fixed-variant: #494640;
+  --color-inverse-surface: #34302c;
+  --color-inverse-on-surface: #f8efea;
+  --color-inverse-primary: #b8cf88;
+
+  /* Spacing Scale */
+  --spacing-gutter: 16px;
+  --spacing-xl: 64px;
+  --spacing-sm: 16px;
+  --spacing-lg: 40px;
+  --spacing-md: 24px;
+  --spacing-container-padding: 20px;
+  --spacing-base: 4px;
+  --spacing-xs: 8px;
+
+  /* Radii */
+  --radius-DEFAULT: 0.125rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.5rem;
+  --radius-full: 0.75rem;
+
+  /* Font Families */
+  --font-display-lg: var(--font-libre-caslon), serif;
+  --font-caption: var(--font-be-vietnam), sans-serif;
+  --font-body-lg: var(--font-be-vietnam), sans-serif;
+  --font-headline-md: var(--font-libre-caslon), serif;
+  --font-headline-lg: var(--font-libre-caslon), serif;
+  --font-headline-lg-mobile: var(--font-libre-caslon), serif;
+  --font-body-md: var(--font-be-vietnam), sans-serif;
+  --font-label-md: var(--font-be-vietnam), sans-serif;
+}
+
+/* Base Body Styles */
+body {
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+  font-family: var(--font-be-vietnam), sans-serif;
+}
+
+/* Material Symbols Outlined settings */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+/* Glass panel */
+.glass-panel {
+  background: rgba(255, 248, 245, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(198, 200, 184, 0.3);
+}
+
+/* Custom font styles that map size, family, weight, and line heights */
+.font-display-lg {
+  font-family: var(--font-display-lg);
+  font-size: 48px;
+  line-height: 56px;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+.font-caption {
+  font-family: var(--font-caption);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+}
+.font-body-lg {
+  font-family: var(--font-body-lg);
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 400;
+}
+.font-headline-md {
+  font-family: var(--font-headline-md);
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 400;
+}
+.font-headline-lg {
+  font-family: var(--font-headline-lg);
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 400;
+}
+.font-headline-lg-mobile {
+  font-family: var(--font-headline-lg-mobile);
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 400;
+}
+.font-body-md {
+  font-family: var(--font-body-md);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+.font-body-md-italic {
+  font-family: var(--font-body-md);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  font-style: italic;
+}
+.font-label-md {
+  font-family: var(--font-label-md);
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
