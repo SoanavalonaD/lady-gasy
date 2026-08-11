@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lady Gasy - Un havre de beauté naturelle</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&amp;family=Libre+Caslon+Text:ital,wght@0,400;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#e7e2d9",
+                        "on-error-container": "#93000a",
+                        "surface": "#fff8f5",
+                        "primary-container": "#4a5d23",
+                        "inverse-primary": "#b8cf88",
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#f8efea",
+                        "secondary": "#8e4d33",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#feaa8a",
+                        "tertiary-fixed-dim": "#cbc6bd",
+                        "secondary-fixed-dim": "#ffb59a",
+                        "on-secondary-fixed-variant": "#71361e",
+                        "outline": "#76786b",
+                        "surface-container-highest": "#e9e1dc",
+                        "surface-container-high": "#efe6e2",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#59564f",
+                        "tertiary": "#413f39",
+                        "surface-variant": "#e9e1dc",
+                        "surface-container": "#f5ece7",
+                        "on-tertiary-container": "#d1cbc3",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#380d00",
+                        "surface-tint": "#52652a",
+                        "secondary-fixed": "#ffdbce",
+                        "inverse-surface": "#34302c",
+                        "error": "#ba1a1a",
+                        "primary": "#33450d",
+                        "on-surface": "#1e1b18",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#1e1b18",
+                        "on-primary-fixed": "#141f00",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#d4eca2",
+                        "on-primary-fixed-variant": "#3b4d14",
+                        "surface-dim": "#e1d8d4",
+                        "on-secondary-container": "#783c24",
+                        "on-tertiary-fixed-variant": "#494640",
+                        "surface-container-low": "#fbf2ed",
+                        "on-tertiary-fixed": "#1d1b16",
+                        "outline-variant": "#c6c8b8",
+                        "background": "#fff8f5",
+                        "surface-bright": "#fff8f5",
+                        "on-primary-container": "#bed58e",
+                        "primary-fixed-dim": "#b8cf88",
+                        "on-surface-variant": "#45483c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "xl": "64px",
+                        "sm": "16px",
+                        "lg": "40px",
+                        "md": "24px",
+                        "container-padding": "20px",
+                        "base": "4px",
+                        "xs": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Libre Caslon Text", "serif"],
+                        "caption": ["Be Vietnam Pro", "sans-serif"],
+                        "body-lg": ["Be Vietnam Pro", "sans-serif"],
+                        "headline-md": ["Libre Caslon Text", "serif"],
+                        "headline-lg": ["Libre Caslon Text", "serif"],
+                        "headline-lg-mobile": ["Libre Caslon Text", "serif"],
+                        "body-md": ["Be Vietnam Pro", "sans-serif"],
+                        "label-md": ["Be Vietnam Pro", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "caption": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.background'); color: theme('colors.on-background'); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel { background: rgba(255, 248, 245, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(198, 200, 184, 0.3); }
+    </style>
+</head>
+<body class="antialiased flex flex-col min-h-screen pt-[104px]"> <!-- Added pt to account for fixed nav -->
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant transition-all duration-300 ease-in-out">
+<div class="flex justify-between items-center px-lg py-md max-w-[1280px] mx-auto">
+<!-- Brand Logo -->
+<a class="font-display-lg text-display-lg text-primary italic hover:text-secondary transition-colors duration-300" href="#">
+                Lady Gasy
+            </a>
+<!-- Navigation Links (Desktop) -->
+<div class="hidden md:flex space-x-lg">
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-secondary transition-colors duration-300" href="#">Catalogue</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-secondary transition-colors duration-300" href="#">Le Salon</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-secondary transition-colors duration-300" href="#">À Propos</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-secondary transition-colors duration-300" href="#">Contact</a>
+</div>
+<!-- Actions -->
+<div class="flex items-center space-x-md">
+<button aria-label="Search" class="text-primary hover:text-secondary transition-colors duration-300">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button aria-label="Profile" class="text-primary hover:text-secondary transition-colors duration-300">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</button>
+<button aria-label="Cart" class="text-primary hover:text-secondary transition-colors duration-300 relative">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+<span class="absolute -top-1 -right-1 bg-primary text-on-primary text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">2</span>
+</button>
+<!-- Mobile Menu Toggle -->
+<button aria-label="Menu" class="md:hidden text-primary">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow">
+<!-- Hero Section -->
+<section class="relative w-full h-[819px] min-h-[600px] flex items-center bg-surface-container-lowest overflow-hidden">
+<!-- Background Image -->
+<div class="absolute inset-0 bg-cover bg-center bg-no-repeat w-full h-full opacity-90" data-alt="A stunning, high-fashion editorial portrait of a woman of Malagasy descent with voluminous, perfectly defined natural curly hair. The lighting is soft and golden, resembling late afternoon sun filtering through a lush botanical garden. The mood is serene, luxurious, and organic, emphasizing the natural beauty and texture of the hair against a soft, creamy minimalist background. Light mode aesthetic, warm earth tones, premium beauty photography style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC0PE_qf584hofL3YvkbH1I_MPDB_vIBMlq5ngh-bgg2LOXzSkmTmqyBaExWqo00YG90qH4Vwxl1gZMJhAnKdngSagzhwglgUmeLmxuF5W92JvXVgsbkJo8m9LYKoHWBfsKglm4Mx0uO_hI1S3kw8Wjp8qdVhUf7mGmVI48PseFJLIt8KX9gyAS3l7r4PnTv_73BtwUnrYjDH7MNLllQYGeReUDDXd5XJIv7laKQrBCxiaj20cD9M4o')"></div>
+<!-- Soft Gradient Overlay to ensure text readability -->
+<div class="absolute inset-0 bg-gradient-to-r from-surface/80 to-transparent md:w-1/2"></div>
+<div class="relative z-10 w-full max-w-[1280px] mx-auto px-container-padding md:px-lg">
+<div class="max-w-xl glass-panel p-lg rounded-xl">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-widest mb-sm block">Expertise Botanique</span>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-md">Un havre de beauté naturelle</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-lg">
+                        Découvrez le pouvoir de la nature avec notre gamme de soins capillaires bio, conçue spécifiquement pour sublimer les cheveux texturés et naturels.
+                    </p>
+<a class="inline-flex items-center justify-center bg-primary text-on-primary font-label-md text-label-md px-lg py-sm rounded hover:bg-surface-tint transition-colors duration-300 shadow-sm" href="#essentiels">
+                        Découvrir nos produits
+                        <span class="material-symbols-outlined ml-2 text-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Features / Trust Bar -->
+<section class="border-y border-outline-variant bg-surface-container-low">
+<div class="max-w-[1280px] mx-auto px-container-padding md:px-lg py-md">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-md text-center">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary mb-2" data-icon="eco">eco</span>
+<span class="font-label-md text-label-md text-on-surface">100% Naturel</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary mb-2" data-icon="cruelty_free">cruelty_free</span>
+<span class="font-label-md text-label-md text-on-surface">Cruelty Free</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary mb-2" data-icon="recycling">recycling</span>
+<span class="font-label-md text-label-md text-on-surface">Éco-responsable</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary mb-2" data-icon="favorite">favorite</span>
+<span class="font-label-md text-label-md text-on-surface">Fait avec amour</span>
+</div>
+</div>
+</div>
+</section>
+<!-- "Nos Essentiels" Product Grid -->
+<section class="py-xl max-w-[1280px] mx-auto px-container-padding md:px-lg" id="essentiels">
+<div class="text-center mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-sm">Nos Essentiels</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl mx-auto">
+                    Une sélection minutieuse d'ingrédients bruts et précieux pour nourrir, hydrater et fortifier votre couronne.
+                </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-lg">
+<!-- Product 1 -->
+<div class="group flex flex-col bg-surface-container-lowest border border-surface-variant rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_10px_30px_rgba(51,69,13,0.08)]">
+<div class="relative h-64 bg-surface-container p-4 flex items-center justify-center overflow-hidden">
+<img class="object-contain h-full w-full group-hover:scale-105 transition-transform duration-500" data-alt="A minimalist, premium product shot of a dark amber glass bottle of 'Huile de Ricin Bio' (Organic Castor Oil) with a black dropper top. The bottle sits on a piece of rough, textured natural stone against a soft cream background. A single, delicate botanical leaf rests softly next to it. Soft, diffused natural light creating gentle reflections on the glass. Light mode aesthetic, earthy and organic vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvgtiPAotBsJ5lIXVowHRIIQeibW5ThW-foK9PrWxVdEpLTjuNmMQzMMLzJ44FOlAGZ996WB4PSUcs0BjdasG3sZnY780M_aw1afUbIeakQcK2ONjIkwLQapsB99KaMrhA3YwLjgzIgGYptwP-ahDOyDxnvYrt15VCl3Wmy14MqWMhh4kb0W0N-eB4hZ22N_rsm9bJJY9lYJq8RhTTqf1qnj5OD9O9lHdqtGOcolq_PUMB7oNHXIQ8"/>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Huile de Ricin Bio</h3>
+<p class="font-caption text-caption text-on-surface-variant mb-md flex-grow">Croissance &amp; Brillance</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-label-md text-label-md text-on-surface">€18.00</span>
+<button aria-label="Ajouter au panier" class="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high text-primary hover:bg-primary hover:text-on-primary transition-colors duration-300">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="group flex flex-col bg-surface-container-lowest border border-surface-variant rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_10px_30px_rgba(51,69,13,0.08)]">
+<div class="relative h-64 bg-surface-container p-4 flex items-center justify-center overflow-hidden">
+<img class="object-contain h-full w-full group-hover:scale-105 transition-transform duration-500" data-alt="A luxurious product shot of a frosted glass jar containing a rich, creamy white hair mask ('Masque Hydratant Coco'). The jar has a dark wooden lid. It is placed on a light beige linen cloth, surrounded by a few pieces of raw coconut shell. Gentle, airy lighting highlighting the creamy texture of the product. Light mode, modern editorial beauty aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSKeUBf5co-4W8nxdIoTHXSRO67vzCxCVVglGuuHNh_AUook2m-2WKUd9dZVUbnSfprQcYJXrxn4DuEKQ8ppSrv-Ed2TD9HH7UwwnRjEIou-hbvMgfbqaDiEIF_kZIgLxpy6Gtppsh4njiLQ33gwVxUqBx6NkW92f8gjsYsYJ5KkGGpz2cz-jaL2zM6H27WS3ZwxSWxZV3RirULg2tq77wW7_opJGCF5qB8CVGj85AePe9EWC9EnmB"/>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Masque Hydratant Coco</h3>
+<p class="font-caption text-caption text-on-surface-variant mb-md flex-grow">Nutrition Profonde</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-label-md text-label-md text-on-surface">€24.50</span>
+<button aria-label="Ajouter au panier" class="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high text-primary hover:bg-primary hover:text-on-primary transition-colors duration-300">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="group flex flex-col bg-surface-container-lowest border border-surface-variant rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_10px_30px_rgba(51,69,13,0.08)]">
+<div class="relative h-64 bg-surface-container p-4 flex items-center justify-center overflow-hidden">
+<img class="object-contain h-full w-full group-hover:scale-105 transition-transform duration-500" data-alt="A clean, minimalist product photograph of a tall, sleek green glass spray bottle ('Brume Rafraîchissante'). The bottle is spritzing a fine mist into the air, caught by a soft backlight. The background is a very light pastel olive green, creating a monochromatic, fresh look. Water droplets are visible on the bottle surface. Light mode, refreshing and botanical." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0NR27VlJL1ZCmFSt8rC9OT9OHp4IEQdNTo3JRJRE4x0IIM316eG83oekQqDEt6hRnM8P-1v_Bu0qm-Lqxjy2K9WhrgQIFRWQsONZavWDLsh4sB2iEM7r6KrMuOORcLYkki7KIrtnXHrS-IqiUAY-fmm6EFHUFTm9DYLtaiiYih9xhwpDmWdQAAphEX79AxNfbD7yH7XLLIxTAYPJ27DhEw_lnsBFLLv9wlOPBb1zARcsEVcgIodof"/>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Brume Rafraîchissante</h3>
+<p class="font-caption text-caption text-on-surface-variant mb-md flex-grow">Hydratation Quotidienne</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-label-md text-label-md text-on-surface">€16.00</span>
+<button aria-label="Ajouter au panier" class="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high text-primary hover:bg-primary hover:text-on-primary transition-colors duration-300">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 4 -->
+<div class="group flex flex-col bg-surface-container-lowest border border-surface-variant rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_10px_30px_rgba(51,69,13,0.08)]">
+<div class="relative h-64 bg-surface-container p-4 flex items-center justify-center overflow-hidden">
+<img class="object-contain h-full w-full group-hover:scale-105 transition-transform duration-500" data-alt="An elegant product shot of a small, clear glass bottle with a gold pump dispenser, filled with a golden amber serum ('Sérum Pousse Baobab'). The bottle rests on a smooth wooden block. In the background, out of focus, are subtle shadows of Baobab tree branches against a warm, sandy-colored backdrop. Warm, natural lighting emphasizing the golden hue of the serum. Premium organic beauty." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBB4WjC_R8uUpGvbDR-uP-67mBK2N3xkZD3k3VOSbYfguLh8wjft_hwf_miXJLsi69_nrVb4WAoJIcIsqFgqVsYMw5HVt756bRe7o_8_rft1JhN8LZXcLur_8zHWilAJGdP41dCc1UYWTDscgfRuVCPH_b8IwCOVAIQrTEWZRri2Ew8JR05ilsa79b4QcbVTZIIVegfAgob_Chcs-ITqqy3mSDzXIdiElhtnS0z8nooJqTZX6UPUdMf"/>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Sérum Pousse Baobab</h3>
+<p class="font-caption text-caption text-on-surface-variant mb-md flex-grow">Force &amp; Densité</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="font-label-md text-label-md text-on-surface">€28.00</span>
+<button aria-label="Ajouter au panier" class="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high text-primary hover:bg-primary hover:text-on-primary transition-colors duration-300">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-lg text-center">
+<a class="inline-flex items-center text-primary font-label-md text-label-md hover:text-secondary transition-colors duration-300 border-b border-primary hover:border-secondary pb-1" href="#">
+                    Voir tout le catalogue
+                    <span class="material-symbols-outlined ml-1 text-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="w-full mt-xl bg-tertiary-fixed border-t border-outline-variant duration-200">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-lg px-lg py-xl max-w-[1280px] mx-auto">
+<!-- Brand Info -->
+<div class="flex flex-col space-y-sm">
+<h2 class="font-headline-md text-headline-md text-primary mb-2">Lady Gasy</h2>
+<p class="font-body-md text-body-md text-on-tertiary-fixed">
+                    Expertise botanique pour cheveux naturels.
+                </p>
+<p class="font-caption text-caption text-on-tertiary-fixed-variant mt-auto pt-sm">
+                    © 2024 Lady Gasy. Tous droits réservés.
+                </p>
+</div>
+<!-- Links Column 1 -->
+<div class="flex flex-col space-y-sm">
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-wider mb-2">Informations</h3>
+<a class="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Mentions Légales</a>
+<a class="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">CGV</a>
+<a class="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Politique de Confidentialité</a>
+</div>
+<!-- Links Column 2 -->
+<div class="flex flex-col space-y-sm">
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-wider mb-2">Aide</h3>
+<a class="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Contactez-nous</a>
+<a class="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">FAQ</a>
+<a class="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors" href="#">Livraison &amp; Retours</a>
+</div>
+<!-- Newsletter / Social -->
+<div class="flex flex-col space-y-sm">
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-wider mb-2">Rejoignez-nous</h3>
+<p class="font-body-md text-body-md text-on-tertiary-fixed-variant mb-2">Inscrivez-vous pour recevoir nos conseils beauté.</p>
+<form class="flex w-full mt-2">
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-l px-sm py-2 font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Votre email" required="" type="email"/>
+<button class="bg-primary text-on-primary px-4 rounded-r font-label-md hover:bg-surface-tint transition-colors" type="submit">
+                        Ok
+                    </button>
+</form>
+</div>
+</div>
+</footer>
+</body></html>

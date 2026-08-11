@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mon Panier - Lady Gasy</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&amp;family=Libre+Caslon+Text:ital,wght@0,400;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed": "#e7e2d9",
+                      "on-error-container": "#93000a",
+                      "surface": "#fff8f5",
+                      "primary-container": "#4a5d23",
+                      "inverse-primary": "#b8cf88",
+                      "on-error": "#ffffff",
+                      "inverse-on-surface": "#f8efea",
+                      "secondary": "#8e4d33",
+                      "error-container": "#ffdad6",
+                      "secondary-container": "#feaa8a",
+                      "tertiary-fixed-dim": "#cbc6bd",
+                      "secondary-fixed-dim": "#ffb59a",
+                      "on-secondary-fixed-variant": "#71361e",
+                      "outline": "#76786b",
+                      "surface-container-highest": "#e9e1dc",
+                      "surface-container-high": "#efe6e2",
+                      "on-secondary": "#ffffff",
+                      "tertiary-container": "#59564f",
+                      "tertiary": "#413f39",
+                      "surface-variant": "#e9e1dc",
+                      "surface-container": "#f5ece7",
+                      "on-tertiary-container": "#d1cbc3",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary-fixed": "#380d00",
+                      "surface-tint": "#52652a",
+                      "secondary-fixed": "#ffdbce",
+                      "inverse-surface": "#34302c",
+                      "error": "#ba1a1a",
+                      "primary": "#33450d",
+                      "on-surface": "#1e1b18",
+                      "on-tertiary": "#ffffff",
+                      "on-background": "#1e1b18",
+                      "on-primary-fixed": "#141f00",
+                      "on-primary": "#ffffff",
+                      "primary-fixed": "#d4eca2",
+                      "on-primary-fixed-variant": "#3b4d14",
+                      "surface-dim": "#e1d8d4",
+                      "on-secondary-container": "#783c24",
+                      "on-tertiary-fixed-variant": "#494640",
+                      "surface-container-low": "#fbf2ed",
+                      "on-tertiary-fixed": "#1d1b16",
+                      "outline-variant": "#c6c8b8",
+                      "background": "#fff8f5",
+                      "surface-bright": "#fff8f5",
+                      "on-primary-container": "#bed58e",
+                      "primary-fixed-dim": "#b8cf88",
+                      "on-surface-variant": "#45483c"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "xl": "64px",
+                      "sm": "16px",
+                      "lg": "40px",
+                      "md": "24px",
+                      "container-padding": "20px",
+                      "base": "4px",
+                      "xs": "8px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Libre Caslon Text"
+                      ],
+                      "caption": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-md": [
+                              "Libre Caslon Text"
+                      ],
+                      "headline-lg": [
+                              "Libre Caslon Text"
+                      ],
+                      "headline-lg-mobile": [
+                              "Libre Caslon Text"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-md": [
+                              "Be Vietnam Pro"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "caption": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface dark:bg-surface-dim border-b border-outline-variant flat no shadows transition-colors duration-300 ease-in-out">
+<div class="flex justify-between items-center px-lg py-md max-w-1280px mx-auto">
+<!-- Brand Logo -->
+<a class="font-display-lg text-display-lg text-primary dark:text-primary-fixed italic" href="#">
+                Lady Gasy
+            </a>
+<!-- Navigation Links (Desktop) -->
+<div class="hidden md:flex gap-md font-body-md text-body-md">
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors" href="#">Catalogue</a>
+<a class="text-primary dark:text-primary-fixed font-bold border-b-2 border-primary hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors" href="#">Le Salon</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors" href="#">À Propos</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors" href="#">Contact</a>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-sm">
+<!-- Search (on left as per JSON, but putting near actions for typical layout) -->
+<button aria-label="Search" class="text-primary dark:text-primary-fixed hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-300 ease-in-out">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button aria-label="Account" class="text-primary dark:text-primary-fixed hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-300 ease-in-out">
+<span class="material-symbols-outlined">person</span>
+</button>
+<button aria-label="Cart" class="text-primary dark:text-primary-fixed hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-300 ease-in-out relative">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="absolute -top-1 -right-1 bg-primary text-on-primary text-xs rounded-full h-4 w-4 flex items-center justify-center font-label-md">2</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow pt-[104px] pb-xl max-w-[1280px] mx-auto w-full px-container-padding md:px-lg">
+<div class="mb-lg">
+<h1 class="font-headline-lg text-headline-lg md:font-display-lg md:text-display-lg text-primary mb-base">Votre Panier</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">2 articles dans votre commande.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-xl">
+<!-- Items List (Left Column) -->
+<div class="lg:col-span-8 space-y-md">
+<!-- Cart Item 1 -->
+<div class="flex items-center gap-md py-md border-b border-surface-variant">
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container-high border border-outline-variant/30 relative">
+<img class="object-cover w-full h-full absolute inset-0" data-alt="A small 80x80px thumbnail product photo of a beautiful organic hair oil bottle. The lighting is soft and natural, emphasizing the amber color of the oil and the elegant minimalist label. Shot in a bright, modern light-mode studio setting with botanical elements out of focus in the background, matching the slow beauty brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCL5tuk9vuqpS7KOVY5NnMO9HjP_0FRgP6XMIkF9Ii2Q_sHBu5uN08pP176JJqFnFccA5ofwvi4pdYkCZZgZbV_ETcgbhZUKpjdF0KJfrsuhMHbLn_tcpCxLnZCSkxW9j6BF57rdwEzlja14F0T6lYB8D9MM4Gu9Y8BtPPdXj6TkDiGclIPPhSbGVp3kfrXMmN6GFBejvXe2JdBYIufBfwPsafSDR0PMQyTq-ylAnuydyjccPAT8PCY"/>
+</div>
+<div class="flex-grow flex flex-col sm:flex-row sm:items-center justify-between gap-md">
+<div>
+<h3 class="font-headline-md text-body-lg text-on-surface mb-xs">Huile de Ricin Botanique</h3>
+<p class="font-caption text-caption text-on-surface-variant">Soin fortifiant - 100ml</p>
+</div>
+<div class="flex items-center gap-lg">
+<div class="flex items-center border border-outline rounded-DEFAULT px-sm py-xs">
+<button class="text-on-surface hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="font-label-md text-label-md px-md w-8 text-center">1</span>
+<button class="text-on-surface hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+<div class="font-label-md text-label-md text-on-surface w-16 text-right">
+                                24,00 €
+                            </div>
+<button aria-label="Supprimer" class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Cart Item 2 -->
+<div class="flex items-center gap-md py-md border-b border-surface-variant">
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container-high border border-outline-variant/30 relative">
+<img class="object-cover w-full h-full absolute inset-0" data-alt="A high quality product shot of an elegant jar of natural hair mask cream. The jar is frosted glass with a dark olive lid. The lighting is bright and soft, highlighting the creamy texture inside. A serene, organic aesthetic fitting a premium slow beauty brand, set against a warm sable background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5Gg46fVpxSEdRrxjts08qhJspnNeZlWZfw28jqJ_vLcA6wGILkCSThLKK53B0rKV2QpwkztGsK3-69EQEPIYXTrMu7QubMrOlzR5gS11gb02wGHJcLvoRJetIBuXXfmf-_LSqNzrxeaSvVAkJ9-moVY2b7Iu51rwjSc0eX0Z3x0lfPsy0_lzYhiAuDG62h1dkKJPWXOEc4c2JU_THQmWMWTB8uyZwH1s4KFVreIPZKecHmaZQ8T4G"/>
+</div>
+<div class="flex-grow flex flex-col sm:flex-row sm:items-center justify-between gap-md">
+<div>
+<h3 class="font-headline-md text-body-lg text-on-surface mb-xs">Masque Hydratation Profonde</h3>
+<p class="font-caption text-caption text-on-surface-variant">Cheveux secs à très secs - 250g</p>
+</div>
+<div class="flex items-center gap-lg">
+<div class="flex items-center border border-outline rounded-DEFAULT px-sm py-xs">
+<button class="text-on-surface hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="font-label-md text-label-md px-md w-8 text-center">1</span>
+<button class="text-on-surface hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+<div class="font-label-md text-label-md text-on-surface w-16 text-right">
+                                32,00 €
+                            </div>
+<button aria-label="Supprimer" class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Order Summary (Right Column) -->
+<div class="lg:col-span-4">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-lg sticky top-[120px]">
+<h2 class="font-headline-md text-headline-md text-on-surface border-b border-surface-variant pb-sm mb-md">Résumé</h2>
+<div class="space-y-sm mb-lg">
+<div class="flex justify-between font-body-md text-body-md text-on-surface">
+<span>Sous-total</span>
+<span>56,00 €</span>
+</div>
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span>Livraison estimée</span>
+<span>Calculé à l'étape suivante</span>
+</div>
+</div>
+<div class="flex justify-between font-label-md text-body-lg text-on-surface font-bold border-t border-surface-variant pt-md mb-xl">
+<span>Total</span>
+<span>56,00 €</span>
+</div>
+<button class="w-full bg-primary hover:bg-surface-tint text-on-primary font-label-md text-label-md py-md rounded-DEFAULT transition-colors duration-200 flex items-center justify-center gap-sm">
+                        Procéder à la commande
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<p class="font-caption text-caption text-center text-on-surface-variant mt-sm flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+                        Paiement sécurisé
+                    </p>
+</div>
+</div>
+</div>
+<!-- Cross-sell Section -->
+<section class="mt-xl pt-xl border-t border-surface-variant">
+<h2 class="font-display-lg text-headline-lg text-primary mb-lg text-center italic">Besoin d'un accessoire ?</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-md">
+<!-- Accessory 1 -->
+<div class="group cursor-pointer">
+<div class="aspect-square bg-surface-container rounded-lg overflow-hidden mb-sm relative">
+<img class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-in-out absolute inset-0" data-alt="A wooden detangling hair brush with natural bristles resting on a textured linen cloth. The warm, tactile minimalism aesthetic is emphasized by soft, diffused natural lighting. Shot from slightly above to show the wood grain and bristle texture, fitting the premium organic salon vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCI6tblV4c1degruQKNd3407CCi2hfLa1bf9iIeKZDTGNUghF73OrogogWeBGHQBx9Oo2kRyOeDncIm6oN_eG50QDwuN2-qTJnfY09QSl-k02UB-g1OjAvYks2D4GqpqDoUQU4nzYSd0NSYEtYwRnS9nSIdcvrX_vKnRc2i_5ViL7vP5rzLock6Jqp-j-NXPOixQVpdZ6VVMb48ziuHFh73aLJ7ql_WyT1xaw5ScaF0eFae4opL8RD1"/>
+<div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mix-blend-multiply"></div>
+</div>
+<h4 class="font-body-md text-body-md text-on-surface">Brosse Démêlante en Bois</h4>
+<p class="font-label-md text-label-md text-on-surface-variant mt-xs">18,00 €</p>
+</div>
+<!-- Accessory 2 -->
+<div class="group cursor-pointer">
+<div class="aspect-square bg-surface-container rounded-lg overflow-hidden mb-sm relative">
+<img class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 ease-in-out absolute inset-0" data-alt="A wide-tooth comb made from sustainable bamboo, placed on a smooth stone surface with a sprig of dried eucalyptus nearby. The composition is clean and organic, reflecting slow beauty. The lighting is bright and editorial, casting soft, elegant shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCn2H6zQCHjmn_3MsMszWxjOZPyQ6faBCs-344dJe_QA4JUXkrvqAmErlmCdGHrlh1NxKBHA9Rtd4taStUaIeR6k9X9RJhvx0nH-aGrYySsTb_u90wg-2zScWlYrhWGFcGrssFCkpfDSNFghStPqrPznHhRS4N-AtRJ9WLbosljwKSnLUW3nExkiRLVUSpQNwj0dMELYgLXHJmPQSYG7GDkTf84vXlZ_UrlHe_Ljd4IzwAdYAIv9lvR"/>
+</div>
+<h4 class="font-body-md text-body-md text-on-surface">Peigne à Dents Larges</h4>
+<p class="font-label-md text-label-md text-on-surface-variant mt-xs">12,00 €</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-xl bg-tertiary-fixed dark:bg-tertiary-container border-t border-outline-variant flat no shadows transition-colors duration-200">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-lg px-lg py-xl max-w-1280px mx-auto">
+<!-- Brand & Copyright -->
+<div class="col-span-1 md:col-span-2">
+<div class="font-headline-md text-headline-md text-primary dark:text-primary-fixed mb-sm">Lady Gasy</div>
+<p class="font-body-md text-body-md text-on-tertiary-fixed-variant dark:text-on-tertiary-container max-w-md">
+                    © 2024 Lady Gasy. Tous droits réservés. Expertise botanique pour cheveux naturels.
+                </p>
+</div>
+<!-- Links -->
+<div class="col-span-1 md:col-span-2 flex flex-col md:flex-row gap-lg md:justify-end font-body-md text-body-md">
+<a class="text-on-tertiary-fixed-variant dark:text-on-tertiary-container hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Mentions Légales</a>
+<a class="text-on-tertiary-fixed-variant dark:text-on-tertiary-container hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">CGV</a>
+<a class="text-on-tertiary-fixed-variant dark:text-on-tertiary-container hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Politique de Confidentialité</a>
+<a class="text-on-tertiary-fixed-variant dark:text-on-tertiary-container hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Contactez-nous</a>
+</div>
+</div>
+</footer>
+</body></html>

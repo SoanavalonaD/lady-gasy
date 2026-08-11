@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lady Gasy - Validation de Commande</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#e7e2d9",
+                        "on-error-container": "#93000a",
+                        "surface": "#fff8f5",
+                        "primary-container": "#4a5d23",
+                        "inverse-primary": "#b8cf88",
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#f8efea",
+                        "secondary": "#8e4d33",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#feaa8a",
+                        "tertiary-fixed-dim": "#cbc6bd",
+                        "secondary-fixed-dim": "#ffb59a",
+                        "on-secondary-fixed-variant": "#71361e",
+                        "outline": "#76786b",
+                        "surface-container-highest": "#e9e1dc",
+                        "surface-container-high": "#efe6e2",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#59564f",
+                        "tertiary": "#413f39",
+                        "surface-variant": "#e9e1dc",
+                        "surface-container": "#f5ece7",
+                        "on-tertiary-container": "#d1cbc3",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#380d00",
+                        "surface-tint": "#52652a",
+                        "secondary-fixed": "#ffdbce",
+                        "inverse-surface": "#34302c",
+                        "error": "#ba1a1a",
+                        "primary": "#33450d",
+                        "on-surface": "#1e1b18",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#1e1b18",
+                        "on-primary-fixed": "#141f00",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#d4eca2",
+                        "on-primary-fixed-variant": "#3b4d14",
+                        "surface-dim": "#e1d8d4",
+                        "on-secondary-container": "#783c24",
+                        "on-tertiary-fixed-variant": "#494640",
+                        "surface-container-low": "#fbf2ed",
+                        "on-tertiary-fixed": "#1d1b16",
+                        "outline-variant": "#c6c8b8",
+                        "background": "#fff8f5",
+                        "surface-bright": "#fff8f5",
+                        "on-primary-container": "#bed58e",
+                        "primary-fixed-dim": "#b8cf88",
+                        "on-surface-variant": "#45483c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "xl": "64px",
+                        "sm": "16px",
+                        "lg": "40px",
+                        "md": "24px",
+                        "container-padding": "20px",
+                        "base": "4px",
+                        "xs": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Libre Caslon Text"],
+                        "caption": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Libre Caslon Text"],
+                        "headline-lg": ["Libre Caslon Text"],
+                        "headline-lg-mobile": ["Libre Caslon Text"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "caption": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased min-h-screen flex flex-col pt-[88px]">
+<!-- TopNavBar: Suppressed because this is a linear transactional checkout page -->
+<!-- We will use a simplified header to maintain focus on the checkout task -->
+<header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm py-md px-lg flex justify-center items-center">
+<a class="font-display-lg text-display-lg text-primary italic" href="/">Lady Gasy</a>
+</header>
+<main class="flex-grow w-full max-w-1280px mx-auto px-lg py-xl">
+<h1 class="font-headline-lg text-headline-lg text-primary mb-xl text-center">Validation de Commande</h1>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-xl">
+<!-- Formulaire Principal -->
+<div class="lg:col-span-7 space-y-xl">
+<!-- Section 1: Identification -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm relative overflow-hidden group">
+<div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-[0.02] transition-opacity duration-300 pointer-events-none"></div>
+<h2 class="font-headline-md text-headline-md text-primary mb-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">person</span>
+                        1. Identification
+                    </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-xs" for="email">Adresse Email</label>
+<input class="w-full bg-surface border border-outline-variant rounded-md px-sm py-sm focus:ring-1 focus:ring-primary focus:border-primary transition-colors text-on-surface" id="email" placeholder="vous@exemple.com" type="email"/>
+</div>
+<div class="flex items-end h-full pb-[2px]">
+<p class="text-on-surface-variant text-sm">Déjà client ? <a class="text-primary underline font-medium hover:text-primary-fixed-variant transition-colors" href="#">Connectez-vous</a></p>
+</div>
+</div>
+</section>
+<!-- Section 2: Coordonnées & Livraison -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm relative overflow-hidden group">
+<div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-[0.02] transition-opacity duration-300 pointer-events-none"></div>
+<h2 class="font-headline-md text-headline-md text-primary mb-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">local_shipping</span>
+                        2. Livraison
+                    </h2>
+<div class="space-y-md">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-xs" for="prenom">Prénom</label>
+<input class="w-full bg-surface border border-outline-variant rounded-md px-sm py-sm focus:ring-1 focus:ring-primary focus:border-primary transition-colors text-on-surface" id="prenom" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-xs" for="nom">Nom</label>
+<input class="w-full bg-surface border border-outline-variant rounded-md px-sm py-sm focus:ring-1 focus:ring-primary focus:border-primary transition-colors text-on-surface" id="nom" type="text"/>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-xs" for="telephone">Téléphone</label>
+<input class="w-full bg-surface border border-outline-variant rounded-md px-sm py-sm focus:ring-1 focus:ring-primary focus:border-primary transition-colors text-on-surface" id="telephone" placeholder="+261 34 00 000 00" type="tel"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-xs" for="zone">Zone de Livraison</label>
+<select class="w-full bg-surface border border-outline-variant rounded-md px-sm py-sm focus:ring-1 focus:ring-primary focus:border-primary transition-colors text-on-surface" id="zone">
+<option disabled="" selected="" value="">Sélectionnez votre zone</option>
+<option value="antananarivo_centre">Antananarivo - Centre Ville (5 000 Ar)</option>
+<option value="antananarivo_peripherie">Antananarivo - Périphérie (10 000 Ar)</option>
+<option value="province">Province (Sur devis)</option>
+</select>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-xs" for="ville">Ville</label>
+<input class="w-full bg-surface border border-outline-variant rounded-md px-sm py-sm focus:ring-1 focus:ring-primary focus:border-primary transition-colors text-on-surface" id="ville" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-xs" for="cp">Code Postal</label>
+<input class="w-full bg-surface border border-outline-variant rounded-md px-sm py-sm focus:ring-1 focus:ring-primary focus:border-primary transition-colors text-on-surface" id="cp" type="text"/>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-xs" for="adresse">Adresse Complète</label>
+<textarea class="w-full bg-surface border border-outline-variant rounded-md px-sm py-sm focus:ring-1 focus:ring-primary focus:border-primary transition-colors text-on-surface resize-none" id="adresse" placeholder="Numéro, rue, quartier..." rows="3"></textarea>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-xs" for="repere">Repère Exact (Facultatif)</label>
+<input class="w-full bg-surface border border-outline-variant rounded-md px-sm py-sm focus:ring-1 focus:ring-primary focus:border-primary transition-colors text-on-surface" id="repere" placeholder="Près de..." type="text"/>
+</div>
+</div>
+</section>
+<!-- Section 3: Paiement -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm relative overflow-hidden group">
+<div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-[0.02] transition-opacity duration-300 pointer-events-none"></div>
+<h2 class="font-headline-md text-headline-md text-primary mb-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">payments</span>
+                        3. Paiement
+                    </h2>
+<div class="bg-surface-container p-md rounded-md border border-outline-variant flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-on-primary-container">money</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Paiement à la livraison</p>
+<p class="font-caption text-caption text-on-surface-variant mt-xs">Vous paierez en espèces lors de la réception de votre commande.</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Résumé de Commande (Sidebar) -->
+<div class="lg:col-span-5">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm sticky top-[120px]">
+<h3 class="font-headline-md text-headline-md text-primary mb-lg border-b border-outline-variant pb-sm">Résumé de la commande</h3>
+<!-- Items -->
+<div class="space-y-md mb-lg">
+<!-- Item 1 -->
+<div class="flex gap-md">
+<div class="w-20 h-20 bg-surface-variant rounded-sm flex-shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A small jar of organic hair cream, Lady Gasy brand, sitting on a textured wooden surface surrounded by subtle green botanical leaves, warm natural lighting, high quality e-commerce product photography, earthy tones, minimalist background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoP0xlBGbOAYu2ETS5ySx_8T4gX65UmJkysDowuLT5qEuxVQfkM33csppEcJB-myhcG5MNegeEABO2Qpm2xCPKWLx_f78tJ2MhllXbk_hDT3BJh1r4jkqZsWgjYhkKfTRhWaXYQnZroIXn1FIvU2neJ8LKbvU8OEfpeq-nF3o2i2z06FcvHHQBQp-t4FFR0YlYst1PH301QLPUdR30gLbhOF8TrF4jbVNJwDtjCCSDpbXJQGAWaSzJ"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface line-clamp-1">Crème d'Hibiscus Nourrissante</h4>
+<p class="font-caption text-caption text-on-surface-variant">Cheveux crépus</p>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-caption text-caption text-on-surface-variant">Qté: 1</span>
+<span class="font-label-md text-label-md text-on-surface">45 000 Ar</span>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex gap-md">
+<div class="w-20 h-20 bg-surface-variant rounded-sm flex-shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A glass dropper bottle of natural hair oil, Lady Gasy brand, placed on a natural stone slab, soft morning sunlight casting gentle shadows, surrounded by dried botanicals, premium skincare aesthetic, warm earthy colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfrX2UaywlUx8n2hJwqr52id_JOBYm1P98jbRq_nDkzEomV3PbAtScmFMOkxMjSM1KWD3cC-cIHR1GVipCuUufiur7KCFxbBienTo9Jkd0P-TP_V84qE_LV_BPHMHlqe3qIrK1V2gyD9PHCYsx1TfoWq3j1yBhGMKrPvM-GnQBmopKjgq4oE85AjFXyHFpufbfj1McBL6KL7wklg5sxW2NBSVq2KCvMtanfLEXjrC1ROy0YHrM1ezb"/>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface line-clamp-1">Sérum Pousse Baobab</h4>
+<p class="font-caption text-caption text-on-surface-variant">Tous types</p>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-caption text-caption text-on-surface-variant">Qté: 2</span>
+<span class="font-label-md text-label-md text-on-surface">70 000 Ar</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Totals -->
+<div class="border-t border-outline-variant pt-md space-y-sm mb-lg">
+<div class="flex justify-between text-on-surface-variant">
+<span>Sous-total</span>
+<span>115 000 Ar</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Livraison (Estimation)</span>
+<span>5 000 Ar</span>
+</div>
+</div>
+<div class="border-t border-primary pt-md mb-lg">
+<div class="flex justify-between items-center">
+<span class="font-headline-md text-headline-md text-primary">Total</span>
+<span class="font-headline-md text-headline-md text-primary">120 000 Ar</span>
+</div>
+<p class="font-caption text-caption text-on-surface-variant text-right mt-xs">TVA incluse</p>
+</div>
+<button class="w-full bg-primary text-on-primary py-md px-lg rounded-md font-label-md text-label-md hover:bg-surface-tint transition-all duration-300 flex items-center justify-center gap-sm shadow-sm hover:shadow-md">
+                        Valider la commande (Paiement à la livraison)
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<p class="font-caption text-caption text-on-surface-variant text-center mt-md flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+                        Vos données personnelles sont sécurisées.
+                    </p>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer: Suppressed as well for this specific checkout task, or simplified. I will render a minimal version of the JSON footer to keep them contained. -->
+<footer class="w-full mt-xl bg-tertiary-fixed border-t border-outline-variant grid grid-cols-1 md:grid-cols-4 gap-lg px-lg py-xl max-w-1280px mx-auto">
+<div class="md:col-span-1">
+<span class="font-headline-md text-headline-md text-primary block mb-sm">Lady Gasy</span>
+<p class="font-caption text-caption text-on-tertiary-fixed-variant">
+                © 2024 Lady Gasy. Tous droits réservés. Expertise botanique pour cheveux naturels.
+            </p>
+</div>
+<div class="md:col-span-3 flex justify-end items-start gap-lg flex-wrap">
+<a class="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors duration-200" href="#">Mentions Légales</a>
+<a class="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors duration-200" href="#">CGV</a>
+<a class="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors duration-200" href="#">Politique de Confidentialité</a>
+<a class="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors duration-200" href="#">Contactez-nous</a>
+</div>
+</footer>
+</body></html>

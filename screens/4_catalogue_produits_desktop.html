@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lady Gasy - Catalogue</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&amp;family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#e7e2d9",
+                        "on-error-container": "#93000a",
+                        "surface": "#fff8f5",
+                        "primary-container": "#4a5d23",
+                        "inverse-primary": "#b8cf88",
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#f8efea",
+                        "secondary": "#8e4d33",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#feaa8a",
+                        "tertiary-fixed-dim": "#cbc6bd",
+                        "secondary-fixed-dim": "#ffb59a",
+                        "on-secondary-fixed-variant": "#71361e",
+                        "outline": "#76786b",
+                        "surface-container-highest": "#e9e1dc",
+                        "surface-container-high": "#efe6e2",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#59564f",
+                        "tertiary": "#413f39",
+                        "surface-variant": "#e9e1dc",
+                        "surface-container": "#f5ece7",
+                        "on-tertiary-container": "#d1cbc3",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#380d00",
+                        "surface-tint": "#52652a",
+                        "secondary-fixed": "#ffdbce",
+                        "inverse-surface": "#34302c",
+                        "error": "#ba1a1a",
+                        "primary": "#33450d",
+                        "on-surface": "#1e1b18",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#1e1b18",
+                        "on-primary-fixed": "#141f00",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#d4eca2",
+                        "on-primary-fixed-variant": "#3b4d14",
+                        "surface-dim": "#e1d8d4",
+                        "on-secondary-container": "#783c24",
+                        "on-tertiary-fixed-variant": "#494640",
+                        "surface-container-low": "#fbf2ed",
+                        "on-tertiary-fixed": "#1d1b16",
+                        "outline-variant": "#c6c8b8",
+                        "background": "#fff8f5",
+                        "surface-bright": "#fff8f5",
+                        "on-primary-container": "#bed58e",
+                        "primary-fixed-dim": "#b8cf88",
+                        "on-surface-variant": "#45483c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "xl": "64px",
+                        "sm": "16px",
+                        "lg": "40px",
+                        "md": "24px",
+                        "container-padding": "20px",
+                        "base": "4px",
+                        "xs": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Libre Caslon Text"],
+                        "caption": ["Be Vietnam Pro"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Libre Caslon Text"],
+                        "headline-lg": ["Libre Caslon Text"],
+                        "headline-lg-mobile": ["Libre Caslon Text"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "label-md": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "caption": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.surface'); color: theme('colors.on-surface'); }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col pt-[88px]">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface dark:bg-surface-dim border-b border-outline-variant transition-colors duration-300 ease-in-out">
+<div class="flex justify-between items-center px-lg py-md max-w-[1280px] mx-auto">
+<!-- Left: Search (Hidden on Mobile, or stylized as icon) -->
+<div class="flex-1 hidden md:flex items-center">
+<button class="text-primary dark:text-primary-fixed hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-300">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">search</span>
+</button>
+</div>
+<!-- Mobile Menu Button -->
+<button class="md:hidden text-primary dark:text-primary-fixed p-2">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Center: Brand Logo -->
+<div class="flex-1 flex justify-center">
+<a class="font-display-lg text-display-lg text-primary dark:text-primary-fixed italic whitespace-nowrap" href="#">Lady Gasy</a>
+</div>
+<!-- Right: Navigation Links & Actions -->
+<div class="flex-1 hidden md:flex items-center justify-end gap-md">
+<div class="flex gap-md font-body-md text-body-md">
+<a class="text-primary dark:text-primary-fixed font-bold border-b-2 border-primary hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-300" href="#">Catalogue</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-300" href="#">Le Salon</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-300" href="#">À Propos</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-300" href="#">Contact</a>
+</div>
+<div class="flex items-center gap-sm text-primary dark:text-primary-fixed">
+<button class="hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-300">
+<span class="material-symbols-outlined">person</span>
+</button>
+<button class="hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-300 relative">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="absolute -top-1 -right-1 bg-secondary text-on-secondary text-xs rounded-full w-4 h-4 flex items-center justify-center font-label-md">2</span>
+</button>
+</div>
+</div>
+<!-- Mobile Actions -->
+<div class="flex md:hidden items-center gap-sm text-primary dark:text-primary-fixed">
+<button class="hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-300 relative">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-[1280px] mx-auto px-container-padding md:px-lg py-xl">
+<!-- Header Section -->
+<div class="mb-xl text-center md:text-left">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-primary mb-sm">Notre Catalogue Botanique</h1>
+<p class="font-body-md text-on-surface-variant max-w-2xl">Découvrez notre sélection de soins naturels conçus avec l'expertise botanique Lady Gasy pour sublimer vos cheveux texturés.</p>
+</div>
+<div class="flex flex-col md:flex-row gap-xl">
+<!-- Sidebar Filters -->
+<aside class="w-full md:w-64 shrink-0">
+<div class="sticky top-[120px]">
+<h2 class="font-label-md text-on-surface mb-md border-b border-outline-variant pb-2">FILTRER PAR</h2>
+<div class="space-y-md">
+<!-- Besoins -->
+<div>
+<h3 class="font-body-md text-primary mb-sm">Besoins</h3>
+<ul class="space-y-xs font-body-md text-on-surface-variant">
+<li>
+<label class="flex items-center gap-sm cursor-pointer group">
+<input class="form-checkbox text-primary rounded-sm border-outline focus:ring-primary-container bg-transparent" type="checkbox"/>
+<span class="group-hover:text-primary transition-colors">Hydratation Profonde</span>
+</label>
+</li>
+<li>
+<label class="flex items-center gap-sm cursor-pointer group">
+<input checked="" class="form-checkbox text-primary rounded-sm border-outline focus:ring-primary-container bg-transparent" type="checkbox"/>
+<span class="group-hover:text-primary transition-colors text-primary font-medium">Définition des Boucles</span>
+</label>
+</li>
+<li>
+<label class="flex items-center gap-sm cursor-pointer group">
+<input class="form-checkbox text-primary rounded-sm border-outline focus:ring-primary-container bg-transparent" type="checkbox"/>
+<span class="group-hover:text-primary transition-colors">Volume &amp; Densité</span>
+</label>
+</li>
+</ul>
+</div>
+<!-- Catégories -->
+<div>
+<h3 class="font-body-md text-primary mb-sm">Catégories</h3>
+<ul class="space-y-xs font-body-md text-on-surface-variant">
+<li>
+<label class="flex items-center gap-sm cursor-pointer group">
+<input class="form-checkbox text-primary rounded-sm border-outline focus:ring-primary-container bg-transparent" type="checkbox"/>
+<span class="group-hover:text-primary transition-colors">Shampoings &amp; Lavants</span>
+</label>
+</li>
+<li>
+<label class="flex items-center gap-sm cursor-pointer group">
+<input class="form-checkbox text-primary rounded-sm border-outline focus:ring-primary-container bg-transparent" type="checkbox"/>
+<span class="group-hover:text-primary transition-colors">Soins &amp; Masques</span>
+</label>
+</li>
+<li>
+<label class="flex items-center gap-sm cursor-pointer group">
+<input class="form-checkbox text-primary rounded-sm border-outline focus:ring-primary-container bg-transparent" type="checkbox"/>
+<span class="group-hover:text-primary transition-colors">Huiles &amp; Sérums</span>
+</label>
+</li>
+<li>
+<label class="flex items-center gap-sm cursor-pointer group">
+<input class="form-checkbox text-primary rounded-sm border-outline focus:ring-primary-container bg-transparent" type="checkbox"/>
+<span class="group-hover:text-primary transition-colors">Accessoires</span>
+</label>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</aside>
+<!-- Product Grid -->
+<div class="flex-1">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-lg">
+<!-- Product Card 1 -->
+<div class="group flex flex-col bg-surface-container-lowest border border-[#E0D7CC] rounded-lg overflow-hidden hover:shadow-[0_20px_40px_rgba(51,69,13,0.1)] transition-all duration-300">
+<div class="relative h-[300px] bg-surface-container-low overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A high-end product photography shot of a sleek amber glass bottle with a minimalist label on a textured sandstone block. Soft, natural sunlight filters through leafy botanical shadows, creating a bright, organic, light-mode aesthetic. The color palette features warm earth tones, soft greens, and creamy whites, evoking luxury and natural beauty." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHyjJPDma_VU2N-UtkbEIuFJKf6On_qaRUxZkRSebixf9-83K9CQ2DR7hRdmtkGNnhYJ81eGa-S79r1b-F99XB7YsJTg6Ae4l7ayB6lc91rufTjk8ruYsnC8ke3AkneNj1rq4vGmfTiVoxE-MmOjJso6gV0l7krVdBQsyKw3zojh6llIHMpESC29mtxG1qnyNjK2YkAleHXnjMOZtTPKMzeJkk7MY_abePBKy95Gqx1s0tp82Z5djP"/>
+<!-- Quick Add Overlay -->
+<div class="absolute inset-x-0 bottom-0 p-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-4 group-hover:translate-y-0 flex justify-center">
+<button class="w-full bg-primary text-on-primary font-label-md py-3 rounded hover:bg-surface-tint transition-colors">Ajouter au Panier</button>
+</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="font-headline-md text-primary mb-1">Huile Sérum Revitalisante</h3>
+<p class="font-caption text-on-surface-variant mb-md flex-grow">Cheveux crépus et frisés</p>
+<div class="flex justify-between items-center mt-auto">
+<span class="font-label-md text-primary">32,00 €</span>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="group flex flex-col bg-surface-container-lowest border border-[#E0D7CC] rounded-lg overflow-hidden hover:shadow-[0_20px_40px_rgba(51,69,13,0.1)] transition-all duration-300">
+<div class="relative h-[300px] bg-surface-container-low overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A luxurious, minimalist cosmetic jar containing a rich, creamy hair mask, positioned on a smooth wooden platter. Surrounded by delicate fresh green leaves and soft morning light, setting a serene, organic, light-mode scene. The color scheme relies on natural beige, soft olive greens, and clean white to convey botanical expertise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOiSxrdrxgPT0JKa0mfiIaPVhlvFXv8_TLl6njXgUeh949djCDj8dmd3iwlQlM_mtN4GFtg5A5xDm9nFEvUHQ-d4lyk1JV5Nu7odPPjN7phrsor0msPm4zgxMmfAMVT09Tdblxm5wx57Xcz_k7P72O4gCivkqKICLxCSH3AWoBY4VS8gc9UgLA8-p6e3URQkByMh9v4TkZOOxh7YXCnyuZ1qKZhaoJQqlpkPVXqB8A1TUaffjJMh70"/>
+<div class="absolute inset-x-0 bottom-0 p-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-4 group-hover:translate-y-0 flex justify-center">
+<button class="w-full bg-primary text-on-primary font-label-md py-3 rounded hover:bg-surface-tint transition-colors">Ajouter au Panier</button>
+</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="font-headline-md text-primary mb-1">Masque Hydratation Intense</h3>
+<p class="font-caption text-on-surface-variant mb-md flex-grow">Tous types de boucles</p>
+<div class="flex justify-between items-center mt-auto">
+<span class="font-label-md text-primary">28,00 €</span>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="group flex flex-col bg-surface-container-lowest border border-[#E0D7CC] rounded-lg overflow-hidden hover:shadow-[0_20px_40px_rgba(51,69,13,0.1)] transition-all duration-300">
+<div class="relative h-[300px] bg-surface-container-low overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A modern pump bottle of natural shampoo standing gracefully next to a small dish of raw shea butter and aloe vera pieces. The lighting is high-key and soft, emphasizing purity and natural ingredients against a creamy off-white background. The aesthetic is clean, premium, and earthy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByTek5XCT00mZPzkpOnToatx9X6Z9cPiduJpCgochmMXSdO3OIEx7NZ393SAsmMpGEBd_pDlMvGyHJPmipIC5XmWq_99k0O4w5HAnJcGScTN501e9yCVaNxXWfIh_3yScp0lE6qA8DHMZbzEXLP3P5s3Ao51qWrz54sWUU5L5hf27XQyb4MUhRBFVVF7Rrmmx8IriAcrFuy2aQs99QvAu-H7yqAv4vOpb5v676XsslhVMJ-AJYU5yE"/>
+<div class="absolute inset-x-0 bottom-0 p-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-4 group-hover:translate-y-0 flex justify-center">
+<button class="w-full bg-primary text-on-primary font-label-md py-3 rounded hover:bg-surface-tint transition-colors">Ajouter au Panier</button>
+</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="font-headline-md text-primary mb-1">Crème Lavante Douce</h3>
+<p class="font-caption text-on-surface-variant mb-md flex-grow">Soin quotidien</p>
+<div class="flex justify-between items-center mt-auto">
+<span class="font-label-md text-primary">24,00 €</span>
+</div>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="group flex flex-col bg-surface-container-lowest border border-[#E0D7CC] rounded-lg overflow-hidden hover:shadow-[0_20px_40px_rgba(51,69,13,0.1)] transition-all duration-300">
+<div class="relative h-[300px] bg-surface-container-low overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="An elegant, eco-friendly wooden hair comb resting on a textured linen cloth beside a subtle sprig of dried lavender. The composition is highly styled with deep tactile minimalism, featuring soft shadows and bright, airy lighting to fit a luxury botanical brand's light-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJlnx2Q4rCp891b2homf1_pPxuNCK0VCCDT6WYSMFC8tcZi-laW_cOpqCVvazoyRcc6AltRLyIAxfGNCbo0EhMDDUGOeRpdqs_a6X7veNQVp8hWq8lQbr5-w5gjRm-NcuRimD1bgQGxSuzvR7kbEqwnMLf1fWqwrH6Y5ajka4ZJqVNWRY8pnwAltVOsy3Sgx4U_EyB4HyA9kgQ2TuxCbFFd5cItPvs_E8Kv7WupYVwiTSYM2bOECuG"/>
+<div class="absolute inset-x-0 bottom-0 p-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-4 group-hover:translate-y-0 flex justify-center">
+<button class="w-full bg-primary text-on-primary font-label-md py-3 rounded hover:bg-surface-tint transition-colors">Ajouter au Panier</button>
+</div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<h3 class="font-headline-md text-primary mb-1">Peigne en Bois de Santal</h3>
+<p class="font-caption text-on-surface-variant mb-md flex-grow">Accessoires Démêlage</p>
+<div class="flex justify-between items-center mt-auto">
+<span class="font-label-md text-primary">18,00 €</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination / Load More (Conceptual) -->
+<div class="mt-xl text-center">
+<button class="font-label-md text-secondary border border-secondary px-lg py-3 rounded hover:bg-secondary hover:text-on-secondary transition-colors">Charger plus de produits</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-xl bg-tertiary-fixed dark:bg-tertiary-container border-t border-outline-variant duration-200">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-lg px-lg py-xl max-w-[1280px] mx-auto font-body-md text-body-md">
+<!-- Brand & Copyright -->
+<div class="flex flex-col gap-sm md:col-span-1">
+<span class="font-headline-md text-headline-md text-primary dark:text-primary-fixed italic">Lady Gasy</span>
+<p class="text-on-tertiary-fixed dark:text-on-tertiary-container text-sm mt-2">© 2024 Lady Gasy. Tous droits réservés. Expertise botanique pour cheveux naturels.</p>
+</div>
+<!-- Links Column 1 -->
+<div class="flex flex-col gap-sm">
+<a class="text-on-tertiary-fixed-variant dark:text-on-tertiary-container hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Mentions Légales</a>
+<a class="text-on-tertiary-fixed-variant dark:text-on-tertiary-container hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">CGV</a>
+</div>
+<!-- Links Column 2 -->
+<div class="flex flex-col gap-sm">
+<a class="text-on-tertiary-fixed-variant dark:text-on-tertiary-container hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Politique de Confidentialité</a>
+<a class="text-on-tertiary-fixed-variant dark:text-on-tertiary-container hover:text-primary dark:hover:text-primary-fixed transition-colors" href="#">Contactez-nous</a>
+</div>
+<!-- Newsletter / Empty space for grid balancing -->
+<div class="flex flex-col gap-sm">
+<span class="font-label-md text-primary">Rejoignez l'univers</span>
+<p class="text-sm text-on-tertiary-fixed-variant">Inscrivez-vous pour recevoir nos conseils botaniques.</p>
+<div class="flex mt-2">
+<input class="form-input bg-transparent border-b border-outline-variant rounded-none border-t-0 border-x-0 px-0 focus:ring-0 focus:border-primary w-full text-sm" placeholder="Votre email" type="email"/>
+<button class="text-primary ml-2 hover:text-secondary transition-colors"><span class="material-symbols-outlined">arrow_forward</span></button>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

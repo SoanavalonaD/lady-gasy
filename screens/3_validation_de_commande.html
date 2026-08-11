@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Validation de Commande - Lady Gasy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&amp;family=Libre+Caslon+Text:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-container": "#783c24",
+                      "surface-container-low": "#fbf2ed",
+                      "error-container": "#ffdad6",
+                      "inverse-surface": "#34302c",
+                      "surface-tint": "#52652a",
+                      "surface-container-highest": "#e9e1dc",
+                      "error": "#ba1a1a",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#b8cf88",
+                      "on-tertiary-container": "#d1cbc3",
+                      "surface-container": "#f5ece7",
+                      "secondary-container": "#feaa8a",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed": "#1d1b16",
+                      "primary-fixed-dim": "#b8cf88",
+                      "surface-dim": "#e1d8d4",
+                      "secondary-fixed": "#ffdbce",
+                      "primary-fixed": "#d4eca2",
+                      "surface-variant": "#e9e1dc",
+                      "primary": "#33450d",
+                      "secondary-fixed-dim": "#ffb59a",
+                      "surface": "#fff8f5",
+                      "outline": "#76786b",
+                      "on-background": "#1e1b18",
+                      "on-primary-container": "#bed58e",
+                      "on-primary-fixed": "#141f00",
+                      "on-tertiary": "#ffffff",
+                      "surface-bright": "#fff8f5",
+                      "on-surface": "#1e1b18",
+                      "on-surface-variant": "#45483c",
+                      "on-primary": "#ffffff",
+                      "background": "#fff8f5",
+                      "tertiary": "#413f39",
+                      "on-secondary-fixed": "#380d00",
+                      "tertiary-fixed": "#e7e2d9",
+                      "surface-container-high": "#efe6e2",
+                      "secondary": "#8e4d33",
+                      "tertiary-fixed-dim": "#cbc6bd",
+                      "primary-container": "#4a5d23",
+                      "inverse-on-surface": "#f8efea",
+                      "on-tertiary-fixed-variant": "#494640",
+                      "on-primary-fixed-variant": "#3b4d14",
+                      "on-secondary": "#ffffff",
+                      "outline-variant": "#c6c8b8",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-container": "#59564f",
+                      "on-secondary-fixed-variant": "#71361e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "lg": "40px",
+                      "xl": "64px",
+                      "md": "24px",
+                      "container-padding": "20px",
+                      "gutter": "16px",
+                      "base": "4px",
+                      "sm": "16px",
+                      "xs": "8px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Libre Caslon Text"
+                      ],
+                      "display-lg": [
+                              "Libre Caslon Text"
+                      ],
+                      "caption": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-lg-mobile": [
+                              "Libre Caslon Text"
+                      ],
+                      "label-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-lg": [
+                              "Libre Caslon Text"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "caption": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+          .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+          }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-tertiary text-on-surface font-body-md antialiased md:hidden pb-safe">
+<!-- TopAppBar (Transactional - simplified) -->
+<header class="flex justify-between items-center px-container-padding h-16 w-full fixed top-0 z-50 bg-surface/80 backdrop-blur-md">
+<a class="flex items-center text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</a>
+<div class="font-headline-md text-headline-md-mobile tracking-tight text-primary dark:text-primary-fixed">
+            Lady Gasy
+        </div>
+<div class="w-6"></div> <!-- Spacer for center alignment -->
+</header>
+<main class="pt-20 px-container-padding pb-xl">
+<div class="max-w-md mx-auto space-y-lg">
+<!-- Page Title -->
+<div class="text-center">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-xs">Validation</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Finalisez votre commande en toute sécurité.</p>
+</div>
+<!-- 1. Authentication Section -->
+<section class="bg-surface p-md rounded-xl border border-[#E0D7CC]">
+<h2 class="font-headline-md text-headline-md text-primary mb-sm flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+                    Identification
+                </h2>
+<div class="flex flex-col gap-sm">
+<button class="w-full bg-primary text-on-primary py-3 rounded-DEFAULT font-label-md text-label-md flex justify-center items-center gap-2 hover:bg-primary-container transition-colors">
+                        Connexion
+                    </button>
+<div class="relative flex py-2 items-center">
+<div class="flex-grow border-t border-outline-variant"></div>
+<span class="flex-shrink-0 mx-4 text-on-surface-variant font-caption text-caption">OU</span>
+<div class="flex-grow border-t border-outline-variant"></div>
+</div>
+<button class="w-full bg-transparent border border-secondary text-secondary py-3 rounded-DEFAULT font-label-md text-label-md flex justify-center items-center gap-2 hover:bg-surface-container-low transition-colors">
+                        Créer un compte
+                    </button>
+</div>
+<p class="font-caption text-caption text-on-surface-variant mt-sm text-center">Un compte est requis pour le suivi de votre commande.</p>
+</section>
+<!-- Checkout Form (Simulated Authenticated State) -->
+<form class="space-y-lg">
+<!-- 2. Information form -->
+<section class="bg-surface p-md rounded-xl border border-[#E0D7CC]">
+<h2 class="font-headline-md text-headline-md text-primary mb-md flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="contact_mail">contact_mail</span>
+                        Mes Coordonnées
+                    </h2>
+<div class="space-y-md">
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-surface mb-xs" for="nom">Nom Complet *</label>
+<input class="w-full bg-surface-container-low border-none rounded-DEFAULT px-4 py-3 focus:ring-1 focus:ring-primary text-on-surface" id="nom" name="nom" placeholder="Jane Doe" required="" type="text"/>
+</div>
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-surface mb-xs" for="telephone">Numéro de Téléphone *</label>
+<input class="w-full bg-surface-container-low border-none rounded-DEFAULT px-4 py-3 focus:ring-1 focus:ring-primary text-on-surface" id="telephone" name="telephone" placeholder="+261 34 00 000 00" required="" type="tel"/>
+</div>
+</div>
+</section>
+<!-- 3 & 4. Address and Delivery Zone -->
+<section class="bg-surface p-md rounded-xl border border-[#E0D7CC]">
+<h2 class="font-headline-md text-headline-md text-primary mb-md flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+                        Livraison
+                    </h2>
+<div class="space-y-md">
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-surface mb-xs" for="zone">Zone de livraison *</label>
+<select class="w-full bg-surface-container-low border-none rounded-DEFAULT px-4 py-3 focus:ring-1 focus:ring-primary text-on-surface appearance-none" id="zone" name="zone" required="">
+<option disabled="" selected="" value="">Sélectionnez votre zone</option>
+<option value="zone1">Zone 1 (Centre-ville) - 4 000 Ar</option>
+<option value="zone2">Zone 2 (Périphérie proche) - 6 000 Ar</option>
+<option value="zone3">Zone 3 (Périphérie lointaine) - 8 000 Ar</option>
+<option value="zone4">Zone 4 (Banlieue) - 10 000 Ar</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-surface mb-xs" for="ville">Ville *</label>
+<input class="w-full bg-surface-container-low border-none rounded-DEFAULT px-4 py-3 focus:ring-1 focus:ring-primary text-on-surface" id="ville" name="ville" placeholder="Antananarivo" required="" type="text"/>
+</div>
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-surface mb-xs" for="codepostal">Code Postal</label>
+<input class="w-full bg-surface-container-low border-none rounded-DEFAULT px-4 py-3 focus:ring-1 focus:ring-primary text-on-surface" id="codepostal" name="codepostal" placeholder="101" type="text"/>
+</div>
+</div>
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-surface mb-xs" for="adresse">Adresse détaillée *</label>
+<input class="w-full bg-surface-container-low border-none rounded-DEFAULT px-4 py-3 focus:ring-1 focus:ring-primary text-on-surface" id="adresse" name="adresse" placeholder="Lot II M 34 Bis..." required="" type="text"/>
+</div>
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-surface mb-xs" for="repere">Repère exact pour le livreur *</label>
+<textarea class="w-full bg-surface-container-low border-none rounded-DEFAULT px-4 py-3 focus:ring-1 focus:ring-primary text-on-surface resize-none" id="repere" name="repere" placeholder="Portail vert, en face de l'épicerie..." required="" rows="3"></textarea>
+<p class="font-caption text-caption text-on-surface-variant mt-xs">Aidez notre livreur à vous trouver facilement.</p>
+</div>
+</div>
+</section>
+<!-- 5. Order Summary -->
+<section class="bg-surface-container p-md rounded-xl">
+<h3 class="font-headline-md text-headline-md-mobile text-primary mb-md">Résumé de la commande</h3>
+<!-- Simulated Cart Items -->
+<div class="space-y-sm mb-md pb-md border-b border-outline-variant/30">
+<div class="flex items-center gap-sm">
+<div class="w-16 h-16 rounded-sm overflow-hidden flex-shrink-0 bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="Close-up of a small glass jar containing an organic botanical face cream, resting on a textured wooden surface. Soft, natural light highlights the creamy texture. The style is modern editorial, organic, and premium, with warm earthy tones aligning with the Lady Gasy brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3S54eIxsuwM-M-NtJ1TLFMqPtYsnQvn3dnhbyJQkmTBPNL0e4UABbkyUA2MNBCrPEsKP11svrTFHfWEaYcsfaRWYe7Jn849yopahK5Za0rA2MOLP406yd7aOBDJYDJ47Yk2howf2_9rphazngtCOy8fnlAxSiHvtpU0hkaualYXCO3WxnV4NRgdF_BQ6vzeQ7v4uy6Bcy2-JhtFWZCnNTAivzkmHp2tItDkXNUJDR6ZFpbmPbvRLi"/>
+</div>
+<div class="flex-grow">
+<h4 class="font-label-md text-label-md text-on-surface">Crème Hydratante Baobab</h4>
+<p class="font-caption text-caption text-on-surface-variant">Qte: 1</p>
+</div>
+<div class="font-label-md text-label-md text-on-surface">
+                                45 000 Ar
+                            </div>
+</div>
+</div>
+<div class="space-y-xs font-body-md text-body-md text-on-surface-variant">
+<div class="flex justify-between">
+<span>Sous-total</span>
+<span>45 000 Ar</span>
+</div>
+<div class="flex justify-between">
+<span>Frais de livraison</span>
+<span id="delivery-cost">--</span>
+</div>
+</div>
+<div class="mt-md pt-sm border-t border-outline-variant/30 flex justify-between font-headline-md text-headline-md-mobile text-primary">
+<span>Total</span>
+<span id="total-cost">45 000 Ar</span>
+</div>
+</section>
+<!-- 6. Final Button -->
+<div class="pt-sm pb-xl">
+<button class="w-full bg-primary text-on-primary py-4 rounded-full font-label-md text-label-md flex justify-center items-center gap-2 hover:bg-primary-container transition-all active:scale-95 shadow-[0_4px_14px_0_rgba(51,69,13,0.39)]" type="submit">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+                        Valider la commande (Paiement à la livraison)
+                    </button>
+<p class="font-caption text-caption text-center text-on-surface-variant mt-sm flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="lock">lock</span>
+                        Vos données sont sécurisées
+                    </p>
+</div>
+</form>
+</div>
+</main>
+<script>
+        // Simple script to update total based on zone selection
+        document.addEventListener('DOMContentLoaded', () => {
+            const zoneSelect = document.getElementById('zone');
+            const deliveryCostSpan = document.getElementById('delivery-cost');
+            const totalCostSpan = document.getElementById('total-cost');
+            const subtotal = 45000;
+
+            const zonePrices = {
+                'zone1': 4000,
+                'zone2': 6000,
+                'zone3': 8000,
+                'zone4': 10000
+            };
+
+            zoneSelect.addEventListener('change', (e) => {
+                const selectedZone = e.target.value;
+                const deliveryCost = zonePrices[selectedZone] || 0;
+                
+                deliveryCostSpan.textContent = `${deliveryCost.toLocaleString('fr-FR')} Ar`;
+                totalCostSpan.textContent = `${(subtotal + deliveryCost).toLocaleString('fr-FR')} Ar`;
+            });
+        });
+    </script>
+</body></html>
