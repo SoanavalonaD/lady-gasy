@@ -44,7 +44,7 @@ export default function Home() {
           {/* Soft Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-surface/80 to-transparent md:w-1/2"></div>
           <div className="relative z-10 w-full max-w-[1280px] mx-auto px-container-padding md:px-lg">
-            <div className="max-w-xl glass-panel p-lg rounded-xl shadow-md">
+            <div className="glass-panel p-lg rounded-xl shadow-md">
               <span className="font-label-md text-label-md text-secondary uppercase tracking-widest mb-sm block">
                 Expertise Botanique
               </span>

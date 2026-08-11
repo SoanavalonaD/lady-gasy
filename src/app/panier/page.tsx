@@ -26,7 +26,7 @@ export default function CartPage() {
 
         {cartItems.length === 0 ? (
           /* Empty state */
-          <div className="text-center py-xl bg-surface-container-low rounded-xl border border-outline-variant/30 max-w-xl mx-auto my-lg">
+          <div className="text-center py-xl bg-surface-container-low rounded-xl border border-outline-variant/30 mx-auto my-lg">
             <span className="material-symbols-outlined text-5xl text-primary mb-md">
               shopping_cart_off
             </span>
