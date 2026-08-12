@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Authentification - Lady Gasy</title>
+<!-- Google Fonts: Libre Caslon Text & Be Vietnam Pro -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&amp;family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "background": "#fff8f5",
+                      "surface": "#fff8f5",
+                      "primary-container": "#4a5d23",
+                      "on-primary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-background": "#1e1b18",
+                      "inverse-primary": "#b8cf88",
+                      "surface-dim": "#e1d8d4",
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#feaa8a",
+                      "on-error": "#ffffff",
+                      "on-secondary-fixed": "#380d00",
+                      "on-tertiary-fixed-variant": "#494640",
+                      "on-primary-fixed": "#141f00",
+                      "on-secondary-fixed-variant": "#71361e",
+                      "on-primary-container": "#bed58e",
+                      "on-tertiary-fixed": "#1d1b16",
+                      "surface-bright": "#fff8f5",
+                      "secondary": "#8e4d33",
+                      "outline": "#76786b",
+                      "on-surface": "#1e1b18",
+                      "primary-fixed": "#d4eca2",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#e7e2d9",
+                      "on-tertiary": "#ffffff",
+                      "tertiary": "#413f39",
+                      "error-container": "#ffdad6",
+                      "surface-tint": "#52652a",
+                      "surface-container-low": "#fbf2ed",
+                      "tertiary-container": "#59564f",
+                      "inverse-on-surface": "#f8efea",
+                      "surface-variant": "#e9e1dc",
+                      "primary-fixed-dim": "#b8cf88",
+                      "on-secondary-container": "#783c24",
+                      "secondary-fixed-dim": "#ffb59a",
+                      "secondary-fixed": "#ffdbce",
+                      "surface-container-highest": "#e9e1dc",
+                      "surface-container-lowest": "#ffffff",
+                      "primary": "#33450d",
+                      "on-primary-fixed-variant": "#3b4d14",
+                      "tertiary-fixed-dim": "#cbc6bd",
+                      "surface-container-high": "#efe6e2",
+                      "on-surface-variant": "#45483c",
+                      "outline-variant": "#c6c8b8",
+                      "surface-container": "#f5ece7",
+                      "on-tertiary-container": "#d1cbc3",
+                      "inverse-surface": "#34302c"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "xl": "64px",
+                      "lg": "40px",
+                      "sm": "16px",
+                      "gutter": "16px",
+                      "container-padding": "20px",
+                      "xs": "8px",
+                      "md": "24px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": [
+                              "Libre Caslon Text"
+                      ],
+                      "headline-md": [
+                              "Libre Caslon Text"
+                      ],
+                      "caption": [
+                              "Be Vietnam Pro"
+                      ],
+                      "display-lg": [
+                              "Libre Caslon Text"
+                      ],
+                      "headline-lg": [
+                              "Libre Caslon Text"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "caption": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Hide scrollbar for clean aesthetic */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-form {
+            display: none;
+            opacity: 0;
+        }
+        .show-form {
+            display: block;
+            animation: fadeIn 0.4s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen text-on-background flex font-body-md antialiased">
+<!-- Split Screen Layout -->
+<div class="flex w-full min-h-screen">
+<!-- Left Side: Editorial Botanical Image (Desktop Only) -->
+<div class="hidden lg:block lg:w-1/2 relative bg-surface-container-highest">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A high-quality, editorial-style close-up photograph of lush, organic botanical ingredients used in premium natural haircare. Soft, natural morning light filters through delicate green olive leaves and rich terracotta clay textures, creating a sense of calm, luxury, and 'slow beauty'. The color palette is earthy and nurturing, emphasizing natural vitality and sophistication without feeling clinical." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCykC3AOeC06DpBuYBdlLh7F6dixnaYxQzbbSMzu-rxFE3nQoU_hYovGseCPPvYYgdbEy8aQGjbS4FO2k0MjHeSyjqNlJsy90fGYK58jnDdbWDYKeufU8loKOJA4g8UQ-tjGByECKs77FaMHQiaZPZueOxe-XASeJxSsoK7I_TZHaB4aGSgEW2puvf9fPtXz3GSqZW0iVmF6CgLEoEvbY2xR-4HDR-L5-BNjmOfQxbyD51kCbnt6ZtS')">
+</div>
+<!-- Overlay to soften the image slightly -->
+<div class="absolute inset-0 bg-primary/10"></div>
+</div>
+<!-- Right Side: Authentication Canvas -->
+<div class="w-full lg:w-1/2 flex items-center justify-center p-container-padding lg:p-xl relative">
+<!-- Floating Back Button (Contextual departure) -->
+<a class="absolute top-md left-md lg:left-xl flex items-center gap-xs text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+<span class="font-label-md text-label-md">Retour</span>
+</a>
+<div class="w-full max-w-[420px] bg-surface-container-lowest p-lg rounded-xl shadow-[0_8px_30px_rgba(51,69,13,0.04)] border border-outline-variant/30">
+<!-- Brand Anchor -->
+<div class="text-center mb-lg">
+<h1 class="font-display-lg text-display-lg text-primary italic mb-base">Lady Gasy</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Expertise botanique pour cheveux naturels</p>
+</div>
+<!-- Tab Navigation -->
+<div class="flex border-b border-surface-variant mb-md relative">
+<button class="flex-1 pb-sm font-label-md text-label-md text-primary border-b-[2px] border-primary transition-all duration-300 focus:outline-none" id="btn-login">
+                        Connexion
+                    </button>
+<button class="flex-1 pb-sm font-label-md text-label-md text-on-surface-variant hover:text-primary border-b-[2px] border-transparent transition-all duration-300 focus:outline-none" id="btn-signup">
+                        Inscription
+                    </button>
+</div>
+<!-- Login Form -->
+<form class="show-form space-y-md" id="form-login">
+<div class="space-y-base">
+<label class="font-label-md text-label-md text-on-surface block" for="login-email">Email</label>
+<input class="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow" id="login-email" placeholder="votre@email.com" required="" type="email"/>
+</div>
+<div class="space-y-base">
+<div class="flex justify-between items-center block">
+<label class="font-label-md text-label-md text-on-surface" for="login-password">Mot de passe</label>
+<a class="font-caption text-caption text-primary hover:underline" href="#">Oublié ?</a>
+</div>
+<input class="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow" id="login-password" placeholder="••••••••" required="" type="password"/>
+</div>
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm rounded-DEFAULT hover:bg-on-primary-fixed-variant transition-colors flex items-center justify-center gap-xs mt-lg" type="submit">
+                        Se connecter
+                        <span class="material-symbols-outlined text-[18px]">login</span>
+</button>
+</form>
+<!-- Sign Up Form -->
+<form class="hide-form space-y-md" id="form-signup">
+<div class="grid grid-cols-2 gap-md">
+<div class="space-y-base">
+<label class="font-label-md text-label-md text-on-surface block" for="signup-nom">Nom</label>
+<input class="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow" id="signup-nom" placeholder="Doe" required="" type="text"/>
+</div>
+<div class="space-y-base">
+<label class="font-label-md text-label-md text-on-surface block" for="signup-prenom">Prénom</label>
+<input class="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow" id="signup-prenom" placeholder="Jane" required="" type="text"/>
+</div>
+</div>
+<div class="space-y-base">
+<label class="font-label-md text-label-md text-on-surface block" for="signup-email">Email</label>
+<input class="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow" id="signup-email" placeholder="jane.doe@email.com" required="" type="email"/>
+</div>
+<div class="space-y-base">
+<label class="font-label-md text-label-md text-on-surface block" for="signup-telephone">Téléphone</label>
+<input class="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow" id="signup-telephone" placeholder="+33 6 00 00 00 00" required="" type="tel"/>
+</div>
+<div class="space-y-base">
+<label class="font-label-md text-label-md text-on-surface block" for="signup-password">Mot de passe</label>
+<input class="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow" id="signup-password" placeholder="Créez un mot de passe" required="" type="password"/>
+</div>
+<p class="font-caption text-caption text-on-surface-variant leading-relaxed pt-xs">
+                        En créant un compte, vous acceptez nos <a class="text-primary underline" href="#">Conditions Générales</a> et notre <a class="text-primary underline" href="#">Politique de Confidentialité</a>.
+                    </p>
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm rounded-DEFAULT hover:bg-on-primary-fixed-variant transition-colors flex items-center justify-center gap-xs mt-md" type="submit">
+                        Créer mon compte
+                        <span class="material-symbols-outlined text-[18px]">person_add</span>
+</button>
+</form>
+</div>
+</div>
+</div>
+<!-- Tab Switching Logic -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnLogin = document.getElementById('btn-login');
+            const btnSignup = document.getElementById('btn-signup');
+            const formLogin = document.getElementById('form-login');
+            const formSignup = document.getElementById('form-signup');
+
+            const activeClass = ['text-primary', 'border-primary'];
+            const inactiveClass = ['text-on-surface-variant', 'border-transparent'];
+
+            function switchTab(showLogin) {
+                if (showLogin) {
+                    // Update Buttons
+                    btnLogin.classList.remove(...inactiveClass);
+                    btnLogin.classList.add(...activeClass);
+                    btnSignup.classList.remove(...activeClass);
+                    btnSignup.classList.add(...inactiveClass);
+
+                    // Update Forms
+                    formSignup.classList.remove('show-form');
+                    formSignup.classList.add('hide-form');
+                    
+                    setTimeout(() => {
+                        formLogin.classList.remove('hide-form');
+                        formLogin.classList.add('show-form');
+                    }, 50); // slight delay for smooth exit/enter
+
+                } else {
+                    // Update Buttons
+                    btnSignup.classList.remove(...inactiveClass);
+                    btnSignup.classList.add(...activeClass);
+                    btnLogin.classList.remove(...activeClass);
+                    btnLogin.classList.add(...inactiveClass);
+
+                    // Update Forms
+                    formLogin.classList.remove('show-form');
+                    formLogin.classList.add('hide-form');
+
+                    setTimeout(() => {
+                        formSignup.classList.remove('hide-form');
+                        formSignup.classList.add('show-form');
+                    }, 50);
+                }
+            }
+
+            btnLogin.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchTab(true);
+            });
+
+            btnSignup.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchTab(false);
+            });
+        });
+    </script>
+</body></html>

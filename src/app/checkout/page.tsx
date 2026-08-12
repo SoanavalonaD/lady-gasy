@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
+import { ShoppingBag, Banknote, ArrowRight, Lock } from "lucide-react";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -96,8 +97,8 @@ export default function CheckoutPage() {
         </h1>
 
         {cartItems.length === 0 ? (
-          <div className="text-center py-xl max-w-md mx-auto bg-surface-container rounded-xl border border-outline-variant p-md">
-            <span className="material-symbols-outlined text-4xl text-primary mb-sm">shopping_bag</span>
+          <div className="text-center py-xl max-w-md mx-auto bg-surface-container rounded-xl border border-outline-variant p-md flex flex-col items-center">
+            <ShoppingBag className="text-primary mb-sm" size={36} />
             <p className="font-body-lg text-on-surface mb-md">Votre panier est vide.</p>
             <Link href="/catalogue" className="bg-primary text-on-primary font-label-md px-lg py-sm rounded hover:bg-surface-tint transition-all">
               Retourner au catalogue
@@ -110,7 +111,6 @@ export default function CheckoutPage() {
               {/* Section 1: Identification */}
               <section className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm relative overflow-hidden group">
                 <h2 className="font-headline-md text-headline-md text-primary mb-md flex items-center gap-sm">
-                  <span className="material-symbols-outlined text-primary">person</span>
                   1. Identification
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
@@ -144,7 +144,6 @@ export default function CheckoutPage() {
               {/* Section 2: Livraison */}
               <section className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm relative overflow-hidden group">
                 <h2 className="font-headline-md text-headline-md text-primary mb-md flex items-center gap-sm">
-                  <span className="material-symbols-outlined text-primary">local_shipping</span>
                   2. Livraison
                 </h2>
                 <div className="space-y-md">
@@ -284,12 +283,11 @@ export default function CheckoutPage() {
               {/* Section 3: Paiement */}
               <section className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm relative overflow-hidden group">
                 <h2 className="font-headline-md text-headline-md text-primary mb-md flex items-center gap-sm">
-                  <span className="material-symbols-outlined text-primary">payments</span>
                   3. Paiement
                 </h2>
                 <div className="bg-surface-container p-md rounded-md border border-outline-variant flex items-center gap-md">
                   <div className="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center flex-shrink-0">
-                    <span className="material-symbols-outlined text-on-primary-container">money</span>
+                    <Banknote className="text-on-primary-container" size={24} />
                   </div>
                   <div>
                     <p className="font-label-md text-label-md text-on-surface font-semibold">Paiement à la livraison</p>
@@ -364,11 +362,11 @@ export default function CheckoutPage() {
                   className="w-full bg-primary text-on-primary py-md px-lg rounded-md font-label-md text-label-md hover:bg-surface-tint transition-all duration-300 flex items-center justify-center gap-sm shadow-sm hover:shadow-md cursor-pointer"
                 >
                   Valider la commande (Paiement à la livraison)
-                  <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                  <ArrowRight size={18} />
                 </button>
 
                 <p className="font-caption text-caption text-on-surface-variant text-center mt-md flex items-center justify-center gap-xs">
-                  <span className="material-symbols-outlined text-[14px]">lock</span>
+                  <Lock size={14} />
                   Vos données personnelles sont sécurisées.
                 </p>
               </div>

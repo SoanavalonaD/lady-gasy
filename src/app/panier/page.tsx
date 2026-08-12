@@ -5,6 +5,7 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
+import { ShoppingCart, Minus, Plus, Trash2, ArrowRight, Lock } from "lucide-react";
 
 export default function CartPage() {
   const { cartItems, updateQuantity, removeFromCart, subtotalEur, totalItems } =
@@ -26,10 +27,8 @@ export default function CartPage() {
 
         {cartItems.length === 0 ? (
           /* Empty state */
-          <div className="text-center py-xl bg-surface-container-low rounded-xl border border-outline-variant/30 mx-auto my-lg">
-            <span className="material-symbols-outlined text-5xl text-primary mb-md">
-              shopping_cart_off
-            </span>
+          <div className="text-center py-xl bg-surface-container-low rounded-xl border border-outline-variant/30 mx-auto my-lg flex flex-col items-center">
+            <ShoppingCart className="text-primary mb-md" size={48} />
             <h2 className="font-headline-md text-primary mb-sm">
               Votre panier est vide
             </h2>
@@ -81,9 +80,7 @@ export default function CartPage() {
                           className="text-on-surface hover:text-primary transition-colors flex items-center justify-center"
                           aria-label="Diminuer la quantité"
                         >
-                          <span className="material-symbols-outlined text-[18px]">
-                            remove
-                          </span>
+                          <Minus size={18} />
                         </button>
                         <span className="font-label-md text-label-md px-md w-8 text-center select-none">
                           {item.quantity}
@@ -93,9 +90,7 @@ export default function CartPage() {
                           className="text-on-surface hover:text-primary transition-colors flex items-center justify-center"
                           aria-label="Augmenter la quantité"
                         >
-                          <span className="material-symbols-outlined text-[18px]">
-                            add
-                          </span>
+                          <Plus size={18} />
                         </button>
                       </div>
 
@@ -110,7 +105,7 @@ export default function CartPage() {
                         aria-label={`Supprimer ${item.product.name} du panier`}
                         className="text-on-surface-variant hover:text-error transition-colors p-2"
                       >
-                        <span className="material-symbols-outlined">delete</span>
+                        <Trash2 size={20} />
                       </button>
                     </div>
                   </div>
@@ -144,13 +139,11 @@ export default function CartPage() {
                   className="w-full bg-primary hover:bg-surface-tint text-on-primary font-label-md text-label-md py-md rounded-DEFAULT transition-colors duration-200 flex items-center justify-center gap-sm cursor-pointer shadow-sm hover:shadow-md"
                 >
                   Procéder à la commande
-                  <span className="material-symbols-outlined text-[18px]">
-                    arrow_forward
-                  </span>
+                  <ArrowRight size={18} />
                 </Link>
 
                 <p className="font-caption text-caption text-center text-on-surface-variant mt-sm flex items-center justify-center gap-xs">
-                  <span className="material-symbols-outlined text-[16px]">lock</span>
+                  <Lock size={16} />
                   Paiement sécurisé
                 </p>
               </div>

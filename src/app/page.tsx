@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
 import { products } from "@/data/products";
+import { CheckCircle2, ArrowRight, Leaf, Rabbit, Recycle, Heart, ShoppingCart } from "lucide-react";
 
 export default function Home() {
   const { addToCart } = useCart();
@@ -26,7 +27,7 @@ export default function Home() {
         {/* Toast Notification */}
         {toastMessage && (
           <div className="fixed bottom-lg right-lg z-50 bg-primary text-on-primary font-label-md px-lg py-md rounded-xl shadow-lg transition-all duration-300 flex items-center gap-sm animate-bounce">
-            <span className="material-symbols-outlined">check_circle</span>
+            <CheckCircle2 size={24} />
             {toastMessage}
           </div>
         )}
@@ -38,7 +39,7 @@ export default function Home() {
             className="absolute inset-0 bg-cover bg-center bg-no-repeat w-full h-full opacity-90 transition-transform duration-10000 hover:scale-105"
             style={{
               backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuC0PE_qf584hofL3YvkbH1I_MPDB_vIBMlq5ngh-bgg2LOXzSkmTmqyBaExWqo00YG90qH4Vwxl1gZMJhAnKdngSagzhwglgUmeLmxuF5W92JvXVgsbkJo8m9LYKoHWBfsKglm4Mx0uO_hI1S3kw8Wjp8qdVhUf7mGmVI48PseFJLIt8KX9gyAS3l7r4PnTv_73BtwUnrYjDH7MNLllQYGeReUDDXd5XJIv7laKQrBCxiaj20cD9M4o')",
+                "url('/background-image.jpg')",
             }}
           />
           {/* Soft Gradient Overlay */}
@@ -59,9 +60,7 @@ export default function Home() {
                 href="#essentiels"
               >
                 Découvrir nos produits
-                <span className="material-symbols-outlined ml-2 text-sm">
-                  arrow_forward
-                </span>
+                <ArrowRight className="ml-2" size={14} />
               </a>
             </div>
           </div>
@@ -72,33 +71,25 @@ export default function Home() {
           <div className="max-w-[1280px] mx-auto px-container-padding md:px-lg py-md">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-md text-center">
               <div className="flex flex-col items-center">
-                <span className="material-symbols-outlined text-secondary mb-2">
-                  eco
-                </span>
+                <Leaf className="text-secondary mb-2" size={24} />
                 <span className="font-label-md text-label-md text-on-surface">
                   100% Naturel
                 </span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="material-symbols-outlined text-secondary mb-2">
-                  cruelty_free
-                </span>
+                <Rabbit className="text-secondary mb-2" size={24} />
                 <span className="font-label-md text-label-md text-on-surface">
                   Cruelty Free
                 </span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="material-symbols-outlined text-secondary mb-2">
-                  recycling
-                </span>
+                <Recycle className="text-secondary mb-2" size={24} />
                 <span className="font-label-md text-label-md text-on-surface">
                   Éco-responsable
                 </span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="material-symbols-outlined text-secondary mb-2">
-                  favorite
-                </span>
+                <Heart className="text-secondary mb-2" size={24} />
                 <span className="font-label-md text-label-md text-on-surface">
                   Fait avec amour
                 </span>
@@ -147,9 +138,7 @@ export default function Home() {
                       aria-label={`Ajouter ${product.name} au panier`}
                       className="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high text-primary hover:bg-primary hover:text-on-primary transition-colors duration-300 cursor-pointer"
                     >
-                      <span className="material-symbols-outlined">
-                        add_shopping_cart
-                      </span>
+                      <ShoppingCart size={20} />
                     </button>
                   </div>
                 </div>
@@ -163,9 +152,7 @@ export default function Home() {
               href="/catalogue"
             >
               Voir tout le catalogue
-              <span className="material-symbols-outlined ml-1 text-sm">
-                arrow_forward
-              </span>
+              <ArrowRight className="ml-1" size={14} />
             </a>
           </div>
         </section>

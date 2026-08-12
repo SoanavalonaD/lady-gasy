@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { Check, ShoppingBasket } from "lucide-react";
 
 interface OrderDetails {
   name: string;
@@ -42,9 +43,7 @@ export default function CheckoutSuccessPage() {
 
           {/* Success Check Icon */}
           <div className="w-16 h-16 bg-primary-container rounded-full flex items-center justify-center mx-auto mb-md animate-bounce">
-            <span className="material-symbols-outlined text-4xl text-on-primary-container font-bold">
-              check
-            </span>
+            <Check className="text-on-primary-container font-bold" size={36} />
           </div>
 
           <h1 className="font-display-lg text-headline-lg text-primary mb-sm">
@@ -89,9 +88,7 @@ export default function CheckoutSuccessPage() {
               className="w-full bg-primary hover:bg-surface-tint text-on-primary py-md rounded-md font-label-md text-label-md transition-all duration-300 flex items-center justify-center gap-sm cursor-pointer shadow-sm hover:shadow-md"
             >
               Continuer mes achats
-              <span className="material-symbols-outlined text-[18px]">
-                shopping_basket
-              </span>
+              <ShoppingBasket size={18} />
             </Link>
             <Link
               href="/"

@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/context/CartContext";
+import { Menu, X, Search, User, ShoppingBag } from "lucide-react";
+import Footer from "@/components/Footer";
 
 export default function Header() {
   const pathname = usePathname();
@@ -15,7 +17,7 @@ export default function Header() {
     { name: "Catalogue", href: "/catalogue" },
     { name: "Le Salon", href: "#" },
     { name: "À Propos", href: "#" },
-    { name: "Contact", href: "#" },
+    { name: "Contact", href: "/contact" },
   ];
 
   return (
@@ -28,9 +30,7 @@ export default function Header() {
             aria-label="Toggle Menu"
             className="md:hidden text-primary p-2 focus:outline-none hover:text-secondary transition-colors"
           >
-            <span className="material-symbols-outlined">
-              {mobileMenuOpen ? "close" : "menu"}
-            </span>
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
           <button
@@ -38,7 +38,7 @@ export default function Header() {
             aria-label="Search"
             className="hidden md:flex text-primary hover:text-secondary transition-colors duration-300 p-2"
           >
-            <span className="material-symbols-outlined">search</span>
+            <Search size={24} />
           </button>
         </div>
 
@@ -78,7 +78,7 @@ export default function Header() {
               aria-label="Profile"
               className="hover:text-secondary transition-colors duration-300 p-2"
             >
-              <span className="material-symbols-outlined">person</span>
+              <User size={24} />
             </button>
 
             <Link
@@ -86,7 +86,7 @@ export default function Header() {
               aria-label="Cart"
               className="hover:text-secondary transition-colors duration-300 relative p-2 flex items-center"
             >
-              <span className="material-symbols-outlined">shopping_bag</span>
+              <ShoppingBag size={24} />
               {totalItems > 0 && (
                 <span className="absolute top-1 right-1 bg-secondary text-on-secondary text-xs rounded-full w-4 h-4 flex items-center justify-center font-label-md animate-pulse">
                   {totalItems}
@@ -103,14 +103,14 @@ export default function Header() {
             aria-label="Search"
             className="hover:text-secondary p-2"
           >
-            <span className="material-symbols-outlined">search</span>
+            <Search size={24} />
           </button>
           <Link
             href="/panier"
             aria-label="Cart"
             className="hover:text-secondary relative p-2 flex items-center"
           >
-            <span className="material-symbols-outlined">shopping_bag</span>
+            <ShoppingBag size={24} />
             {totalItems > 0 && (
               <span className="absolute top-1 right-1 bg-secondary text-on-secondary text-xs rounded-full w-4 h-4 flex items-center justify-center font-label-md">
                 {totalItems}
@@ -124,7 +124,7 @@ export default function Header() {
       {searchOpen && (
         <div className="absolute top-full left-0 w-full bg-surface-container border-b border-outline-variant p-md transition-all duration-300 ease-in-out">
           <div className="max-w-[600px] mx-auto flex gap-sm items-center">
-            <span className="material-symbols-outlined text-primary">search</span>
+            <Search className="text-primary" size={24} />
             <input
               type="text"
               placeholder="Rechercher un ingrédient, un soin..."
@@ -135,7 +135,7 @@ export default function Header() {
               onClick={() => setSearchOpen(false)}
               className="text-on-surface-variant hover:text-primary p-2"
             >
-              <span className="material-symbols-outlined">close</span>
+              <X size={24} />
             </button>
           </div>
         </div>
@@ -163,12 +163,14 @@ export default function Header() {
               );
             })}
             <button className="flex items-center gap-sm text-primary py-sm border-b border-outline-variant/30">
-              <span className="material-symbols-outlined">person</span>
+              <User size={24} />
               Mon Compte
             </button>
           </nav>
         </div>
       )}
+    
     </header>
+    
   );
 }

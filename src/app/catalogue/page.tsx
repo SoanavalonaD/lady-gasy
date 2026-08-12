@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
 import { products } from "@/data/products";
+import { CheckCircle2, Search } from "lucide-react";
 
 export default function Catalogue() {
   const { addToCart } = useCart();
@@ -65,7 +66,7 @@ export default function Catalogue() {
         {/* Toast Alert */}
         {toastMessage && (
           <div className="fixed bottom-lg right-lg z-50 bg-primary text-on-primary font-label-md px-lg py-md rounded-xl shadow-lg transition-all duration-300 flex items-center gap-sm animate-bounce">
-            <span className="material-symbols-outlined">check_circle</span>
+            <CheckCircle2 size={24} />
             {toastMessage}
           </div>
         )}
@@ -147,9 +148,7 @@ export default function Catalogue() {
           <div className="flex-1">
             {filteredProducts.length === 0 ? (
               <div className="text-center py-xl bg-surface-container-low rounded-xl border border-outline-variant/30">
-                <span className="material-symbols-outlined text-4xl text-on-surface-variant mb-md">
-                  search_off
-                </span>
+                <Search className="text-on-surface-variant mb-md mx-auto" size={36} />
                 <p className="font-body-lg text-on-surface-variant">
                   Aucun produit ne correspond à ces critères de recherche.
                 </p>
