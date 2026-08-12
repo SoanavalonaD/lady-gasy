@@ -1,12 +1,37 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, LogIn, UserPlus, CheckCircle2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ArrowLeft, LogIn, UserPlus, CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function ConnexionPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const slideImages = [
+    { url: "/background-image.jpg", size: "bg-cover", position: "bg-center" },
+    { url: "/banees1.jpg", size: "bg-contain bg-no-repeat", position: "bg-center" },
+    { url: "/banneer.jpg", size: "bg-contain bg-no-repeat", position: "bg-center" },
+  ];
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slideImages.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slideImages.length) % slideImages.length);
+  };
+
+  // Autoplay slideshow
+  useEffect(() => {
+    const timer = setInterval(() => {
+      nextSlide();
+    }, 5000); // Cycles every 5 seconds
+    return () => clearInterval(timer);
+  }, [currentSlide]);
 
   // Form states
   const [loginEmail, setLoginEmail] = useState("");
@@ -20,14 +45,19 @@ export default function ConnexionPage() {
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    sessionStorage.setItem("isLoggedIn", "true");
     setToastMessage("Connexion réussie ! Bienvenue sur Lady Gasy.");
     setLoginEmail("");
     setLoginPassword("");
     setTimeout(() => setToastMessage(null), 3000);
+    setTimeout(() => {
+      router.push("/checkout");
+    }, 1500);
   };
 
   const handleSignupSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    sessionStorage.setItem("isLoggedIn", "true");
     setToastMessage("Inscription réussie ! Votre compte a été créé.");
     setSignupNom("");
     setSignupPrenom("");
@@ -35,6 +65,9 @@ export default function ConnexionPage() {
     setSignupTelephone("");
     setSignupPassword("");
     setTimeout(() => setToastMessage(null), 3000);
+    setTimeout(() => {
+      router.push("/checkout");
+    }, 1500);
   };
 
   return (
@@ -49,17 +82,51 @@ export default function ConnexionPage() {
 
       {/* Split Screen Layout */}
       <div className="flex w-full min-h-screen">
-        {/* Left Side: Editorial Botanical Image (Desktop Only) */}
-        <div className="hidden lg:block lg:w-1/2 relative bg-surface-container-highest">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{
-              backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida-public/AB6AXuCykC3AOeC06DpBuYBdlLh7F6dixnaYxQzbbSMzu-rxFE3nQoU_hYovGseCPPvYYgdbEy8aQGjbS4FO2k0MjHeSyjqNlJsy90fGYK58jnDdbWDYKeufU8loKOJA4g8UQ-tjGByECKs77FaMHQiaZPZueOxe-XASeJxSsoK7I_TZHaB4aGSgEW2puvf9fPtXz3GSqZW0iVmF6CgLEoEvbY2xR-4HDR-L5-BNjmOfQxbyD51kCbnt6ZtS')",
-            }}
-          />
+        {/* Left Side: Editorial Botanical Image Slider (Desktop Only) */}
+        <div className="hidden lg:block lg:w-1/2 relative bg-surface-container-highest overflow-hidden group/slider">
+          {slideImages.map((slide, idx) => (
+            <div
+              key={idx}
+              className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${slide.size} ${slide.position} ${
+                currentSlide === idx ? "opacity-100" : "opacity-0 pointer-events-none"
+              }`}
+              style={{
+                backgroundImage: `url('${slide.url}')`,
+              }}
+            />
+          ))}
           {/* Overlay to soften the image slightly */}
-          <div className="absolute inset-0 bg-primary/10"></div>
+          <div className="absolute inset-0 bg-primary/10 pointer-events-none"></div>
+
+          {/* Navigation Buttons */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-md top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-surface/80 hover:bg-surface text-primary flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 opacity-0 group-hover/slider:opacity-100 cursor-pointer focus:outline-none"
+            aria-label="Image précédente"
+          >
+            <ChevronLeft size={24} />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-md top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-surface/80 hover:bg-surface text-primary flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 opacity-0 group-hover/slider:opacity-100 cursor-pointer focus:outline-none"
+            aria-label="Image suivante"
+          >
+            <ChevronRight size={24} />
+          </button>
+
+          {/* Slide Indicator Dots */}
+          <div className="absolute bottom-md left-1/2 -translate-x-1/2 flex gap-sm">
+            {slideImages.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentSlide(idx)}
+                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer focus:outline-none ${
+                  currentSlide === idx ? "bg-primary scale-125" : "bg-surface/55 hover:bg-surface/80"
+                }`}
+                aria-label={`Aller à l'image ${idx + 1}`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Right Side: Authentication Canvas */}
@@ -75,8 +142,12 @@ export default function ConnexionPage() {
 
           <div className="w-full max-w-[420px] bg-surface-container-lowest p-lg rounded-xl shadow-[0_8px_30px_rgba(51,69,13,0.04)] border border-outline-variant/30">
             {/* Brand Anchor */}
-            <div className="text-center mb-lg">
-              <h1 className="font-display-lg text-display-lg text-primary italic mb-base">Lady Gasy</h1>
+            <div className="flex flex-col items-center mb-lg">
+              <img
+                src="/logo2.png"
+                alt="Lady Gasy"
+                className="h-50 w-auto object-contain mb-base"
+              />
               <p className="font-body-md text-body-md text-on-surface-variant">
                 Expertise botanique pour cheveux naturels
               </p>
@@ -207,7 +278,7 @@ export default function ConnexionPage() {
                     className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
                     id="signup-telephone"
                     type="tel"
-                    placeholder="+33 6 00 00 00 00"
+                    placeholder="+261 34 00 000 00"
                     value={signupTelephone}
                     onChange={(e) => setSignupTelephone(e.target.value)}
                     required

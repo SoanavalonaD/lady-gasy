@@ -10,6 +10,7 @@ interface OrderDetails {
   phone: string;
   address: string;
   total: number;
+  paymentMethod?: string;
 }
 
 export default function CheckoutSuccessPage() {
@@ -77,7 +78,7 @@ export default function CheckoutSuccessPage() {
                 </span>
               </div>
               <p className="text-xs text-secondary italic text-center font-medium mt-xs">
-                * Mode de règlement : Espèces à la livraison. Veuillez préparer la somme exacte.
+                * Mode de règlement : {order.paymentMethod === "mobile_money" ? "Mobile Money (MVola, Orange Money, Airtel Money). Notre service client vous contactera pour finaliser le transfert." : "Espèces à la livraison. Veuillez préparer la somme exacte."}
               </p>
             </div>
           )}

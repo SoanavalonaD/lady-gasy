@@ -134,7 +134,7 @@ export default function Home() {
                   </p>
                   <div className="flex items-center justify-between mt-auto">
                     <span className="font-label-md text-label-md text-on-surface">
-                      {product.priceEur.toFixed(2)} €
+                      {product.priceEur.toFixed(2)} Ar
                     </span>
                     <button
                       onClick={() => handleAddToCart(product)}

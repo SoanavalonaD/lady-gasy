@@ -147,10 +147,10 @@ export default function ProductDetailPage({ params }: PageProps) {
               </h1>
               <div className="flex items-end gap-sm mb-4">
                 <span className="font-headline-md text-headline-md text-on-surface">
-                  {product.priceEur.toFixed(2)} €
+                  {product.priceEur.toFixed(2)} Ar
                 </span>
                 <span className="text-on-surface-variant font-body-md text-body-md line-through">
-                  {(product.priceEur * 1.3).toFixed(2)} €
+                  {(product.priceEur * 1.3).toFixed(2)} Ar
                 </span>
               </div>
               <div className="flex items-center gap-2 text-primary font-caption text-caption">

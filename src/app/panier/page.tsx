@@ -96,7 +96,7 @@ export default function CartPage() {
 
                       {/* Total Price for item */}
                       <div className="font-label-md text-label-md text-on-surface w-20 text-right">
-                        {(item.product.priceEur * item.quantity).toFixed(2)} €
+                        {(item.product.priceEur * item.quantity).toFixed(2)} Ar
                       </div>
 
                       {/* Delete Button */}
@@ -122,7 +122,7 @@ export default function CartPage() {
                 <div className="space-y-sm mb-lg">
                   <div className="flex justify-between font-body-md text-body-md text-on-surface">
                     <span>Sous-total</span>
-                    <span>{subtotalEur.toFixed(2)} €</span>
+                    <span>{subtotalEur.toFixed(2)} Ar </span>
                   </div>
                   <div className="flex justify-between font-body-md text-body-md text-on-surface-variant">
                     <span>Livraison estimée</span>
@@ -131,7 +131,7 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between font-body-lg text-body-lg text-on-surface font-bold border-t border-surface-variant pt-md mb-xl">
                   <span>Total</span>
-                  <span>{subtotalEur.toFixed(2)} €</span>
+                  <span>{subtotalEur.toFixed(2)} Ar</span>
                 </div>
 
                 <Link
