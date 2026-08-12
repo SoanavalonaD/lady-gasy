@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
 import { products } from "@/data/products";
+import Link from "next/link";
 import { CheckCircle2, ArrowRight, Leaf, Rabbit, Recycle, Heart, ShoppingCart } from "lucide-react";
 
 export default function Home() {
@@ -115,17 +116,19 @@ export default function Home() {
                 key={product.id}
                 className="group flex flex-col bg-surface-container-lowest border border-surface-variant rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_10px_30px_rgba(51,69,13,0.08)]"
               >
-                <div className="relative h-64 bg-surface-container p-4 flex items-center justify-center overflow-hidden">
+                <Link href={`/catalogue/${product.id}`} className="relative h-64 bg-surface-container p-4 flex items-center justify-center overflow-hidden cursor-pointer">
                   <img
                     className="object-contain h-full w-full group-hover:scale-105 transition-transform duration-500"
                     src={product.image}
                     alt={product.name}
                   />
-                </div>
+                </Link>
                 <div className="p-md flex flex-col flex-grow">
-                  <h3 className="font-headline-md text-headline-md text-on-surface mb-1">
-                    {product.name}
-                  </h3>
+                  <Link href={`/catalogue/${product.id}`} className="hover:text-primary transition-colors">
+                    <h3 className="font-headline-md text-headline-md text-on-surface mb-1">
+                      {product.name}
+                    </h3>
+                  </Link>
                   <p className="font-caption text-caption text-on-surface-variant mb-md flex-grow">
                     {product.description}
                   </p>

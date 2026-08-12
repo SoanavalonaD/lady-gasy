@@ -18,27 +18,6 @@ export default function Footer() {
 
         {/* Links Column 1 */}
         <div className="flex flex-col space-y-sm">
-          <h3 className="font-label-md text-label-md text-primary uppercase tracking-wider mb-2">
-            Informations
-          </h3>
-          <Link
-            href="#"
-            className="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors"
-          >
-            Mentions Légales
-          </Link>
-          <Link
-            href="#"
-            className="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors"
-          >
-            CGV
-          </Link>
-          <Link
-            href="#"
-            className="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors"
-          >
-            Politique de Confidentialité
-          </Link>
         </div>
 
         {/* Links Column 2 */}
@@ -47,7 +26,7 @@ export default function Footer() {
             Aide
           </h3>
           <Link
-            href="#"
+            href="/contact"
             className="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors"
           >
             Contactez-nous
@@ -56,13 +35,7 @@ export default function Footer() {
             href="#"
             className="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors"
           >
-            FAQ
-          </Link>
-          <Link
-            href="#"
-            className="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors"
-          >
-            Livraison & Retours
+            Conditions générales de vente
           </Link>
         </div>
 

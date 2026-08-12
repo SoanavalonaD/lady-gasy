@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
 import { products } from "@/data/products";
 import { CheckCircle2, Search } from "lucide-react";
+import Link from "next/link";
 
 export default function Catalogue() {
   const { addToCart } = useCart();
@@ -170,11 +171,13 @@ export default function Catalogue() {
                     className="group flex flex-col bg-surface-container-lowest border border-[#E0D7CC] rounded-lg overflow-hidden hover:shadow-[0_20px_40px_rgba(51,69,13,0.1)] transition-all duration-300"
                   >
                     <div className="relative h-[300px] bg-surface-container-low overflow-hidden flex items-center justify-center p-md">
-                      <img
-                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
-                        src={product.image}
-                        alt={product.name}
-                      />
+                      <Link href={`/catalogue/${product.id}`} className="w-full h-full flex items-center justify-center cursor-pointer">
+                        <img
+                          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                          src={product.image}
+                          alt={product.name}
+                        />
+                      </Link>
                       {/* Quick Add Overlay */}
                       <div className="absolute inset-x-0 bottom-0 p-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-4 group-hover:translate-y-0 flex justify-center bg-gradient-to-t from-surface-container-lowest/90 via-surface-container-lowest/40 to-transparent pt-lg">
                         <button
@@ -186,9 +189,11 @@ export default function Catalogue() {
                       </div>
                     </div>
                     <div className="p-md flex flex-col flex-grow">
-                      <h3 className="font-headline-md text-primary mb-1">
-                        {product.name}
-                      </h3>
+                      <Link href={`/catalogue/${product.id}`} className="hover:text-primary transition-colors">
+                        <h3 className="font-headline-md text-primary mb-1">
+                          {product.name}
+                        </h3>
+                      </Link>
                       <p className="font-caption text-on-surface-variant mb-md flex-grow">
                         {product.description}
                       </p>

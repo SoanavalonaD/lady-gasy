@@ -74,12 +74,13 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-sm text-primary">
-            <button
+            <Link
+              href="/connexion"
               aria-label="Profile"
               className="hover:text-secondary transition-colors duration-300 p-2"
             >
               <User size={24} />
-            </button>
+            </Link>
 
             <Link
               href="/panier"
@@ -162,10 +163,14 @@ export default function Header() {
                 </Link>
               );
             })}
-            <button className="flex items-center gap-sm text-primary py-sm border-b border-outline-variant/30">
+            <Link
+              href="/connexion"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-sm text-primary py-sm border-b border-outline-variant/30"
+            >
               <User size={24} />
               Mon Compte
-            </button>
+            </Link>
           </nav>
         </div>
       )}

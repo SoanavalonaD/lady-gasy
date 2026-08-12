@@ -184,12 +184,12 @@ export default function ContactPage() {
                       Téléphone
                     </h3>
                     <p className="font-body-md text-body-md text-on-surface-variant">
-                      <a className="hover:text-primary transition-colors" href="tel:+261340000000">
-                        +261 34 00 000 00
+                      <a className="hover:text-primary transition-colors" href="tel:+261382451608">
+                        +261 38 24 516 08
                       </a>
                     </p>
                     <p className="font-caption text-caption text-outline mt-1">
-                      Mar-Sam : 9h00 - 18h00
+                      Lundi - Samedi : 9h00 - 18h00
                     </p>
                   </div>
                 </div>
@@ -204,8 +204,8 @@ export default function ContactPage() {
                       Email
                     </h3>
                     <p className="font-body-md text-body-md text-on-surface-variant">
-                      <a className="hover:text-primary transition-colors" href="mailto:contact@ladygasy.mg">
-                        contact@ladygasy.mg
+                      <a className="hover:text-primary transition-colors" href="mailto:ladygasy.contact@gmail.com">
+                        ladygasy.contact@gmail.com
                       </a>
                     </p>
                   </div>
