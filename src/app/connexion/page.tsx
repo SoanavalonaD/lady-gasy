@@ -25,6 +25,8 @@ export default function ConnexionPage() {
 
   // Authentication State
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [emailConfirmationPending, setEmailConfirmationPending] = useState(false);
+  const [pendingEmail, setPendingEmail] = useState("");
   const [userProfile, setUserProfile] = useState({ name: "", email: "", phone: "" });
   const [orders, setOrders] = useState<any[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
@@ -105,8 +107,13 @@ export default function ConnexionPage() {
         router.push("/checkout");
       }, 1500);
     } else {
-      setToastMessage(`Échec : ${result.error}`);
-      setTimeout(() => setToastMessage(null), 4000);
+      // Detect unconfirmed email
+      const isInvalidCreds = result.error?.toLowerCase().includes("invalid login credentials");
+      const friendlyError = isInvalidCreds
+        ? "Email ou mot de passe incorrect. Si vous venez de créer votre compte, vérifiez d'abord votre boite mail pour confirmer votre inscription."
+        : result.error;
+      setToastMessage(`Échec : ${friendlyError}`);
+      setTimeout(() => setToastMessage(null), 6000);
     }
   };
 
@@ -122,13 +129,18 @@ export default function ConnexionPage() {
       signupPassword
     );
     
-    if (result.success) {
-      setToastMessage("Compte créé avec succès !");
+    if (result.success && result.emailConfirmationPending) {
+      // Show email confirmation pending screen
+      setPendingEmail(signupEmail);
+      setEmailConfirmationPending(true);
       setSignupNom("");
       setSignupPrenom("");
       setSignupEmail("");
       setSignupTelephone("");
       setSignupPassword("");
+      setToastMessage(null);
+    } else if (result.success) {
+      setToastMessage("Compte créé avec succès !");
       setTimeout(() => {
         setToastMessage(null);
         checkLoginStatus();
@@ -164,6 +176,64 @@ export default function ConnexionPage() {
           {toastMessage}
         </div>
       )}
+
+      {/* Email Confirmation Pending Screen */}
+      {emailConfirmationPending && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center">
+          {/* Background image */}
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: "url('/background-image.jpg')" }}
+          />
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-surface/90 via-surface/70 to-transparent" />
+
+          {/* Content card */}
+          <div>
+            <div className="glass-panel p-lg rounded-xl shadow-md text-center space-y-md">
+
+              {/* Mail icon */}
+              <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="text-primary" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect width="20" height="16" x="2" y="4" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+              </div>
+
+              <div className="space-y-xs">
+                <h1 className="font-headline-lg text-on-surface">Vérifiez votre boite mail</h1>
+                <p className="font-body-md text-on-surface-variant">
+                  Un email de confirmation a été envoyé à{" "}
+                  <span className="text-primary font-semibold break-all">{pendingEmail}</span>.
+                </p>
+                <p className="font-body-sm text-on-surface-variant/80">
+                  Cliquez sur le lien reçu pour activer votre compte et accéder à Lady Gasy.
+                </p>
+              </div>
+
+              <div className="bg-surface-container-low/60 border border-outline-variant/30 rounded-xl p-md text-left space-y-xs">
+                <p className="font-label-md text-on-surface">Vous ne trouvez pas l'email ?</p>
+                <ul className="font-body-sm text-on-surface-variant list-disc list-inside space-y-xs">
+                  <li>Vérifiez votre dossier <strong>Spam</strong> ou <strong>Promotions</strong></li>
+                  <li>L'email peut prendre quelques minutes</li>
+                  <li>Vérifiez la bonne adresse email utilisée</li>
+                </ul>
+              </div>
+
+              <button
+                onClick={() => {
+                  setEmailConfirmationPending(false);
+                  setActiveTab("login");
+                }}
+                className="w-full py-3 rounded bg-primary text-on-primary font-label-md hover:bg-surface-tint transition-colors duration-300 shadow-sm"
+              >
+                Retour à la connexion
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
 
       {/* Split Screen Layout */}
       <div className="flex w-full min-h-screen">
@@ -354,6 +424,17 @@ export default function ConnexionPage() {
                     Inscription
                   </button>
                 </div>
+
+                {/* DEV PREVIEW — remove before production */}
+                {process.env.NODE_ENV === "development" && (
+                  <button
+                    type="button"
+                    onClick={() => { setPendingEmail("preview@ladygasy.mg"); setEmailConfirmationPending(true); }}
+                    className="w-full mb-sm text-xs text-on-surface-variant/50 underline hover:text-primary transition-colors"
+                  >
+                    [DEV] Prévisualiser l'écran de confirmation email
+                  </button>
+                )}
 
                 {/* Login Form */}
                 {activeTab === "login" && (

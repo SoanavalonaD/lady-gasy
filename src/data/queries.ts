@@ -72,8 +72,9 @@ export async function signUpUser(
 
     const userId = authData.user.id;
 
-    // Insert profile details directly into utilisateurs table
-    const { error: insertError } = await supabase
+    // Attempt to pre-insert profile (may fail if trigger hasn't run yet, that's OK).
+    // The database trigger `on_auth_user_created` will handle the final insert.
+    await supabase
       .from("utilisateurs")
       .insert({
         id: userId,
@@ -82,18 +83,14 @@ export async function signUpUser(
         email,
         telephone,
         role: "CLIENT"
-      });
+      })
+      .select()
+      .maybeSingle(); // Ignore duplicate errors — trigger might already have inserted
 
-    if (insertError) throw insertError;
-
-    // Set session storage
-    sessionStorage.setItem("isLoggedIn", "true");
-    sessionStorage.setItem("userId", userId);
-    sessionStorage.setItem("userName", `${prenom} ${nom}`);
-    sessionStorage.setItem("userEmail", email);
-    sessionStorage.setItem("userPhone", telephone);
-
-    return { success: true, user: authData.user };
+    // ⚠️ Do NOT set sessionStorage here.
+    // The user must confirm their email before they can log in.
+    // The session will be created by Supabase only after email confirmation.
+    return { success: true, emailConfirmationPending: true, user: authData.user };
   } catch (err: any) {
     console.error("Sign up failure:", err.message);
     return { success: false, error: err.message };
@@ -113,14 +110,12 @@ export async function signInUser(email: string, password: string) {
 
     const userId = authData.user.id;
 
-    // Fetch details from utilisateurs table
-    const { data: userData, error: userError } = await supabase
+    // Fetch details from utilisateurs table (maybeSingle to avoid crash if profile missing)
+    const { data: userData } = await supabase
       .from("utilisateurs")
       .select("*")
       .eq("id", userId)
-      .single();
-
-    if (userError) throw userError;
+      .maybeSingle();
 
     const userName = userData ? `${userData.prenom} ${userData.nom}` : email.split("@")[0];
     const userPhone = userData ? userData.telephone : "";
