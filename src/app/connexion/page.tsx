@@ -16,7 +16,7 @@ import {
   User
 } from "lucide-react";
 import { supabase } from "@/data/supabase";
-import { signInUser, signUpUser, getOrderHistory } from "@/data/db";
+import { signInUser, signUpUser, getOrderHistory } from "@/data/queries";
 
 export default function ConnexionPage() {
   const router = useRouter();

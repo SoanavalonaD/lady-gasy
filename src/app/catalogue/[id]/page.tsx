@@ -4,7 +4,7 @@ import React, { useState, useEffect, use } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
-import { getDbProducts } from "@/data/db";
+import { getDbProducts } from "@/data/queries";
 import Link from "next/link";
 import {
   Star,

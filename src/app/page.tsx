@@ -4,8 +4,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
-import { products, Product } from "@/data/products";
-import { getDbProducts } from "@/data/db";
+import { Product } from "@/data/types";
+import { getDbProducts } from "@/data/queries";
 import Link from "next/link";
 import { CheckCircle2, ArrowRight, Leaf, Rabbit, Recycle, Heart, ShoppingCart } from "lucide-react";
 
@@ -128,13 +128,15 @@ export default function Home() {
                 key={product.id}
                 className="group flex flex-col bg-surface-container-lowest border border-surface-variant rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_10px_30px_rgba(51,69,13,0.08)]"
               >
-                <Link href={`/catalogue/${product.id}`} className="relative h-64 bg-surface-container p-4 flex items-center justify-center overflow-hidden cursor-pointer">
-                  <img
-                    className="object-contain h-full w-full group-hover:scale-105 transition-transform duration-500"
-                    src={product.image}
-                    alt={product.name}
-                  />
-                </Link>
+                <div className="relative h-64 overflow-hidden">
+                  <Link href={`/catalogue/${product.id}`} className="absolute inset-0 cursor-pointer">
+                    <img
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      src={product.image}
+                      alt={product.name}
+                    />
+                  </Link>
+                </div>
                 <div className="p-md flex flex-col flex-grow">
                   <Link href={`/catalogue/${product.id}`} className="hover:text-primary transition-colors">
                     <h3 className="font-headline-md text-headline-md text-on-surface mb-1">

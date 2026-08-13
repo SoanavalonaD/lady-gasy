@@ -4,8 +4,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
-import { products, Product } from "@/data/products";
-import { getDbProducts } from "@/data/db";
+import { Product } from "@/data/types";
+import { getDbProducts } from "@/data/queries";
 import { CheckCircle2, Search } from "lucide-react";
 import Link from "next/link";
 
@@ -13,15 +13,22 @@ export default function Catalogue() {
   const { addToCart } = useCart();
   const [dbProducts, setDbProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedNeeds, setSelectedNeeds] = useState<string[]>(["Définition des Boucles"]); // Default checked in mockup
+  const [error, setError] = useState<string | null>(null);
+  const [selectedNeeds, setSelectedNeeds] = useState<string[]>([]); // No default filter: show all products
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    getDbProducts().then((data) => {
-      setDbProducts(data);
-      setLoading(false);
-    });
+    getDbProducts()
+      .then((data) => {
+        setDbProducts(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Erreur de chargement des produits:", err);
+        setError("Impossible de charger les produits. Veuillez réessayer.");
+        setLoading(false);
+      });
   }, []);
 
   const handleNeedChange = (need: string) => {
@@ -100,35 +107,7 @@ export default function Catalogue() {
                 FILTRER PAR
               </h2>
               <div className="space-y-md">
-                {/* Besoins */}
                 <div>
-                  <h3 className="font-body-md text-primary mb-sm font-semibold">Besoins</h3>
-                  <ul className="space-y-xs font-body-md text-on-surface-variant">
-                    {allNeeds.map((need) => (
-                      <li key={need}>
-                        <label className="flex items-center gap-sm cursor-pointer group">
-                          <input
-                            type="checkbox"
-                            checked={selectedNeeds.includes(need)}
-                            onChange={() => handleNeedChange(need)}
-                            className="form-checkbox text-primary rounded-sm border-outline focus:ring-primary-container bg-transparent"
-                          />
-                          <span
-                            className={`group-hover:text-primary transition-colors ${
-                              selectedNeeds.includes(need) ? "text-primary font-medium" : ""
-                            }`}
-                          >
-                            {need}
-                          </span>
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Catégories */}
-                <div>
-                  <h3 className="font-body-md text-primary mb-sm font-semibold">Catégories</h3>
                   <ul className="space-y-xs font-body-md text-on-surface-variant">
                     {allCategories.map((cat) => (
                       <li key={cat}>
@@ -157,7 +136,30 @@ export default function Catalogue() {
 
           {/* Product Grid */}
           <div className="flex-1">
-            {filteredProducts.length === 0 ? (
+            {loading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-md">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="bg-surface-container-low rounded-xl border border-outline-variant/20 overflow-hidden animate-pulse">
+                    <div className="aspect-square bg-surface-container" />
+                    <div className="p-md space-y-sm">
+                      <div className="h-4 bg-surface-container rounded w-3/4" />
+                      <div className="h-3 bg-surface-container rounded w-1/2" />
+                      <div className="h-6 bg-surface-container rounded w-1/3 mt-md" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : error ? (
+              <div className="text-center py-xl bg-surface-container-low rounded-xl border border-outline-variant/30">
+                <p className="font-body-lg text-error mb-md">{error}</p>
+                <button
+                  onClick={() => { setError(null); setLoading(true); getDbProducts().then(setDbProducts).finally(() => setLoading(false)); }}
+                  className="mt-md text-primary font-label-md underline hover:text-secondary transition-colors"
+                >
+                  Réessayer
+                </button>
+              </div>
+            ) : filteredProducts.length === 0 ? (
               <div className="text-center py-xl bg-surface-container-low rounded-xl border border-outline-variant/30">
                 <Search className="text-on-surface-variant mb-md mx-auto" size={36} />
                 <p className="font-body-lg text-on-surface-variant">
@@ -180,10 +182,10 @@ export default function Catalogue() {
                     key={product.id}
                     className="group flex flex-col bg-surface-container-lowest border border-[#E0D7CC] rounded-lg overflow-hidden hover:shadow-[0_20px_40px_rgba(51,69,13,0.1)] transition-all duration-300"
                   >
-                    <div className="relative h-[300px] bg-surface-container-low overflow-hidden flex items-center justify-center p-md">
-                      <Link href={`/catalogue/${product.id}`} className="w-full h-full flex items-center justify-center cursor-pointer">
+                    <div className="relative h-[300px] overflow-hidden">
+                      <Link href={`/catalogue/${product.id}`} className="absolute inset-0 cursor-pointer">
                         <img
-                          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           src={product.image}
                           alt={product.name}
                         />

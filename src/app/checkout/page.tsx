@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { ShoppingBag, ArrowRight, Lock, LogIn, CheckCircle2 } from "lucide-react";
-import { createOrderReservation } from "@/data/db";
+import { createOrderReservation } from "@/data/queries";
 
 interface Neighborhood {
   name: string;

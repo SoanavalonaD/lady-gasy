@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { Product, products } from "@/data/products";
+import { Product } from "@/data/types";
 
 export interface CartItem {
   product: Product;
@@ -44,13 +44,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         console.error("Failed to parse cart items", e);
       }
     } else {
-      // Default items from the mon-panier.html mockup
-      const defaultItems: CartItem[] = [];
-      const item1 = products.find((p) => p.id === "ricin-botanique");
-      const item2 = products.find((p) => p.id === "mask-profonde");
-      if (item1) defaultItems.push({ product: item1, quantity: 1 });
-      if (item2) defaultItems.push({ product: item2, quantity: 1 });
-      setTimeout(() => setCartItems(defaultItems), 0);
+      setTimeout(() => setCartItems([]), 0);
     }
     setTimeout(() => setIsLoaded(true), 0);
   }, []);
