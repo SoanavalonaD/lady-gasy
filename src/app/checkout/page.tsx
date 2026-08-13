@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { ShoppingBag, ArrowRight, Lock, LogIn, CheckCircle2 } from "lucide-react";
+import { createOrderReservation } from "@/data/db";
 
 interface Neighborhood {
   name: string;
@@ -131,14 +132,33 @@ export default function CheckoutPage() {
     );
   }, [fullName, phone, ville, deliveryLocation, timeSlot, selectedQuartier]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isFormValid || !selectedQuartier) return;
+
+    const userId = sessionStorage.getItem("userId");
 
     // Build address description
     const addressDetails = `${deliveryLocation}, ${selectedQuartier.name}, ${ville} (${
       selectedQuartier.zone === 6 ? "Province" : `Zone ${selectedQuartier.zone}`
     }) ${isExpress ? "[LIVRAISON EXPRESS]" : ""}`;
+
+    // Create reservation in DB (Supabase + localStorage fallback)
+    await createOrderReservation({
+      userId,
+      items: cartItems,
+      fullName,
+      phone,
+      ville,
+      quartier: selectedQuartier,
+      deliveryLocation,
+      timeSlot,
+      isExpress,
+      paymentMethod,
+      subtotal: subtotalAr,
+      deliveryFee,
+      total: totalAr
+    });
 
     const orderDetails = {
       name: fullName,

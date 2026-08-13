@@ -3,17 +3,37 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, LogIn, UserPlus, CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ArrowLeft,
+  LogIn,
+  UserPlus,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  LogOut,
+  Package,
+  Calendar,
+  User
+} from "lucide-react";
+import { supabase } from "@/data/supabase";
+import { signInUser, signUpUser, getOrderHistory } from "@/data/db";
 
 export default function ConnexionPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // Authentication State
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userProfile, setUserProfile] = useState({ name: "", email: "", phone: "" });
+  const [orders, setOrders] = useState<any[]>([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+
+  // Slideshow config
   const slideImages = [
     { url: "/background-image.jpg", size: "bg-cover", position: "bg-center" },
-    { url: "/banees1.jpg", size: "bg-contain bg-no-repeat", position: "bg-center" },
-    { url: "/banneer.jpg", size: "bg-contain bg-no-repeat", position: "bg-center" },
+    { url: "/banees1.jpg", size: "bg-cover bg-contain bg-no-repeat", position: "bg-center" },
+    { url: "/banneer.jpg", size: "bg-cover bg-contain bg-no-repeat", position: "bg-center" }
   ];
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -29,7 +49,7 @@ export default function ConnexionPage() {
   useEffect(() => {
     const timer = setInterval(() => {
       nextSlide();
-    }, 5000); // Cycles every 5 seconds
+    }, 5000);
     return () => clearInterval(timer);
   }, [currentSlide]);
 
@@ -43,31 +63,96 @@ export default function ConnexionPage() {
   const [signupTelephone, setSignupTelephone] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    sessionStorage.setItem("isLoggedIn", "true");
-    setToastMessage("Connexion réussie ! Bienvenue sur Lady Gasy.");
-    setLoginEmail("");
-    setLoginPassword("");
-    setTimeout(() => setToastMessage(null), 3000);
-    setTimeout(() => {
-      router.push("/checkout");
-    }, 1500);
+  // Sync login status and load order history
+  const checkLoginStatus = () => {
+    const logged = sessionStorage.getItem("isLoggedIn") === "true";
+    setIsLoggedIn(logged);
+    
+    if (logged) {
+      const name = sessionStorage.getItem("userName") || "";
+      const email = sessionStorage.getItem("userEmail") || "";
+      const phone = sessionStorage.getItem("userPhone") || "";
+      setUserProfile({ name, email, phone });
+
+      // Fetch order history from Supabase/Local fallback
+      setLoadingOrders(true);
+      const userId = sessionStorage.getItem("userId");
+      getOrderHistory(userId)
+        .then((data) => setOrders(data))
+        .catch((err) => console.error("Error loading order history:", err))
+        .finally(() => setLoadingOrders(false));
+    }
   };
 
-  const handleSignupSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
+
+  // Form Submit Handlers
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    sessionStorage.setItem("isLoggedIn", "true");
-    setToastMessage("Inscription réussie ! Votre compte a été créé.");
-    setSignupNom("");
-    setSignupPrenom("");
-    setSignupEmail("");
-    setSignupTelephone("");
-    setSignupPassword("");
-    setTimeout(() => setToastMessage(null), 3000);
-    setTimeout(() => {
-      router.push("/checkout");
-    }, 1500);
+    setToastMessage("Connexion en cours...");
+    
+    const result = await signInUser(loginEmail, loginPassword);
+    
+    if (result.success) {
+      setToastMessage("Connexion réussie ! Bienvenue sur Lady Gasy.");
+      setLoginEmail("");
+      setLoginPassword("");
+      setTimeout(() => {
+        setToastMessage(null);
+        checkLoginStatus();
+        router.push("/checkout");
+      }, 1500);
+    } else {
+      setToastMessage(`Échec : ${result.error}`);
+      setTimeout(() => setToastMessage(null), 4000);
+    }
+  };
+
+  const handleSignupSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setToastMessage("Création de votre compte...");
+    
+    const result = await signUpUser(
+      signupNom,
+      signupPrenom,
+      signupEmail,
+      signupTelephone,
+      signupPassword
+    );
+    
+    if (result.success) {
+      setToastMessage("Compte créé avec succès !");
+      setSignupNom("");
+      setSignupPrenom("");
+      setSignupEmail("");
+      setSignupTelephone("");
+      setSignupPassword("");
+      setTimeout(() => {
+        setToastMessage(null);
+        checkLoginStatus();
+        router.push("/checkout");
+      }, 1500);
+    } else {
+      setToastMessage(`Échec : ${result.error}`);
+      setTimeout(() => setToastMessage(null), 4000);
+    }
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    sessionStorage.removeItem("isLoggedIn");
+    sessionStorage.removeItem("userId");
+    sessionStorage.removeItem("userName");
+    sessionStorage.removeItem("userEmail");
+    sessionStorage.removeItem("userPhone");
+    
+    setIsLoggedIn(false);
+    setUserProfile({ name: "", email: "", phone: "" });
+    setOrders([]);
+    setToastMessage("Déconnexion réussie.");
+    setTimeout(() => setToastMessage(null), 2000);
   };
 
   return (
@@ -129,7 +214,7 @@ export default function ConnexionPage() {
           </div>
         </div>
 
-        {/* Right Side: Authentication Canvas */}
+        {/* Right Side: Authentication / Dashboard Canvas */}
         <div className="w-full lg:w-1/2 flex items-center justify-center p-container-padding lg:p-xl relative">
           {/* Floating Back Button */}
           <Link
@@ -140,183 +225,278 @@ export default function ConnexionPage() {
             <span className="font-label-md text-label-md">Retour</span>
           </Link>
 
-          <div className="w-full max-w-[420px] bg-surface-container-lowest p-lg rounded-xl shadow-[0_8px_30px_rgba(51,69,13,0.04)] border border-outline-variant/30">
-            {/* Brand Anchor */}
+          <div
+            className={`w-full bg-surface-container-lowest p-lg rounded-xl shadow-[0_8px_30px_rgba(51,69,13,0.04)] border border-outline-variant/30 transition-all duration-300 ${
+              isLoggedIn ? "max-w-[550px]" : "max-w-[420px]"
+            }`}
+          >
+            {/* Logo */}
             <div className="flex flex-col items-center mb-lg">
-              <img
-                src="/logo2.png"
-                alt="Lady Gasy"
-                className="h-50 w-auto object-contain mb-base"
-              />
-              <p className="font-body-md text-body-md text-on-surface-variant">
+              <img src="/logo2.png" alt="Lady Gasy" className="h-40 w-auto object-contain mb-base" />
+              <p className="font-body-md text-body-md text-on-surface-variant text-center">
                 Expertise botanique pour cheveux naturels
               </p>
             </div>
 
-            {/* Tab Navigation */}
-            <div className="flex border-b border-surface-variant mb-md relative">
-              <button
-                onClick={() => setActiveTab("login")}
-                className={`flex-1 pb-sm font-label-md text-label-md transition-all duration-300 focus:outline-none cursor-pointer border-b-[2px] ${
-                  activeTab === "login"
-                    ? "text-primary border-primary"
-                    : "text-on-surface-variant hover:text-primary border-transparent"
-                }`}
-              >
-                Connexion
-              </button>
-              <button
-                onClick={() => setActiveTab("signup")}
-                className={`flex-1 pb-sm font-label-md text-label-md transition-all duration-300 focus:outline-none cursor-pointer border-b-[2px] ${
-                  activeTab === "signup"
-                    ? "text-primary border-primary"
-                    : "text-on-surface-variant hover:text-primary border-transparent"
-                }`}
-              >
-                Inscription
-              </button>
-            </div>
+            {/* Render Dashboard if logged in */}
+            {isLoggedIn ? (
+              <div className="space-y-lg">
+                {/* Profile Details Block */}
+                <div className="border-b border-surface-variant pb-md">
+                  <h2 className="font-headline-md text-primary font-semibold flex items-center gap-sm mb-md">
+                    <User size={22} /> Mon Compte
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-sm text-sm">
+                    <div>
+                      <p className="text-on-surface-variant font-medium">Nom :</p>
+                      <p className="text-on-surface font-semibold">{userProfile.name}</p>
+                    </div>
+                    <div>
+                      <p className="text-on-surface-variant font-medium">Téléphone :</p>
+                      <p className="text-on-surface font-semibold">{userProfile.phone || "Non renseigné"}</p>
+                    </div>
+                    <div className="md:col-span-2">
+                      <p className="text-on-surface-variant font-medium">Email :</p>
+                      <p className="text-on-surface font-semibold">{userProfile.email}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="mt-md text-error hover:text-error/80 transition-colors flex items-center gap-xs font-label-md text-xs border border-error/25 hover:border-error px-sm py-1.5 rounded cursor-pointer focus:outline-none"
+                  >
+                    <LogOut size={14} /> Déconnexion
+                  </button>
+                </div>
 
-            {/* Login Form */}
-            {activeTab === "login" && (
-              <form onSubmit={handleLoginSubmit} className="space-y-md animate-fade-in">
-                <div className="space-y-base">
-                  <label className="font-label-md text-label-md text-on-surface block" htmlFor="login-email">
-                    Email
-                  </label>
-                  <input
-                    className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
-                    id="login-email"
-                    type="email"
-                    placeholder="votre@email.com"
-                    value={loginEmail}
-                    onChange={(e) => setLoginEmail(e.target.value)}
-                    required
-                  />
+                {/* Orders History List */}
+                <div>
+                  <h2 className="font-headline-md text-primary font-semibold flex items-center gap-sm mb-md">
+                    <Package size={22} /> Mes Réservations
+                  </h2>
+                  {loadingOrders ? (
+                    <p className="text-sm text-on-surface-variant animate-pulse italic">Chargement de votre historique...</p>
+                  ) : orders.length === 0 ? (
+                    <p className="text-sm text-on-surface-variant italic">Vous n&apos;avez aucune commande enregistrée.</p>
+                  ) : (
+                    <div className="space-y-md max-h-[250px] overflow-y-auto pr-xs">
+                      {orders.map((o) => (
+                        <div
+                          key={o.id}
+                          className="border border-outline-variant/60 rounded-lg p-md bg-surface-container-low text-xs space-y-sm shadow-sm"
+                        >
+                          <div className="flex justify-between items-center font-semibold text-primary">
+                            <span className="flex items-center gap-xs text-on-surface-variant">
+                              <Calendar size={14} />
+                              {new Date(o.date_commande).toLocaleDateString("fr-FR")}
+                            </span>
+                            <span
+                              className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider ${
+                                o.statut === "LIVREE"
+                                  ? "bg-primary text-on-primary"
+                                  : o.statut === "CONFIRMEE"
+                                  ? "bg-primary-container text-on-primary-container"
+                                  : "bg-secondary-container text-on-secondary-container"
+                              }`}
+                            >
+                              {o.statut.replace("_", " ")}
+                            </span>
+                          </div>
+                          <div className="space-y-1 pl-sm border-l-2 border-primary/20">
+                            {o.items.map((item: any, idx: number) => (
+                              <div key={idx} className="flex justify-between text-on-surface-variant">
+                                <span>
+                                  {item.nom_produit} <span className="font-medium">x{item.quantite}</span>
+                                </span>
+                                <span className="text-on-surface">
+                                  {item.prix_unitaire_applique.toLocaleString()} Ar
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                          {o.livraison && (
+                            <p className="text-[10px] text-on-surface-variant italic border-t border-surface-variant/20 pt-xs">
+                              Livré à : {o.livraison.adresse_detaillee}, {o.livraison.ville}
+                            </p>
+                          )}
+                          <div className="flex justify-between items-center pt-xs border-t border-surface-variant/30 font-bold text-sm">
+                            <span>Total</span>
+                            <span className="text-primary">{o.montant_total.toLocaleString()} Ar</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <div className="space-y-base">
-                  <div className="flex justify-between items-center">
-                    <label className="font-label-md text-label-md text-on-surface" htmlFor="login-password">
-                      Mot de passe
-                    </label>
-                    <a className="font-caption text-caption text-primary hover:underline" href="#">
-                      Oublié ?
-                    </a>
-                  </div>
-                  <input
-                    className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
-                    id="login-password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={loginPassword}
-                    onChange={(e) => setLoginPassword(e.target.value)}
-                    required
-                  />
+              </div>
+            ) : (
+              /* Render Auth forms if not logged in */
+              <>
+                {/* Tab Navigation */}
+                <div className="flex border-b border-surface-variant mb-md relative">
+                  <button
+                    onClick={() => setActiveTab("login")}
+                    className={`flex-1 pb-sm font-label-md text-label-md transition-all duration-300 focus:outline-none cursor-pointer border-b-[2px] ${
+                      activeTab === "login"
+                        ? "text-primary border-primary"
+                        : "text-on-surface-variant hover:text-primary border-transparent"
+                    }`}
+                  >
+                    Connexion
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("signup")}
+                    className={`flex-1 pb-sm font-label-md text-label-md transition-all duration-300 focus:outline-none cursor-pointer border-b-[2px] ${
+                      activeTab === "signup"
+                        ? "text-primary border-primary"
+                        : "text-on-surface-variant hover:text-primary border-transparent"
+                    }`}
+                  >
+                    Inscription
+                  </button>
                 </div>
-                <button
-                  className="w-full bg-primary text-on-primary font-label-md text-label-md py-sm rounded-DEFAULT hover:bg-on-primary-fixed-variant transition-colors flex items-center justify-center gap-xs mt-lg cursor-pointer"
-                  type="submit"
-                >
-                  Se connecter
-                  <LogIn size={18} />
-                </button>
-              </form>
-            )}
 
-            {/* Sign Up Form */}
-            {activeTab === "signup" && (
-              <form onSubmit={handleSignupSubmit} className="space-y-md animate-fade-in">
-                <div className="grid grid-cols-2 gap-md">
-                  <div className="space-y-base">
-                    <label className="font-label-md text-label-md text-on-surface block" htmlFor="signup-nom">
-                      Nom
-                    </label>
-                    <input
-                      className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
-                      id="signup-nom"
-                      type="text"
-                      placeholder="Doe"
-                      value={signupNom}
-                      onChange={(e) => setSignupNom(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-base">
-                    <label className="font-label-md text-label-md text-on-surface block" htmlFor="signup-prenom">
-                      Prénom
-                    </label>
-                    <input
-                      className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
-                      id="signup-prenom"
-                      type="text"
-                      placeholder="Jane"
-                      value={signupPrenom}
-                      onChange={(e) => setSignupPrenom(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="space-y-base">
-                  <label className="font-label-md text-label-md text-on-surface block" htmlFor="signup-email">
-                    Email
-                  </label>
-                  <input
-                    className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
-                    id="signup-email"
-                    type="email"
-                    placeholder="jane.doe@email.com"
-                    value={signupEmail}
-                    onChange={(e) => setSignupEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-base">
-                  <label className="font-label-md text-label-md text-on-surface block" htmlFor="signup-telephone">
-                    Téléphone
-                  </label>
-                  <input
-                    className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
-                    id="signup-telephone"
-                    type="tel"
-                    placeholder="+261 34 00 000 00"
-                    value={signupTelephone}
-                    onChange={(e) => setSignupTelephone(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-base">
-                  <label className="font-label-md text-label-md text-on-surface block" htmlFor="signup-password">
-                    Mot de passe
-                  </label>
-                  <input
-                    className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
-                    id="signup-password"
-                    type="password"
-                    placeholder="Créez un mot de passe"
-                    value={signupPassword}
-                    onChange={(e) => setSignupPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <p className="font-caption text-caption text-on-surface-variant leading-relaxed pt-xs">
-                  En créant un compte, vous acceptez nos{" "}
-                  <a className="text-primary underline" href="#">
-                    Conditions Générales
-                  </a>{" "}
-                  et notre{" "}
-                  <a className="text-primary underline" href="#">
-                    Politique de Confidentialité
-                  </a>
-                  .
-                </p>
-                <button
-                  className="w-full bg-primary text-on-primary font-label-md text-label-md py-sm rounded-DEFAULT hover:bg-on-primary-fixed-variant transition-colors flex items-center justify-center gap-xs mt-md cursor-pointer"
-                  type="submit"
-                >
-                  Créer mon compte
-                  <UserPlus size={18} />
-                </button>
-              </form>
+                {/* Login Form */}
+                {activeTab === "login" && (
+                  <form onSubmit={handleLoginSubmit} className="space-y-md">
+                    <div className="space-y-base">
+                      <label className="font-label-md text-label-md text-on-surface block" htmlFor="login-email">
+                        Email
+                      </label>
+                      <input
+                        className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
+                        id="login-email"
+                        type="email"
+                        placeholder="votre@email.com"
+                        value={loginEmail}
+                        onChange={(e) => setLoginEmail(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-base">
+                      <div className="flex justify-between items-center">
+                        <label className="font-label-md text-label-md text-on-surface" htmlFor="login-password">
+                          Mot de passe
+                        </label>
+                        <a className="font-caption text-caption text-primary hover:underline" href="#">
+                          Oublié ?
+                        </a>
+                      </div>
+                      <input
+                        className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
+                        id="login-password"
+                        type="password"
+                        placeholder="••••••••"
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <button
+                      className="w-full bg-primary text-on-primary font-label-md text-label-md py-sm rounded-DEFAULT hover:bg-on-primary-fixed-variant transition-colors flex items-center justify-center gap-xs mt-lg cursor-pointer focus:outline-none"
+                      type="submit"
+                    >
+                      Se connecter
+                      <LogIn size={18} />
+                    </button>
+                  </form>
+                )}
+
+                {/* Sign Up Form */}
+                {activeTab === "signup" && (
+                  <form onSubmit={handleSignupSubmit} className="space-y-md">
+                    <div className="grid grid-cols-2 gap-md">
+                      <div className="space-y-base">
+                        <label className="font-label-md text-label-md text-on-surface block" htmlFor="signup-nom">
+                          Nom
+                        </label>
+                        <input
+                          className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
+                          id="signup-nom"
+                          type="text"
+                          placeholder="Doe"
+                          value={signupNom}
+                          onChange={(e) => setSignupNom(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-base">
+                        <label className="font-label-md text-label-md text-on-surface block" htmlFor="signup-prenom">
+                          Prénom
+                        </label>
+                        <input
+                          className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
+                          id="signup-prenom"
+                          type="text"
+                          placeholder="Jane"
+                          value={signupPrenom}
+                          onChange={(e) => setSignupPrenom(e.target.value)}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-base">
+                      <label className="font-label-md text-label-md text-on-surface block" htmlFor="signup-email">
+                        Email
+                      </label>
+                      <input
+                        className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
+                        id="signup-email"
+                        type="email"
+                        placeholder="jane.doe@email.com"
+                        value={signupEmail}
+                        onChange={(e) => setSignupEmail(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-base">
+                      <label className="font-label-md text-label-md text-on-surface block" htmlFor="signup-telephone">
+                        Téléphone
+                      </label>
+                      <input
+                        className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
+                        id="signup-telephone"
+                        type="tel"
+                        placeholder="+261 34 00 000 00"
+                        value={signupTelephone}
+                        onChange={(e) => setSignupTelephone(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-base">
+                      <label className="font-label-md text-label-md text-on-surface block" htmlFor="signup-password">
+                        Mot de passe
+                      </label>
+                      <input
+                        className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
+                        id="signup-password"
+                        type="password"
+                        placeholder="Créez un mot de passe"
+                        value={signupPassword}
+                        onChange={(e) => setSignupPassword(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <p className="font-caption text-caption text-on-surface-variant leading-relaxed pt-xs">
+                      En créant un compte, vous acceptez nos{" "}
+                      <a className="text-primary underline" href="#">
+                        Conditions Générales
+                      </a>{" "}
+                      et notre{" "}
+                      <a className="text-primary underline" href="#">
+                        Politique de Confidentialité
+                      </a>
+                      .
+                    </p>
+                    <button
+                      className="w-full bg-primary text-on-primary font-label-md text-label-md py-sm rounded-DEFAULT hover:bg-on-primary-fixed-variant transition-colors flex items-center justify-center gap-xs mt-md cursor-pointer focus:outline-none"
+                      type="submit"
+                    >
+                      Créer mon compte
+                      <UserPlus size={18} />
+                    </button>
+                  </form>
+                )}
+              </>
             )}
           </div>
         </div>

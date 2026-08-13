@@ -1,18 +1,28 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
-import { products } from "@/data/products";
+import { products, Product } from "@/data/products";
+import { getDbProducts } from "@/data/db";
 import { CheckCircle2, Search } from "lucide-react";
 import Link from "next/link";
 
 export default function Catalogue() {
   const { addToCart } = useCart();
+  const [dbProducts, setDbProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedNeeds, setSelectedNeeds] = useState<string[]>(["Définition des Boucles"]); // Default checked in mockup
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    getDbProducts().then((data) => {
+      setDbProducts(data);
+      setLoading(false);
+    });
+  }, []);
 
   const handleNeedChange = (need: string) => {
     setSelectedNeeds((prev) =>
@@ -30,7 +40,7 @@ export default function Catalogue() {
 
   // Filter products based on selected needs and categories
   const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
+    return dbProducts.filter((product) => {
       // If need filter is active, product must match at least one selected need
       const matchesNeeds =
         selectedNeeds.length === 0 ||
@@ -44,9 +54,9 @@ export default function Catalogue() {
 
       return matchesNeeds && matchesCategories;
     });
-  }, [selectedNeeds, selectedCategories]);
+  }, [dbProducts, selectedNeeds, selectedCategories]);
 
-  const handleAddToCart = (product: typeof products[0]) => {
+  const handleAddToCart = (product: Product) => {
     addToCart(product, 1);
     setToastMessage(`"${product.name}" a été ajouté au panier !`);
     setTimeout(() => setToastMessage(null), 3000);

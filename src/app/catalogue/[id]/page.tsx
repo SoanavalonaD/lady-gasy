@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, use } from "react";
+import React, { useState, useEffect, use } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { products } from "@/data/products";
 import { useCart } from "@/context/CartContext";
+import { getDbProducts } from "@/data/db";
 import Link from "next/link";
 import {
   Star,
@@ -24,12 +24,39 @@ interface PageProps {
 export default function ProductDetailPage({ params }: PageProps) {
   const { id } = use(params);
   const { addToCart } = useCart();
+  const [dbProducts, setDbProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isWishlist, setIsWishlist] = useState(false);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
 
-  // Find product by id
-  const product = products.find((p) => p.id === id);
+  useEffect(() => {
+    getDbProducts().then((data) => {
+      setDbProducts(data);
+      setLoading(false);
+    });
+  }, []);
+
+  const product = dbProducts.find((p) => p.id === id);
+
+  useEffect(() => {
+    if (product) {
+      setActiveImage(product.image);
+    }
+  }, [product]);
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <main className="flex-grow pt-[120px] pb-xl max-w-[1280px] mx-auto w-full px-container-padding text-center flex flex-col items-center justify-center min-h-[50vh]">
+          <p className="animate-pulse text-primary font-medium text-lg">Chargement du produit...</p>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   if (!product) {
     return (
@@ -55,16 +82,12 @@ export default function ProductDetailPage({ params }: PageProps) {
     );
   }
 
-  // Gallery images (default to product image, with placeholders to match the mockup design)
   const mainImage = product.image;
   const secondaryImages = [
-    // Close-up placeholders / texture shots
     "https://lh3.googleusercontent.com/aida-public/AB6AXuCcERwwHRgWt8gtoGrI0Q-o7Y35sInX_5DbU4s8KaQ6BPaiCkqjesfdemHzEJA5UUn7c-1svzeBN8pd7x3KCUfIUY5rj-Ml9I25y_4-lbyS3ahjUCnLUw7m-FMEa9SgGFcQkSZbr9g0bxjr55yywehsX_-CGaEVXEiPdjHd-Mcz0hZzniYgsb-JqDpXsnBajsKZebwR8FwHou_ahg6u_Tqqzr8mFwEKz0exlMYzmby2cKhFnQxelq3EBo56Gbz9d5dKMQ",
     "https://lh3.googleusercontent.com/aida-public/AB6AXuD1wJDInvUoQr0Z9lGQHsOqOOaYJaYD53J7MtUrxHO9o-FlecURvn8tHevBLzRHcH0UJ-Y6lyWVp7bQ1KUkkK0-h5nrHSbUm1qcuejaebKNXODcIlK2i88YSJ0h-87d-KZ5vPb3H_0GJ98W87uFRhPx0lWeuvkRTYRTSaS0SJUhT1VLoD-l3pdF4cpIawBJOIBNg7IkMCnNYzKIb9wv56FOsgkBXYcB6C0pPwFfHSY89CCEJzKrklFU",
     "https://lh3.googleusercontent.com/aida-public/AB6AXuDlBRdoePzyo7Ceh1F4TuN-MurMfxq0b8Ouw3z7z3bzKQxU6DwVZ4LmIPZidMyhnggoz4fJsCujQ21BIfL6K9EtSMsIlH5LSjbn-7cIdLUcqbDcQgkigFtnwdWvE2IqdXIQh0swbFntDjJ3C8MnYz0WqfLlI4bkkCUGIKwdD0V8SLSvq2Na0LVku4odpmKKhC4Wjny7Ga55lrDCV03WYobPuTkG4DXVcZK1liekHZUPqjLWWNw9HiOt"
   ];
-
-  const [activeImage, setActiveImage] = useState(mainImage);
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
@@ -94,14 +117,14 @@ export default function ProductDetailPage({ params }: PageProps) {
               <img
                 alt={product.name}
                 className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                src={activeImage}
+                src={activeImage || mainImage}
               />
             </div>
             <div className="grid grid-cols-4 gap-sm">
               <div
                 onClick={() => setActiveImage(mainImage)}
                 className={`aspect-square rounded-lg overflow-hidden bg-surface-container-low border cursor-pointer ${
-                  activeImage === mainImage ? "border-primary" : "border-transparent"
+                  (activeImage || mainImage) === mainImage ? "border-primary" : "border-transparent"
                 }`}
               >
                 <img alt={product.name} className="w-full h-full object-cover" src={mainImage} />
@@ -243,7 +266,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                 <div className="pb-4 font-body-md text-body-md text-on-surface-variant">
                   <ul className="list-disc pl-5 space-y-2">
                     {product.usage ? (
-                      product.usage.map((step, idx) => <li key={idx}>{step}</li>)
+                      product.usage.map((step: string, idx: number) => <li key={idx}>{step}</li>)
                     ) : (
                       <>
                         <li>En soin quotidien : Appliquer une petite quantité sur les pointes pour sceller l&apos;hydratation.</li>

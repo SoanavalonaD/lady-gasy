@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
-import { products } from "@/data/products";
+import { products, Product } from "@/data/products";
+import { getDbProducts } from "@/data/db";
 import Link from "next/link";
 import { CheckCircle2, ArrowRight, Leaf, Rabbit, Recycle, Heart, ShoppingCart } from "lucide-react";
 
@@ -12,10 +13,21 @@ export default function Home() {
   const { addToCart } = useCart();
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  const homeProductIds = ["ricin-bio", "coco-mask", "brume-fresh", "serum-baobab"];
-  const featuredProducts = products.filter((p) => homeProductIds.includes(p.id));
+  const [dbProducts, setDbProducts] = useState<Product[]>([]);
 
-  const handleAddToCart = (product: typeof products[0]) => {
+  useEffect(() => {
+    getDbProducts().then(setDbProducts);
+  }, []);
+
+  const homeProductIds = ["ricin-bio", "coco-mask", "brume-fresh", "serum-baobab"];
+  
+  const featuredProducts = useMemo(() => {
+    const filtered = dbProducts.filter((p) => homeProductIds.includes(p.id));
+    if (filtered.length > 0) return filtered;
+    return dbProducts.slice(0, 4);
+  }, [dbProducts]);
+
+  const handleAddToCart = (product: Product) => {
     addToCart(product, 1);
     setToastMessage(`"${product.name}" a été ajouté au panier !`);
     setTimeout(() => setToastMessage(null), 3000);
