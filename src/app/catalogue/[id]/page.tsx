@@ -29,7 +29,6 @@ export default function ProductDetailPage({ params }: PageProps) {
   const [quantity, setQuantity] = useState(1);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isWishlist, setIsWishlist] = useState(false);
-  const [activeImage, setActiveImage] = useState<string | null>(null);
 
   useEffect(() => {
     getDbProducts().then((data) => {
@@ -39,12 +38,6 @@ export default function ProductDetailPage({ params }: PageProps) {
   }, []);
 
   const product = dbProducts.find((p) => p.id === id);
-
-  useEffect(() => {
-    if (product) {
-      setActiveImage(product.image);
-    }
-  }, [product]);
 
   if (loading) {
     return (
@@ -82,20 +75,12 @@ export default function ProductDetailPage({ params }: PageProps) {
     );
   }
 
-  const mainImage = product.image;
-  const secondaryImages = [
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuCcERwwHRgWt8gtoGrI0Q-o7Y35sInX_5DbU4s8KaQ6BPaiCkqjesfdemHzEJA5UUn7c-1svzeBN8pd7x3KCUfIUY5rj-Ml9I25y_4-lbyS3ahjUCnLUw7m-FMEa9SgGFcQkSZbr9g0bxjr55yywehsX_-CGaEVXEiPdjHd-Mcz0hZzniYgsb-JqDpXsnBajsKZebwR8FwHou_ahg6u_Tqqzr8mFwEKz0exlMYzmby2cKhFnQxelq3EBo56Gbz9d5dKMQ",
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuD1wJDInvUoQr0Z9lGQHsOqOOaYJaYD53J7MtUrxHO9o-FlecURvn8tHevBLzRHcH0UJ-Y6lyWVp7bQ1KUkkK0-h5nrHSbUm1qcuejaebKNXODcIlK2i88YSJ0h-87d-KZ5vPb3H_0GJ98W87uFRhPx0lWeuvkRTYRTSaS0SJUhT1VLoD-l3pdF4cpIawBJOIBNg7IkMCnNYzKIb9wv56FOsgkBXYcB6C0pPwFfHSY89CCEJzKrklFU",
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuDlBRdoePzyo7Ceh1F4TuN-MurMfxq0b8Ouw3z7z3bzKQxU6DwVZ4LmIPZidMyhnggoz4fJsCujQ21BIfL6K9EtSMsIlH5LSjbn-7cIdLUcqbDcQgkigFtnwdWvE2IqdXIQh0swbFntDjJ3C8MnYz0WqfLlI4bkkCUGIKwdD0V8SLSvq2Na0LVku4odpmKKhC4Wjny7Ga55lrDCV03WYobPuTkG4DXVcZK1liekHZUPqjLWWNw9HiOt"
-  ];
-
   const handleAddToCart = () => {
     addToCart(product, quantity);
     setToastMessage(`"${product.name}" a été ajouté au panier !`);
     setTimeout(() => setToastMessage(null), 3000);
   };
 
-  // Build breadcrumbs
   const category = product.categories?.[0] || "Soins Capillaires";
 
   return (
@@ -111,35 +96,14 @@ export default function ProductDetailPage({ params }: PageProps) {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-lg md:gap-xl">
-          {/* Image Gallery */}
+          {/* Image Display */}
           <div className="md:col-span-6 flex flex-col gap-sm">
             <div className="aspect-[2/3] w-full relative rounded-lg overflow-hidden bg-surface-container-low border border-outline-variant/30">
               <img
                 alt={product.name}
                 className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                src={activeImage || mainImage}
+                src={product.image}
               />
-            </div>
-            <div className="grid grid-cols-4 gap-sm">
-              <div
-                onClick={() => setActiveImage(mainImage)}
-                className={`aspect-square rounded-lg overflow-hidden bg-surface-container-low border cursor-pointer ${
-                  (activeImage || mainImage) === mainImage ? "border-primary" : "border-transparent"
-                }`}
-              >
-                <img alt={product.name} className="w-full h-full object-cover" src={mainImage} />
-              </div>
-              {secondaryImages.map((img, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => setActiveImage(img)}
-                  className={`aspect-square rounded-lg overflow-hidden bg-surface-container-low border transition-colors cursor-pointer ${
-                    activeImage === img ? "border-primary" : "border-transparent hover:border-primary/20"
-                  }`}
-                >
-                  <img alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" src={img} />
-                </div>
-              ))}
             </div>
           </div>
 
@@ -170,10 +134,7 @@ export default function ProductDetailPage({ params }: PageProps) {
               </h1>
               <div className="flex items-end gap-sm mb-4">
                 <span className="font-headline-md text-headline-md text-on-surface">
-                  {product.priceEur.toFixed(2)} Ar
-                </span>
-                <span className="text-on-surface-variant font-body-md text-body-md line-through">
-                  {(product.priceEur * 1.3).toFixed(2)} Ar
+                  {product.priceAr.toLocaleString()} Ar
                 </span>
               </div>
               <div className="flex items-center gap-2 text-primary font-caption text-caption">
@@ -192,7 +153,7 @@ export default function ProductDetailPage({ params }: PageProps) {
 
             {/* Description */}
             <div className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              <p>{product.description}. Un soin précieux formulé pour nourrir intensément et réparer les cheveux texturés, crépus, bouclés ou abîmés. Infusée aux herbes botaniques naturelles, cette formule légère pénètre rapidement pour sceller l&apos;hydratation, apporter de la brillance et fortifier la fibre capillaire sans l&apos;alourdir. Idéal pour votre routine capillaire saine.</p>
+              <p>{product.description}</p>
             </div>
 
             {/* Stock & Actions */}

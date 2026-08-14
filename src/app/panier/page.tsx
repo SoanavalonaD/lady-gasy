@@ -8,7 +8,7 @@ import { useCart } from "@/context/CartContext";
 import { ShoppingCart, Minus, Plus, Trash2, ArrowRight, Lock } from "lucide-react";
 
 export default function CartPage() {
-  const { cartItems, updateQuantity, removeFromCart, subtotalEur, totalItems } =
+  const { cartItems, updateQuantity, removeFromCart, subtotalAr, totalItems } =
     useCart();
 
   return (
@@ -95,8 +95,8 @@ export default function CartPage() {
                       </div>
 
                       {/* Total Price for item */}
-                      <div className="font-label-md text-label-md text-on-surface w-20 text-right">
-                        {(item.product.priceEur * item.quantity).toFixed(2)} Ar
+                      <div className="font-label-md text-label-md text-on-surface w-24 text-right">
+                        {(item.product.priceAr * item.quantity).toLocaleString()} Ar
                       </div>
 
                       {/* Delete Button */}
@@ -122,7 +122,7 @@ export default function CartPage() {
                 <div className="space-y-sm mb-lg">
                   <div className="flex justify-between font-body-md text-body-md text-on-surface">
                     <span>Sous-total</span>
-                    <span>{subtotalEur.toFixed(2)} Ar </span>
+                    <span>{subtotalAr.toLocaleString()} Ar</span>
                   </div>
                   <div className="flex justify-between font-body-md text-body-md text-on-surface-variant">
                     <span>Livraison estimée</span>
@@ -131,7 +131,7 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between font-body-lg text-body-lg text-on-surface font-bold border-t border-surface-variant pt-md mb-xl">
                   <span>Total</span>
-                  <span>{subtotalEur.toFixed(2)} Ar</span>
+                  <span>{subtotalAr.toLocaleString()} Ar</span>
                 </div>
 
                 <Link

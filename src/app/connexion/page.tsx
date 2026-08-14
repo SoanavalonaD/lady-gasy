@@ -104,7 +104,7 @@ export default function ConnexionPage() {
       setTimeout(() => {
         setToastMessage(null);
         checkLoginStatus();
-        router.push("/checkout");
+        router.push("/");
       }, 1500);
     } else {
       // Detect unconfirmed email

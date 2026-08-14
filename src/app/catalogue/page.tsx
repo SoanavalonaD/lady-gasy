@@ -211,7 +211,7 @@ export default function Catalogue() {
                       </p>
                       <div className="flex justify-between items-center mt-auto">
                         <span className="font-label-md text-primary">
-                          {product.priceEur.toFixed(2)} Ar
+                          {product.priceAr.toLocaleString()} Ar
                         </span>
                       </div>
                     </div>

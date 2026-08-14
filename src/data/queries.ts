@@ -35,7 +35,7 @@ export async function getDbProducts(): Promise<Product[]> {
     name: row.nom_produit,
     description: row.description || "",
     priceAr: Number(row.prix),
-    priceEur: Number(row.prix) / 4500, // Conversion estimate
+    priceEur: Number(row.prix), // Direct price from database
     image: row.image_url || "/background-image.jpg",
     needs: ["Hydratation Profonde"], // Default since needs are not in SQL schema
     categories: [mapDbCategoryToLocal(row.categorie)],
