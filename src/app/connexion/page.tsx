@@ -12,11 +12,11 @@ import {
   ChevronRight,
   LogOut,
   Package,
-  Calendar,
   User
 } from "lucide-react";
 import { supabase } from "@/data/supabase";
 import { signInUser, signUpUser, getOrderHistory } from "@/data/queries";
+import { ArrowRight } from "lucide-react";
 
 export default function ConnexionPage() {
   const router = useRouter();
@@ -343,59 +343,13 @@ export default function ConnexionPage() {
                   <h2 className="font-headline-md text-primary font-semibold flex items-center gap-sm mb-md">
                     <Package size={22} /> Mes Réservations
                   </h2>
-                  {loadingOrders ? (
-                    <p className="text-sm text-on-surface-variant animate-pulse italic">Chargement de votre historique...</p>
-                  ) : orders.length === 0 ? (
-                    <p className="text-sm text-on-surface-variant italic">Vous n&apos;avez aucune commande enregistrée.</p>
-                  ) : (
-                    <div className="space-y-md max-h-[250px] overflow-y-auto pr-xs">
-                      {orders.map((o) => (
-                        <div
-                          key={o.id}
-                          className="border border-outline-variant/60 rounded-lg p-md bg-surface-container-low text-xs space-y-sm shadow-sm"
-                        >
-                          <div className="flex justify-between items-center font-semibold text-primary">
-                            <span className="flex items-center gap-xs text-on-surface-variant">
-                              <Calendar size={14} />
-                              {new Date(o.date_commande).toLocaleDateString("fr-FR")}
-                            </span>
-                            <span
-                              className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider ${
-                                o.statut === "LIVREE"
-                                  ? "bg-primary text-on-primary"
-                                  : o.statut === "CONFIRMEE"
-                                  ? "bg-primary-container text-on-primary-container"
-                                  : "bg-secondary-container text-on-secondary-container"
-                              }`}
-                            >
-                              {o.statut.replace("_", " ")}
-                            </span>
-                          </div>
-                          <div className="space-y-1 pl-sm border-l-2 border-primary/20">
-                            {o.items.map((item: any, idx: number) => (
-                              <div key={idx} className="flex justify-between text-on-surface-variant">
-                                <span>
-                                  {item.nom_produit} <span className="font-medium">x{item.quantite}</span>
-                                </span>
-                                <span className="text-on-surface">
-                                  {item.prix_unitaire_applique.toLocaleString()} Ar
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                          {o.livraison && (
-                            <p className="text-[10px] text-on-surface-variant italic border-t border-surface-variant/20 pt-xs">
-                              Livré à : {o.livraison.adresse_detaillee}, {o.livraison.ville}
-                            </p>
-                          )}
-                          <div className="flex justify-between items-center pt-xs border-t border-surface-variant/30 font-bold text-sm">
-                            <span>Total</span>
-                            <span className="text-primary">{o.montant_total.toLocaleString()} Ar</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  <Link
+                    href="/commandes"
+                    className="w-full bg-primary hover:bg-surface-tint text-on-primary py-md rounded-md font-label-md text-label-md transition-all duration-300 flex items-center justify-center gap-sm cursor-pointer shadow-sm hover:shadow-md"
+                  >
+                    Consulter mes commandes
+                    <ArrowRight className="ml-2" size={18} />
+                  </Link>
                 </div>
               </div>
             ) : (

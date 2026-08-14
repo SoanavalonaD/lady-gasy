@@ -14,9 +14,17 @@ export default function Catalogue() {
   const [dbProducts, setDbProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedNeeds, setSelectedNeeds] = useState<string[]>([]); // No default filter: show all products
+  const [selectedNeeds, setSelectedNeeds] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Read ?q= URL parameter on load or change
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q");
+    if (q) setSearchQuery(q);
+  }, []);
 
   useEffect(() => {
     getDbProducts()
@@ -45,23 +53,30 @@ export default function Catalogue() {
     );
   };
 
-  // Filter products based on selected needs and categories
+  // Filter products based on search query, selected needs, and categories
   const filteredProducts = useMemo(() => {
     return dbProducts.filter((product) => {
-      // If need filter is active, product must match at least one selected need
+      const matchesSearch =
+        !searchQuery.trim() ||
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (product.categories &&
+          product.categories.some((cat) =>
+            cat.toLowerCase().includes(searchQuery.toLowerCase())
+          ));
+
       const matchesNeeds =
         selectedNeeds.length === 0 ||
         (product.needs && product.needs.some((need) => selectedNeeds.includes(need)));
 
-      // If category filter is active, product must match at least one selected category
       const matchesCategories =
         selectedCategories.length === 0 ||
         (product.categories &&
           product.categories.some((cat) => selectedCategories.includes(cat)));
 
-      return matchesNeeds && matchesCategories;
+      return matchesSearch && matchesNeeds && matchesCategories;
     });
-  }, [dbProducts, selectedNeeds, selectedCategories]);
+  }, [dbProducts, searchQuery, selectedNeeds, selectedCategories]);
 
   const handleAddToCart = (product: Product) => {
     addToCart(product, 1);
@@ -136,6 +151,22 @@ export default function Catalogue() {
 
           {/* Product Grid */}
           <div className="flex-1">
+            {searchQuery && (
+              <div className="mb-md flex items-center justify-between bg-primary-container/20 border border-primary/30 p-sm rounded-lg">
+                <span className="font-body-md text-sm text-primary font-medium">
+                  Résultats de recherche pour : <strong className="italic">&quot;{searchQuery}&quot;</strong> ({filteredProducts.length})
+                </span>
+                <button
+                  onClick={() => {
+                    setSearchQuery("");
+                    window.history.replaceState({}, "", "/catalogue");
+                  }}
+                  className="font-label-md text-xs text-primary underline hover:text-secondary transition-colors cursor-pointer"
+                >
+                  Effacer la recherche
+                </button>
+              </div>
+            )}
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-md">
                 {[...Array(6)].map((_, i) => (
@@ -169,6 +200,8 @@ export default function Catalogue() {
                   onClick={() => {
                     setSelectedNeeds([]);
                     setSelectedCategories([]);
+                    setSearchQuery("");
+                    window.history.replaceState({}, "", "/catalogue");
                   }}
                   className="mt-md text-primary font-label-md underline hover:text-secondary transition-colors"
                 >
