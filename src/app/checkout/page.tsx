@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { ShoppingBag, ArrowRight, Lock, LogIn, CheckCircle2 } from "lucide-react";
 import { createOrderReservation } from "@/data/queries";
+import { supabase } from "@/data/supabase";
 
 interface Neighborhood {
   name: string;
@@ -97,10 +98,46 @@ export default function CheckoutPage() {
   const [isExpress, setIsExpress] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"cash" | "mobile_money">("cash");
 
-  // Check login on load
+  // Check login & auto-fill user data in background on load
   useEffect(() => {
-    const loggedIn = sessionStorage.getItem("isLoggedIn") === "true";
-    setIsLoggedIn(loggedIn);
+    const checkUser = async () => {
+      const loggedIn = sessionStorage.getItem("isLoggedIn") === "true";
+      setIsLoggedIn(loggedIn);
+
+      if (loggedIn) {
+        let storedName = sessionStorage.getItem("userName") || "";
+        let storedPhone = sessionStorage.getItem("userPhone") || "";
+
+        // If not found in sessionStorage, attempt to fetch from Supabase auth user profile
+        if (!storedName || !storedPhone) {
+          try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+              const { data: profile } = await supabase
+                .from("utilisateurs")
+                .select("*")
+                .eq("id", user.id)
+                .maybeSingle();
+
+              if (profile) {
+                storedName = storedName || `${profile.prenom || ""} ${profile.nom || ""}`.trim();
+                storedPhone = storedPhone || profile.telephone || "";
+              } else if (user.user_metadata) {
+                storedName = storedName || `${user.user_metadata.prenom || ""} ${user.user_metadata.nom || ""}`.trim();
+                storedPhone = storedPhone || user.user_metadata.telephone || "";
+              }
+            }
+          } catch (err) {
+            console.error("Erreur lors de la récupération du profil utilisateur:", err);
+          }
+        }
+
+        if (storedName) setFullName(storedName);
+        if (storedPhone) setPhone(storedPhone);
+      }
+    };
+
+    checkUser();
   }, []);
 
   // Filter neighborhoods based on search query
@@ -123,20 +160,22 @@ export default function CheckoutPage() {
   // Form validation for submit button activation
   const isFormValid = useMemo(() => {
     return (
-      fullName.trim() !== "" &&
-      phone.trim() !== "" &&
       ville.trim() !== "" &&
       deliveryLocation.trim() !== "" &&
       timeSlot !== "" &&
       selectedQuartier !== null
     );
-  }, [fullName, phone, ville, deliveryLocation, timeSlot, selectedQuartier]);
+  }, [ville, deliveryLocation, timeSlot, selectedQuartier]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isFormValid || !selectedQuartier) return;
 
     const userId = sessionStorage.getItem("userId");
+
+    // Use background loaded fullName & phone, or fallback to sessionStorage
+    const finalFullName = fullName || sessionStorage.getItem("userName") || "Client";
+    const finalPhone = phone || sessionStorage.getItem("userPhone") || "";
 
     // Build address description
     const addressDetails = `${deliveryLocation}, ${selectedQuartier.name}, ${ville} (${
@@ -147,8 +186,8 @@ export default function CheckoutPage() {
     await createOrderReservation({
       userId,
       items: cartItems,
-      fullName,
-      phone,
+      fullName: finalFullName,
+      phone: finalPhone,
       ville,
       quartier: selectedQuartier,
       deliveryLocation,
@@ -161,9 +200,9 @@ export default function CheckoutPage() {
     });
 
     const orderDetails = {
-      name: fullName,
-      email: "client@ladygasy.com",
-      phone,
+      name: finalFullName,
+      email: sessionStorage.getItem("userEmail") || "client@ladygasy.com",
+      phone: finalPhone,
       address: addressDetails,
       total: totalAr,
       paymentMethod,
@@ -249,7 +288,7 @@ export default function CheckoutPage() {
         </h1>
 
         {cartItems.length === 0 ? (
-          <div className="text-center py-xl max-w-md mx-auto bg-surface-container rounded-xl border border-outline-variant p-md flex flex-col items-center">
+          <div className="text-center py-xl mx-auto bg-surface-container rounded-xl border border-outline-variant flex flex-col items-center">
             <ShoppingBag className="text-primary mb-sm" size={36} />
             <p className="font-body-lg text-on-surface mb-md">Votre panier est vide.</p>
             <Link href="/catalogue" className="bg-primary text-on-primary font-label-md px-lg py-sm rounded hover:bg-surface-tint transition-all">
@@ -267,19 +306,19 @@ export default function CheckoutPage() {
                 </h2>
 
                 <div>
-                    <label className="block font-label-md text-label-md text-on-surface-variant mb-xs" htmlFor="ville">
-                      Ville *
-                    </label>
-                    <input
-                      id="ville"
-                      type="text"
-                      placeholder="Antananarivo"
-                      value={ville}
-                      onChange={(e) => setVille(e.target.value)}
-                      className="w-full bg-surface border border-outline-variant rounded-md px-sm py-sm focus:ring-1 focus:ring-primary focus:border-primary transition-colors text-on-surface"
-                      required
-                    />
-                  </div>
+                  <label className="block font-label-md text-label-md text-on-surface-variant mb-xs" htmlFor="ville">
+                    Ville *
+                  </label>
+                  <input
+                    id="ville"
+                    type="text"
+                    placeholder="Saisissez votre ville (ex: Antananarivo, Majunga...)"
+                    value={ville}
+                    onChange={(e) => setVille(e.target.value)}
+                    className="w-full bg-surface border border-outline-variant rounded-md px-sm py-sm focus:ring-1 focus:ring-primary focus:border-primary transition-colors text-on-surface"
+                    required
+                  />
+                </div>
 
                 <div className="relative">
                   
@@ -532,6 +571,16 @@ export default function CheckoutPage() {
                   Valider la commande
                   <ArrowRight size={18} />
                 </button>
+
+                {!isFormValid && (
+                  <p className="font-caption text-xs text-secondary text-center mt-xs font-medium">
+                    ⚠️ Veuillez remplir tous les champs obligatoires (*) :
+                    {!ville.trim() && " Ville,"}
+                    {!selectedQuartier && " Quartier de livraison,"}
+                    {!deliveryLocation.trim() && " Repère de livraison,"}
+                    {!timeSlot && " Créneau horaire."}
+                  </p>
+                )}
 
                 <p className="font-caption text-caption text-on-surface-variant text-center mt-md flex items-center justify-center gap-xs">
                   <Lock size={14} />
