@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Check, ShoppingBasket } from "lucide-react";
+import { Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 interface OrderDetails {
   name: string;
@@ -85,11 +86,11 @@ export default function CheckoutSuccessPage() {
 
           <div className="space-y-sm">
             <Link
-              href="/catalogue"
+              href="/commandes"
               className="w-full bg-primary hover:bg-surface-tint text-on-primary py-md rounded-md font-label-md text-label-md transition-all duration-300 flex items-center justify-center gap-sm cursor-pointer shadow-sm hover:shadow-md"
             >
-              Continuer mes achats
-              <ShoppingBasket size={18} />
+              Consulter mes commandes
+              <ArrowRight className="ml-2" size={18} />
             </Link>
             <Link
               href="/"

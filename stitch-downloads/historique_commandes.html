@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mes Commandes - Lady Gasy</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&amp;family=Libre+Caslon+Text:ital,wght@0,400;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#34302c",
+                    "tertiary-fixed-dim": "#cbc6bd",
+                    "outline": "#76786b",
+                    "on-secondary-fixed": "#380d00",
+                    "on-primary-container": "#bed58e",
+                    "inverse-primary": "#b8cf88",
+                    "on-background": "#1e1b18",
+                    "on-error": "#ffffff",
+                    "secondary": "#8e4d33",
+                    "surface-tint": "#52652a",
+                    "on-secondary-container": "#783c24",
+                    "primary": "#33450d",
+                    "background": "#fff8f5",
+                    "secondary-fixed-dim": "#ffb59a",
+                    "primary-container": "#4a5d23",
+                    "surface-container": "#f5ece7",
+                    "surface-container-high": "#efe6e2",
+                    "secondary-fixed": "#ffdbce",
+                    "tertiary-fixed": "#e7e2d9",
+                    "on-secondary": "#ffffff",
+                    "on-surface": "#1e1b18",
+                    "on-tertiary-fixed": "#1d1b16",
+                    "on-secondary-fixed-variant": "#71361e",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed": "#141f00",
+                    "error": "#ba1a1a",
+                    "surface-bright": "#fff8f5",
+                    "surface-container-low": "#fbf2ed",
+                    "surface-dim": "#e1d8d4",
+                    "on-tertiary-fixed-variant": "#494640",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#e9e1dc",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#feaa8a",
+                    "on-primary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed-dim": "#b8cf88",
+                    "tertiary-container": "#59564f",
+                    "on-surface-variant": "#45483c",
+                    "on-primary-fixed-variant": "#3b4d14",
+                    "primary-fixed": "#d4eca2",
+                    "tertiary": "#413f39",
+                    "surface": "#fff8f5",
+                    "surface-container-highest": "#e9e1dc",
+                    "outline-variant": "#c6c8b8",
+                    "on-tertiary-container": "#d1cbc3",
+                    "inverse-on-surface": "#f8efea"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sm": "16px",
+                    "gutter": "16px",
+                    "container-padding": "20px",
+                    "xs": "8px",
+                    "lg": "40px",
+                    "xl": "64px",
+                    "base": "4px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "label-md": [
+                            "Be Vietnam Pro"
+                    ],
+                    "headline-lg-mobile": [
+                            "Libre Caslon Text"
+                    ],
+                    "headline-md": [
+                            "Libre Caslon Text"
+                    ],
+                    "display-lg": [
+                            "Libre Caslon Text"
+                    ],
+                    "body-md": [
+                            "Be Vietnam Pro"
+                    ],
+                    "caption": [
+                            "Be Vietnam Pro"
+                    ],
+                    "headline-lg": [
+                            "Libre Caslon Text"
+                    ],
+                    "body-lg": [
+                            "Be Vietnam Pro"
+                    ]
+            },
+            "fontSize": {
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "28px",
+                            {
+                                    "lineHeight": "36px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "caption": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="bg-surface border-b border-outline-variant fixed top-0 w-full z-50">
+<div class="flex justify-between items-center px-lg py-md max-w-[1280px] mx-auto">
+<!-- Navigation Links -->
+<nav class="hidden md:flex gap-lg">
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 ease-in-out font-body-md text-body-md" href="#">Catalogue</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 ease-in-out font-body-md text-body-md" href="#">Le Salon</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 ease-in-out font-body-md text-body-md" href="#">À Propos</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 ease-in-out font-body-md text-body-md" href="#">Contact</a>
+</nav>
+<!-- Brand Logo -->
+<a class="font-display-lg text-display-lg text-primary italic absolute left-1/2 -translate-x-1/2" href="#">Lady Gasy</a>
+<!-- Actions -->
+<div class="flex items-center gap-md">
+<button class="text-primary hover:text-secondary transition-colors duration-300 ease-in-out">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="text-primary hover:text-secondary transition-colors duration-300 ease-in-out">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</button>
+<button class="text-primary hover:text-secondary transition-colors duration-300 ease-in-out relative">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow pt-xl mt-xl px-container-padding md:px-lg max-w-[1280px] mx-auto w-full">
+<!-- Page Header -->
+<div class="mb-xl text-center md:text-left pt-lg">
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-xs">Mes Commandes</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Consultez l'historique et le statut de vos commandes.</p>
+</div>
+<!-- Filters / Tabs -->
+<div class="flex flex-wrap gap-sm mb-lg border-b border-outline-variant pb-xs">
+<button class="font-label-md text-label-md px-sm py-xs text-primary border-b-2 border-primary">Toutes</button>
+<button class="font-label-md text-label-md px-sm py-xs text-on-surface-variant hover:text-primary transition-colors">En cours</button>
+<button class="font-label-md text-label-md px-sm py-xs text-on-surface-variant hover:text-primary transition-colors">Terminées</button>
+<button class="font-label-md text-label-md px-sm py-xs text-on-surface-variant hover:text-primary transition-colors">Annulées</button>
+</div>
+<!-- Orders List (Bento-style Grid / Cards for tactile minimalism) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg mb-xl">
+<!-- Order Card 1 -->
+<div class="bg-surface-container-lowest border border-[#E0D7CC] rounded-lg p-md flex flex-col hover:shadow-[0_10px_30px_rgba(51,69,13,0.05)] transition-shadow duration-300 relative overflow-hidden group">
+<div class="absolute inset-0 bg-surface-container opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none"></div>
+<div class="flex justify-between items-start mb-md">
+<div>
+<span class="font-caption text-caption text-on-surface-variant mb-base block">Commande n°</span>
+<span class="font-label-md text-label-md text-primary">ORD-9f8a-4b2c</span>
+</div>
+<!-- Status Badge -->
+<span class="inline-flex items-center px-xs py-base rounded-full bg-surface-container-high border border-outline-variant font-caption text-caption text-on-surface">
+<span class="w-2 h-2 rounded-full bg-primary mr-xs"></span>
+                        CONFIRMÉE
+                    </span>
+</div>
+<div class="flex justify-between items-center border-t border-outline-variant pt-md mb-md">
+<div>
+<span class="font-caption text-caption text-on-surface-variant block mb-base">Date</span>
+<span class="font-body-md text-body-md text-on-surface">24 Oct 2024</span>
+</div>
+<div class="text-right">
+<span class="font-caption text-caption text-on-surface-variant block mb-base">Total</span>
+<span class="font-headline-md text-headline-md text-primary">€ 145,00</span>
+</div>
+</div>
+<div class="mt-auto pt-sm flex justify-between items-center">
+<span class="font-caption text-caption text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="package">package</span> 3 articles
+                    </span>
+<button class="font-label-md text-label-md text-secondary border border-secondary px-md py-xs rounded-DEFAULT hover:bg-secondary hover:text-on-secondary transition-colors duration-200">
+                        Voir les détails
+                    </button>
+</div>
+</div>
+<!-- Order Card 2 -->
+<div class="bg-surface-container-lowest border border-[#E0D7CC] rounded-lg p-md flex flex-col hover:shadow-[0_10px_30px_rgba(51,69,13,0.05)] transition-shadow duration-300 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-md">
+<div>
+<span class="font-caption text-caption text-on-surface-variant mb-base block">Commande n°</span>
+<span class="font-label-md text-label-md text-primary">ORD-3d2e-1f9a</span>
+</div>
+<span class="inline-flex items-center px-xs py-base rounded-full bg-surface-container-high border border-outline-variant font-caption text-caption text-on-surface">
+<span class="w-2 h-2 rounded-full bg-secondary mr-xs"></span>
+                        EXPÉDIÉE
+                    </span>
+</div>
+<div class="flex justify-between items-center border-t border-outline-variant pt-md mb-md">
+<div>
+<span class="font-caption text-caption text-on-surface-variant block mb-base">Date</span>
+<span class="font-body-md text-body-md text-on-surface">18 Oct 2024</span>
+</div>
+<div class="text-right">
+<span class="font-caption text-caption text-on-surface-variant block mb-base">Total</span>
+<span class="font-headline-md text-headline-md text-primary">€ 89,50</span>
+</div>
+</div>
+<div class="mt-auto pt-sm flex justify-between items-center">
+<span class="font-caption text-caption text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="local_shipping">local_shipping</span> 1 article
+                    </span>
+<button class="font-label-md text-label-md text-secondary border border-secondary px-md py-xs rounded-DEFAULT hover:bg-secondary hover:text-on-secondary transition-colors duration-200">
+                        Voir les détails
+                    </button>
+</div>
+</div>
+<!-- Order Card 3 -->
+<div class="bg-surface-container-lowest border border-[#E0D7CC] rounded-lg p-md flex flex-col hover:shadow-[0_10px_30px_rgba(51,69,13,0.05)] transition-shadow duration-300 relative overflow-hidden group opacity-75">
+<div class="flex justify-between items-start mb-md">
+<div>
+<span class="font-caption text-caption text-on-surface-variant mb-base block">Commande n°</span>
+<span class="font-label-md text-label-md text-primary">ORD-7c5b-8d1e</span>
+</div>
+<span class="inline-flex items-center px-xs py-base rounded-full bg-surface-container border border-outline-variant font-caption text-caption text-on-surface-variant">
+<span class="material-symbols-outlined text-[12px] mr-xs" data-icon="check_circle">check_circle</span>
+                        LIVRÉE
+                    </span>
+</div>
+<div class="flex justify-between items-center border-t border-outline-variant pt-md mb-md">
+<div>
+<span class="font-caption text-caption text-on-surface-variant block mb-base">Date</span>
+<span class="font-body-md text-body-md text-on-surface">02 Sep 2024</span>
+</div>
+<div class="text-right">
+<span class="font-caption text-caption text-on-surface-variant block mb-base">Total</span>
+<span class="font-headline-md text-headline-md text-primary">€ 210,00</span>
+</div>
+</div>
+<div class="mt-auto pt-sm flex justify-between items-center">
+<span class="font-caption text-caption text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="inventory_2">inventory_2</span> 4 articles
+                    </span>
+<button class="font-label-md text-label-md text-primary hover:text-secondary underline decoration-1 underline-offset-4 transition-colors duration-200">
+                        Voir les détails
+                    </button>
+</div>
+</div>
+</div>
+<!-- Empty State Example (Hidden by default, shown here for design completeness) -->
+<!--
+        <div class="flex flex-col items-center justify-center py-xl text-center bg-surface-container-lowest border border-[#E0D7CC] rounded-lg">
+            <span class="material-symbols-outlined text-[48px] text-tertiary-fixed-dim mb-md" data-icon="receipt_long">receipt_long</span>
+            <h3 class="font-headline-md text-headline-md text-primary mb-sm">Aucune commande</h3>
+            <p class="font-body-md text-body-md text-on-surface-variant max-w-md mb-lg">Vous n'avez pas encore passé de commande. Découvrez notre sélection d'expertise botanique.</p>
+            <button class="font-label-md text-label-md bg-primary text-on-primary px-lg py-sm rounded-DEFAULT hover:bg-primary-container transition-colors">
+                Explorer le catalogue
+            </button>
+        </div>
+        -->
+</main>
+<!-- Footer -->
+<footer class="bg-tertiary-fixed border-t border-outline-variant w-full mt-xl">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-lg px-lg py-xl max-w-[1280px] mx-auto">
+<div class="md:col-span-1 flex flex-col gap-sm">
+<span class="font-headline-md text-headline-md text-primary">Lady Gasy</span>
+<p class="font-body-md text-body-md text-on-tertiary-fixed-variant">© 2024 Lady Gasy. Tous droits réservés. Expertise botanique pour cheveux naturels.</p>
+</div>
+<div class="flex flex-col gap-sm">
+<a class="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors duration-200" href="#">Mentions Légales</a>
+</div>
+<div class="flex flex-col gap-sm">
+<a class="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors duration-200" href="#">CGV</a>
+</div>
+<div class="flex flex-col gap-sm">
+<a class="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors duration-200" href="#">Politique de Confidentialité</a>
+<a class="font-body-md text-body-md text-on-tertiary-fixed-variant hover:text-primary transition-colors duration-200" href="#">Contactez-nous</a>
+</div>
+</div>
+</footer>
+</body></html>
