@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { getAllAdminOrders, getDbProducts } from "@/data/queries";
 import { Product } from "@/data/types";
+import AdminDashboardCharts from "@/components/admin/AdminDashboardCharts";
 
 export default function AdminDashboardPage() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -194,6 +195,9 @@ export default function AdminDashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Sales & Statistics Charts */}
+      {!loading && <AdminDashboardCharts orders={orders} products={products} />}
 
       {/* Recent Orders Table */}
       <div className="bg-surface-container-lowest border border-outline-variant/50 rounded-xl overflow-hidden shadow-xs">
