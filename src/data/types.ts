@@ -7,8 +7,10 @@ export interface Product {
   image: string;
   needs?: string[];
   categories?: string[];
+  rawCategory?: string;
   ingredients?: string;
   usage?: string[];
   rating?: number;
   reviewsCount?: number;
+  stock?: number;
 }

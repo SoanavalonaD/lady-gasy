@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lady Gasy Admin - Détails de la Commande</title>
+<!-- Google Fonts: Libre Caslon Text & Be Vietnam Pro -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&amp;family=Libre+Caslon+Text:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config injected from Style Guidance -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#34302c",
+                        "on-tertiary-container": "#d1cbc3",
+                        "secondary-fixed": "#ffdbce",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#bed58e",
+                        "surface-variant": "#e9e1dc",
+                        "tertiary": "#413f39",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#e1d8d4",
+                        "on-tertiary-fixed": "#1d1b16",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#d4eca2",
+                        "surface-container-highest": "#e9e1dc",
+                        "surface-container-low": "#fbf2ed",
+                        "surface-container": "#f5ece7",
+                        "inverse-primary": "#b8cf88",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#feaa8a",
+                        "tertiary-fixed": "#e7e2d9",
+                        "error": "#ba1a1a",
+                        "primary": "#33450d",
+                        "background": "#fff8f5",
+                        "on-secondary-container": "#783c24",
+                        "surface-bright": "#fff8f5",
+                        "on-secondary-fixed-variant": "#71361e",
+                        "on-primary-fixed": "#141f00",
+                        "tertiary-container": "#59564f",
+                        "inverse-on-surface": "#f8efea",
+                        "surface": "#fff8f5",
+                        "surface-container-high": "#efe6e2",
+                        "secondary-fixed-dim": "#ffb59a",
+                        "secondary": "#8e4d33",
+                        "on-surface-variant": "#45483c",
+                        "surface-tint": "#52652a",
+                        "on-secondary-fixed": "#380d00",
+                        "outline-variant": "#c6c8b8",
+                        "on-surface": "#1e1b18",
+                        "outline": "#76786b",
+                        "tertiary-fixed-dim": "#cbc6bd",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#4a5d23",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#494640",
+                        "on-background": "#1e1b18",
+                        "primary-fixed-dim": "#b8cf88",
+                        "on-primary-fixed-variant": "#3b4d14"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "md": "24px",
+                        "container-padding": "20px",
+                        "xs": "8px",
+                        "lg": "40px",
+                        "sm": "16px",
+                        "gutter": "16px",
+                        "xl": "64px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Libre Caslon Text"],
+                        "label-md": ["Be Vietnam Pro"],
+                        "caption": ["Be Vietnam Pro"],
+                        "display-lg": ["Libre Caslon Text"],
+                        "headline-lg-mobile": ["Libre Caslon Text"],
+                        "headline-lg": ["Libre Caslon Text"],
+                        "body-md": ["Be Vietnam Pro"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "caption": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom scrollbar for panel */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #c6c8b8; /* outline-variant */
+            border-radius: 10px;
+        }
+        /* Soft ambient shadow for panel mimicking elevation */
+        .ambient-shadow-panel {
+            box-shadow: -10px 0 30px rgba(51, 69, 13, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Shell Layout -->
+<div class="flex h-screen w-full relative">
+<!-- Component: SideNavBar -->
+<nav class="hidden md:flex h-screen w-64 fixed left-0 top-0 border-r border-outline-variant dark:border-on-surface-variant flex-col py-lg px-sm bg-surface dark:bg-inverse-surface z-10 transition-all duration-200 ease-in-out">
+<!-- Header/Brand -->
+<div class="flex items-center gap-sm px-sm mb-xl">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">spa</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-primary dark:text-primary-fixed">Lady Gasy</h1>
+<p class="font-caption text-caption text-on-surface-variant">Administration</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<ul class="flex flex-col gap-xs flex-1">
+<li>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-high dark:hover:bg-tertiary-container transition-colors rounded-full font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                        Tableau de bord
+                    </a>
+</li>
+<!-- ACTIVE ITEM: Commandes -->
+<li>
+<a class="flex items-center gap-sm px-md py-sm bg-primary-container text-on-primary-container rounded-full font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shopping_cart</span>
+                        Commandes
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-high dark:hover:bg-tertiary-container transition-colors rounded-full font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+                        Produits
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-high dark:hover:bg-tertiary-container transition-colors rounded-full font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">group</span>
+                        Clients
+                    </a>
+</li>
+</ul>
+<!-- Footer Action -->
+<div class="mt-auto">
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:text-primary hover:bg-surface-container-high dark:hover:bg-tertiary-container transition-colors rounded-full font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">logout</span>
+                    Déconnexion
+                </a>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<main class="flex-1 ml-0 md:ml-64 flex flex-col min-h-screen relative">
+<!-- Component: TopAppBar -->
+<header class="fixed top-0 right-0 left-0 md:left-64 h-16 bg-surface/80 backdrop-blur-md border-b border-outline-variant flex justify-between items-center px-xl w-full z-10">
+<div class="flex items-center gap-md">
+<!-- Mobile Menu Trigger -->
+<button class="md:hidden text-on-surface-variant hover:text-on-surface p-2 -ml-2 rounded-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Search (Search Bar: on_left logic implied by spacing) -->
+<div class="relative hidden sm:block w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="w-full bg-surface-container-highest border-none rounded-full py-1.5 pl-10 pr-4 font-body-md text-body-md text-on-surface placeholder:text-outline focus:ring-1 focus:ring-primary" placeholder="Rechercher..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-tertiary-container ml-sm overflow-hidden border border-outline-variant">
+<img alt="Profil Administrateur" class="w-full h-full object-cover" data-alt="A clean, minimalist profile avatar placeholder depicting a soft neutral grey background, representing an administrator profile in a modern web application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXtjXlVcsreChqgYtvr03mqm0spsj1NU8uNnIuCqNlCUDSmQ2pl7QfdY96UyHxmIT0W6syVVncaw2Qrfq08j_31xla8G-R7xqiNjP9HUSwjpCpiF51FS04Y_3pnT3veZo3weGCFpcQkO_q5_9ceQl-w1HNPdoZR1ovZEYB1N8N-Hhf9e5j43fVZ2PDU2z15atzLxj5t4NYzRWkiWaLCyy22d98k6igV3oJ5icap1b4Rq22K4rHpMnf"/>
+</div>
+</div>
+</header>
+<!-- Dummy Page Content (Context beneath overlay) -->
+<div class="pt-24 px-xl pb-xl flex-1 flex flex-col">
+<div class="flex justify-between items-end mb-lg">
+<h2 class="font-display-lg text-display-lg text-on-surface">Commandes</h2>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-md py-sm rounded-full flex items-center gap-xs hover:bg-primary-container hover:text-on-primary-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        Nouvelle
+                    </button>
+</div>
+<!-- Skeleton rows for context -->
+<div class="space-y-sm opacity-40">
+<div class="h-16 w-full bg-surface-container-highest rounded-lg border border-outline-variant"></div>
+<div class="h-16 w-full bg-surface-container-highest rounded-lg border border-outline-variant"></div>
+<div class="h-16 w-full bg-surface-container-highest rounded-lg border border-outline-variant"></div>
+</div>
+</div>
+</main>
+</div>
+<!-- OVERLAY: Order Detail Modal/Panel -->
+<div class="fixed inset-0 z-50 flex justify-end">
+<!-- Backdrop -->
+<div class="absolute inset-0 bg-tertiary/20 backdrop-blur-[4px] transition-opacity cursor-pointer"></div>
+<!-- Right Side Panel -->
+<aside class="relative w-full max-w-2xl h-full bg-surface-container-lowest border-l border-outline-variant flex flex-col ambient-shadow-panel z-10 transform transition-transform duration-300">
+<!-- Panel Header -->
+<header class="px-lg py-md border-b border-surface-variant flex justify-between items-center bg-surface-container-lowest shrink-0">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-sm">
+<h2 class="font-headline-md text-headline-md text-on-surface m-0">Commande #LG-8291</h2>
+<span class="bg-surface-container-high text-on-surface-variant font-caption text-caption px-2 py-0.5 rounded-full border border-outline-variant">Aujourd'hui, 10:42</span>
+</div>
+<!-- Status Update Dropdown -->
+<div class="flex items-center gap-xs mt-2">
+<label class="font-caption text-caption text-on-surface-variant" for="order-status">Statut :</label>
+<div class="relative">
+<select class="appearance-none bg-primary-container/10 border border-primary-container text-primary font-label-md text-label-md rounded-full py-1 pl-3 pr-8 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer" id="order-status">
+<option selected="" value="prep">En préparation</option>
+<option value="ready">Prêt pour livraison</option>
+<option value="route">En route</option>
+<option value="delivered">Livré</option>
+<option value="cancelled">Annulé</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-[18px] text-primary pointer-events-none">arrow_drop_down</span>
+</div>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</header>
+<!-- Panel Body (Scrollable) -->
+<div class="flex-1 overflow-y-auto px-lg py-lg space-y-xl bg-surface-container-lowest">
+<!-- Section: Driver Assignment (Highlighted Action Area) -->
+<section class="bg-surface border border-outline-variant rounded-xl p-md flex flex-col gap-md relative overflow-hidden">
+<!-- Subtle background decoration -->
+<div class="absolute -right-10 -top-10 w-32 h-32 bg-secondary-container/20 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary">local_shipping</span>
+<h3 class="font-label-md text-label-md text-on-surface">Assignation Livreur</h3>
+</div>
+<div class="flex flex-col sm:flex-row gap-sm items-start sm:items-center">
+<div class="relative flex-1 w-full">
+<select class="w-full appearance-none bg-surface-container-lowest border border-outline-variant text-on-surface font-body-md text-body-md rounded-lg py-2.5 pl-3 pr-10 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary">
+<option disabled="" selected="" value="">Sélectionner un livreur...</option>
+<option value="1">Jean Rakoto - Zone Centre</option>
+<option value="2">Hery Randria - Zone Nord</option>
+<option value="3">Externe - Service Express</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-outline pointer-events-none">person_search</span>
+</div>
+<button class="w-full sm:w-auto shrink-0 bg-primary text-on-primary font-label-md text-label-md px-md py-2.5 rounded-lg shadow-sm hover:bg-[#2a380a] active:bg-[#1a2306] transition-colors flex items-center justify-center gap-xs">
+                            Confirmer l'assignation
+                        </button>
+</div>
+</section>
+<!-- 2-Column Bento Layout for Info -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Information Group: Client/Contact -->
+<section class="flex flex-col gap-sm">
+<h3 class="font-label-md text-label-md text-on-surface border-b border-surface-variant pb-2">Client</h3>
+<div class="flex flex-col gap-3">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-outline mt-0.5 text-[20px]">person</span>
+<div>
+<p class="font-body-md text-body-md text-on-surface">Miora Andriamanana</p>
+<p class="font-caption text-caption text-on-surface-variant">Cliente Fidèle</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline text-[20px]">call</span>
+<p class="font-body-md text-body-md text-on-surface">+261 34 00 123 45</p>
+</div>
+</div>
+</section>
+<!-- Information Group: Delivery Details -->
+<section class="flex flex-col gap-sm">
+<h3 class="font-label-md text-label-md text-on-surface border-b border-surface-variant pb-2">Livraison</h3>
+<div class="flex flex-col gap-3">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-outline mt-0.5 text-[20px]">location_on</span>
+<div>
+<p class="font-body-md text-body-md text-on-surface">Antananarivo</p>
+<p class="font-caption text-caption text-on-surface-variant leading-relaxed">Lot II B 18 Ambohijatovo<br/>Repère: Portail vert en face de l'épicerie.</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline text-[20px]">schedule</span>
+<p class="font-body-md text-body-md text-on-surface">14:00 - 16:30 <span class="font-caption text-caption text-on-surface-variant ml-1">(Aujourd'hui)</span></p>
+</div>
+</div>
+</section>
+</div>
+<!-- Information Group: Payment -->
+<section class="flex flex-col gap-sm">
+<h3 class="font-label-md text-label-md text-on-surface border-b border-surface-variant pb-2">Paiement</h3>
+<div class="flex items-center justify-between p-sm rounded-lg bg-surface-container border border-outline-variant/50">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant text-[22px]">payments</span>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Mobile Money (MVola)</p>
+<p class="font-caption text-caption text-on-surface-variant">Réf: MV-9928172</p>
+</div>
+</div>
+<span class="bg-[#d4eca2]/30 text-primary font-label-md text-label-md px-3 py-1 rounded-full border border-[#d4eca2]">Payé</span>
+</div>
+</section>
+<!-- Information Group: Order Items -->
+<section class="flex flex-col gap-md">
+<div class="flex items-center justify-between border-b border-surface-variant pb-2">
+<h3 class="font-label-md text-label-md text-on-surface">Articles (2)</h3>
+</div>
+<div class="flex flex-col gap-md">
+<!-- Item 1 -->
+<div class="flex gap-md items-center">
+<div class="w-20 h-20 shrink-0 bg-surface-variant rounded-sm overflow-hidden border border-outline-variant/30 relative">
+<img alt="Sérum Revitalisant" class="w-full h-full object-cover" data-alt="A highly detailed, editorial-style product photograph of a premium organic hair care bottle resting on a subtle, textured stone surface. The lighting is soft, natural, and high-key, creating a bright and airy atmosphere consistent with a modern, luxury beauty brand. The color palette features earthy tones, specifically highlighting an olive green brand aesthetic against a pristine white background. Delicate botanical shadows hint at natural ingredients, enhancing the tactile minimalism and refined elegance of the composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkZ5I9Z4uCOmMUQjiA_eagj1dJz2WFn26vZx0b3GDx-e_IHyf-uyJfawZh8WeheKeFDbckah9hK3hafIYk4PmaR6_6-t2gj62ctVIez7LnGwPRHUsc5lCuqPLTmB2vbUs81XzIgPYDIROd-z6cqSA0lAvpow6KunMlrWgBMBWZWClRQldqxKaZKJTqAliiqKoupErnzK05XHe--saePQbJgNxKJhnlhPqxG7_d7o3fAQ-rxq6rSdm4"/>
+</div>
+<div class="flex-1 flex flex-col justify-center">
+<h4 class="font-body-md text-body-md text-on-surface leading-tight">Sérum Revitalisant aux Huiles Essentielles</h4>
+<p class="font-caption text-caption text-on-surface-variant mt-1">Soin Intense - 50ml</p>
+<p class="font-label-md text-label-md text-on-surface mt-2 lg:hidden">45 000 Ar</p>
+</div>
+<div class="text-right hidden lg:block">
+<p class="font-body-md text-body-md text-on-surface">45 000 Ar</p>
+<p class="font-caption text-caption text-on-surface-variant">Qté: 1</p>
+</div>
+<div class="lg:hidden text-right">
+<p class="font-caption text-caption text-on-surface-variant">x1</p>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex gap-md items-center">
+<div class="w-20 h-20 shrink-0 bg-surface-variant rounded-sm overflow-hidden border border-outline-variant/30 relative">
+<img alt="Masque Hydratant" class="w-full h-full object-cover" data-alt="A close-up, high-end editorial product shot of a sleek jar of organic hair mask cream on a smooth, off-white pedestal. The scene is bathed in warm, diffused natural light that emphasizes the rich, creamy texture of the product. The overall aesthetic is tactile minimalism, utilizing a sophisticated palette of soft sable, pristine white, and subtle terracotta accents. The composition exudes luxury, calm, and botanical expertise, typical of a premium organic beauty brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBx51XvlYM0vi5ubT5JgdJi27hE0mWoLxhdP9W9MNY-Dribh6WGy8xF09cLtAYVyMuNysqOMSEq7ZzIO6obknyVGWitbJsqLgAZzYjY3KX0X5AePmOve-7Ercb9z2RSzReCCkidboV8KzqqrLnD06Oh7DaznMOemvoHHQDEV5GkRtM6TBImyR7OP-OSu_8Gsiio7VuobAun9L-AeevVIZ9vskm73e8hoxTOYHtZmBFFdyG16FTGhNKY"/>
+</div>
+<div class="flex-1 flex flex-col justify-center">
+<h4 class="font-body-md text-body-md text-on-surface leading-tight">Masque Profond Hydratation &amp; Brillance</h4>
+<p class="font-caption text-caption text-on-surface-variant mt-1">Cheveux Secs - 200g</p>
+<p class="font-label-md text-label-md text-on-surface mt-2 lg:hidden">65 000 Ar</p>
+</div>
+<div class="text-right hidden lg:block">
+<p class="font-body-md text-body-md text-on-surface">130 000 Ar</p>
+<p class="font-caption text-caption text-on-surface-variant">Qté: 2 (65 000 Ar/u)</p>
+</div>
+<div class="lg:hidden text-right">
+<p class="font-caption text-caption text-on-surface-variant">x2</p>
+</div>
+</div>
+</div>
+<!-- Totals Block -->
+<div class="mt-md pt-md border-t border-surface-variant flex flex-col gap-2 w-full md:w-2/3 self-end">
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-body-md text-body-md">Sous-total</span>
+<span class="font-body-md text-body-md">175 000 Ar</span>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="font-body-md text-body-md">Frais de livraison</span>
+<span class="font-body-md text-body-md">5 000 Ar</span>
+</div>
+<div class="flex justify-between items-center mt-2 pt-2 border-t border-outline-variant/30">
+<span class="font-headline-md text-headline-md text-on-surface">Total</span>
+<span class="font-headline-md text-headline-md text-primary">180 000 Ar</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Optional Footer Actions (if needed, otherwise just padding) -->
+<footer class="p-lg bg-surface-container-lowest border-t border-surface-variant flex justify-end gap-sm shrink-0">
+<button class="font-label-md text-label-md text-primary border-b border-primary pb-0.5 hover:text-[#2a380a] hover:border-[#2a380a] transition-colors">
+                    Télécharger Facture
+                </button>
+</footer>
+</aside>
+</div>
+</body></html>

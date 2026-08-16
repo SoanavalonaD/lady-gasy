@@ -71,8 +71,14 @@ export default function Catalogue() {
 
       const matchesCategories =
         selectedCategories.length === 0 ||
+        (product.rawCategory &&
+          selectedCategories.includes(product.rawCategory.toUpperCase())) ||
         (product.categories &&
-          product.categories.some((cat) => selectedCategories.includes(cat)));
+          product.categories.some(
+            (cat) =>
+              selectedCategories.includes(cat.toUpperCase()) ||
+              (cat === "Soins & Masques" && selectedCategories.includes("CHEVEUX"))
+          ));
 
       return matchesSearch && matchesNeeds && matchesCategories;
     });
@@ -86,10 +92,11 @@ export default function Catalogue() {
 
   const allNeeds = ["Hydratation Profonde", "Définition des Boucles", "Volume & Densité"];
   const allCategories = [
-    "Shampoings & Lavants",
-    "Soins & Masques",
-    "Huiles & Sérums",
-    "Accessoires",
+    "CHEVEUX",
+    "ONGLES",
+    "ACCESSOIRES",
+    "CILS",
+    "LEVRES",
   ];
 
   return (

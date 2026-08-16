@@ -380,7 +380,7 @@ export default function ConnexionPage() {
                 </div>
 
                 {/* DEV PREVIEW — remove before production */}
-                {process.env.NODE_ENV === "development" && (
+                {/* {process.env.NODE_ENV === "development" && (
                   <button
                     type="button"
                     onClick={() => { setPendingEmail("preview@ladygasy.mg"); setEmailConfirmationPending(true); }}
@@ -388,7 +388,7 @@ export default function ConnexionPage() {
                   >
                     [DEV] Prévisualiser l'écran de confirmation email
                   </button>
-                )}
+                )} */}
 
                 {/* Login Form */}
                 {activeTab === "login" && (

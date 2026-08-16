@@ -37,12 +37,14 @@ export async function getDbProducts(): Promise<Product[]> {
     priceAr: Number(row.prix),
     priceEur: Number(row.prix), // Direct price from database
     image: row.image_url || "/background-image.jpg",
-    needs: ["Hydratation Profonde"], // Default since needs are not in SQL schema
-    categories: [mapDbCategoryToLocal(row.categorie)],
+    needs: ["Hydratation Profonde"],
+    categories: [mapDbCategoryToLocal(row.categorie), row.categorie],
+    rawCategory: row.categorie,
     ingredients: "Ingrédients 100% naturels.",
     usage: ["Appliquer sur cheveux propres."],
     rating: 4.7,
-    reviewsCount: 100
+    reviewsCount: 100,
+    stock: Number(row.stock_disponible || 0)
   }));
 }
 
@@ -253,3 +255,192 @@ export async function getOrderHistory(userId: string | null): Promise<any[]> {
     };
   });
 }
+
+// 6. ADMIN FUNCTIONS
+
+// Fetch all orders for Admin
+export async function getAllAdminOrders(): Promise<any[]> {
+  const { data: ordersData, error } = await supabase
+    .from("commandes")
+    .select(`
+      id,
+      id_utilisateur,
+      statut,
+      montant_total,
+      date_commande,
+      lignes_commande (
+        quantite,
+        prix_unitaire_applique,
+        id_produit
+      ),
+      livraisons (
+        adresse_detaillee,
+        ville,
+        zone_livraison,
+        frais_livraison,
+        repere,
+        statut
+      )
+    `)
+    .order("date_commande", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching admin orders:", error.message);
+    throw error;
+  }
+
+  // Fetch users & products to hydrate order info
+  const { data: usersData } = await supabase.from("utilisateurs").select("*");
+  const dbProducts = await getDbProducts();
+
+  return (ordersData || []).map((order: any) => {
+    const userMatch = (usersData || []).find((u: any) => u.id === order.id_utilisateur);
+    const mappedItems = (order.lignes_commande || []).map((line: any) => {
+      const prodMatch = dbProducts.find((p) => p.id === line.id_produit);
+      return {
+        id_produit: line.id_produit,
+        nom_produit: prodMatch?.name || "Produit Lady Gasy",
+        image_url: prodMatch?.image || "/background-image.jpg",
+        quantite: line.quantite,
+        prix_unitaire_applique: Number(line.prix_unitaire_applique)
+      };
+    });
+
+    return {
+      id: order.id,
+      date_commande: order.date_commande,
+      statut: order.statut,
+      montant_total: Number(order.montant_total),
+      client: userMatch ? {
+        nom: `${userMatch.prenom || ""} ${userMatch.nom || ""}`.trim(),
+        email: userMatch.email,
+        telephone: userMatch.telephone
+      } : {
+        nom: "Client Invité",
+        email: "Non renseigné",
+        telephone: "Non renseigné"
+      },
+      items: mappedItems,
+      livraison: order.livraisons ? {
+        adresse_detaillee: order.livraisons.adresse_detaillee,
+        ville: order.livraisons.ville,
+        zone_livraison: order.livraisons.zone_livraison,
+        frais_livraison: Number(order.livraisons.frais_livraison || 0),
+        repere: order.livraisons.repere,
+        statut: order.livraisons.statut
+      } : null
+    };
+  });
+}
+
+// Update Order Status in Supabase
+export async function updateOrderStatus(orderId: string, newStatus: string): Promise<void> {
+  const { error } = await supabase
+    .from("commandes")
+    .update({ statut: newStatus })
+    .eq("id", orderId);
+
+  if (error) {
+    console.error("Error updating order status:", error.message);
+    throw error;
+  }
+}
+
+// Create Product in Supabase
+export async function createAdminProduct(productData: {
+  nom_produit: string;
+  description: string;
+  categorie: "CHEVEUX" | "ONGLES" | "ACCESSOIRES" | "CILS" | "LEVRES";
+  prix: number;
+  stock_disponible: number;
+  image_url: string;
+}): Promise<any> {
+  const { data, error } = await supabase
+    .from("produits")
+    .insert({
+      nom_produit: productData.nom_produit,
+      description: productData.description,
+      categorie: productData.categorie,
+      prix: productData.prix,
+      stock_disponible: productData.stock_disponible,
+      image_url: productData.image_url
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error creating product:", error.message);
+    throw error;
+  }
+  return data;
+}
+
+// Update Product in Supabase
+export async function updateAdminProduct(
+  id: string,
+  productData: {
+    nom_produit?: string;
+    description?: string;
+    categorie?: "CHEVEUX" | "ONGLES" | "ACCESSOIRES" | "CILS" | "LEVRES";
+    prix?: number;
+    stock_disponible?: number;
+    image_url?: string;
+  }
+): Promise<any> {
+  const { data, error } = await supabase
+    .from("produits")
+    .update(productData)
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error updating product:", error.message);
+    throw error;
+  }
+  return data;
+}
+
+// Delete Product from Supabase
+export async function deleteAdminProduct(id: string): Promise<void> {
+  const { error } = await supabase
+    .from("produits")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error deleting product:", error.message);
+    throw error;
+  }
+}
+
+// Upload Product Image to Supabase Storage Bucket ("produits")
+export async function uploadProductImage(file: File): Promise<string> {
+  const fileExt = file.name.split(".").pop();
+  const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+  const filePath = `${fileName}`;
+
+  const bucketName = "produits";
+  const { error: uploadError } = await supabase.storage
+    .from(bucketName)
+    .upload(filePath, file, {
+      cacheControl: "3600",
+      upsert: true,
+    });
+
+  if (uploadError) {
+    console.error("Supabase Storage upload error:", uploadError);
+    throw new Error(
+      `Impossible d'uploader l'image dans le bucket Supabase '${bucketName}'. Détail: ${uploadError.message}`
+    );
+  }
+
+  // Get Public URL
+  const { data: publicUrlData } = supabase.storage
+    .from(bucketName)
+    .getPublicUrl(filePath);
+
+  return publicUrlData.publicUrl;
+}
+
+

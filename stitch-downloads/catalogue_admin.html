@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Catalogue Produits - Lady Gasy Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&amp;family=Libre+Caslon+Text&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-surface": "#34302c",
+                      "on-tertiary-container": "#d1cbc3",
+                      "secondary-fixed": "#ffdbce",
+                      "on-error": "#ffffff",
+                      "on-primary-container": "#bed58e",
+                      "surface-variant": "#e9e1dc",
+                      "tertiary": "#413f39",
+                      "on-primary": "#ffffff",
+                      "surface-dim": "#e1d8d4",
+                      "on-tertiary-fixed": "#1d1b16",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed": "#d4eca2",
+                      "surface-container-highest": "#e9e1dc",
+                      "surface-container-low": "#fbf2ed",
+                      "surface-container": "#f5ece7",
+                      "inverse-primary": "#b8cf88",
+                      "on-tertiary": "#ffffff",
+                      "secondary-container": "#feaa8a",
+                      "tertiary-fixed": "#e7e2d9",
+                      "error": "#ba1a1a",
+                      "primary": "#33450d",
+                      "background": "#fff8f5",
+                      "on-secondary-container": "#783c24",
+                      "surface-bright": "#fff8f5",
+                      "on-secondary-fixed-variant": "#71361e",
+                      "on-primary-fixed": "#141f00",
+                      "tertiary-container": "#59564f",
+                      "inverse-on-surface": "#f8efea",
+                      "surface": "#fff8f5",
+                      "surface-container-high": "#efe6e2",
+                      "secondary-fixed-dim": "#ffb59a",
+                      "secondary": "#8e4d33",
+                      "on-surface-variant": "#45483c",
+                      "surface-tint": "#52652a",
+                      "on-secondary-fixed": "#380d00",
+                      "outline-variant": "#c6c8b8",
+                      "on-surface": "#1e1b18",
+                      "outline": "#76786b",
+                      "tertiary-fixed-dim": "#cbc6bd",
+                      "on-error-container": "#93000a",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#4a5d23",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#494640",
+                      "on-background": "#1e1b18",
+                      "primary-fixed-dim": "#b8cf88",
+                      "on-primary-fixed-variant": "#3b4d14"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "md": "24px",
+                      "container-padding": "20px",
+                      "xs": "8px",
+                      "lg": "40px",
+                      "sm": "16px",
+                      "gutter": "16px",
+                      "xl": "64px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-md": [
+                              "Libre Caslon Text"
+                      ],
+                      "label-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "caption": [
+                              "Be Vietnam Pro"
+                      ],
+                      "display-lg": [
+                              "Libre Caslon Text"
+                      ],
+                      "headline-lg-mobile": [
+                              "Libre Caslon Text"
+                      ],
+                      "headline-lg": [
+                              "Libre Caslon Text"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "caption": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+<!-- SideNavBar -->
+<nav class="h-screen w-64 fixed left-0 top-0 bg-surface border-r border-outline-variant hidden md:flex flex-col py-lg px-sm z-40">
+<div class="mb-xl px-md">
+<h1 class="font-headline-md text-headline-md text-primary">Lady Gasy</h1>
+<p class="font-caption text-caption text-on-surface-variant">Administration</p>
+</div>
+<ul class="flex flex-col gap-xs flex-grow">
+<li><a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-container-high rounded-full" href="#"><span class="material-symbols-outlined">dashboard</span>Tableau de bord</a></li>
+<li><a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-container-high rounded-full" href="#"><span class="material-symbols-outlined">shopping_cart</span>Commandes</a></li>
+<li><a class="flex items-center gap-sm px-md py-sm bg-primary-container text-on-primary-container rounded-full" href="#"><span class="material-symbols-outlined">inventory_2</span>Produits</a></li>
+<li><a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-container-high rounded-full" href="#"><span class="material-symbols-outlined">group</span>Clients</a></li>
+</ul>
+<div class="mt-auto">
+<a class="flex items-center gap-sm px-md py-sm text-on-surface-variant hover:text-primary transition-colors hover:bg-surface-container-high rounded-full" href="#"><span class="material-symbols-outlined">logout</span>Déconnexion</a>
+</div>
+</nav>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 left-0 md:left-64 h-16 bg-surface/80 backdrop-blur-md border-b border-outline-variant flex justify-between items-center px-container-padding md:px-xl w-full z-30">
+<div class="md:hidden">
+<h1 class="font-headline-md text-headline-md text-on-surface">Lady Gasy Admin</h1>
+</div>
+<div class="hidden md:flex items-center gap-sm bg-surface-container-low px-sm py-xs rounded-full border border-outline-variant/30">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md font-body-md text-on-surface placeholder-on-surface-variant w-64" placeholder="Rechercher..." type="text"/>
+</div>
+<div class="flex items-center gap-md">
+<button class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors rounded-full p-xs scale-95 active:scale-90 transition-transform"><span class="material-symbols-outlined">notifications</span></button>
+<button class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors rounded-full p-xs scale-95 active:scale-90 transition-transform"><span class="material-symbols-outlined">settings</span></button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant ml-sm">
+<img alt="Profil Administrateur" class="w-full h-full object-cover" data-alt="A macro shot of a single drop of essential oil resting on a pristine white surface, catching the light in a bright, modern studio setting. The lighting is soft and airy, highlighting the natural purity and botanical essence central to the Lady Gasy brand aesthetic. Olive green and soft earthy tones reflect subtly in the oil." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChYj2AkC6XaCxwxGRVLS3kV3C3ykkT3CPsK7Ip_UPmbd2H2bQunDvpjri6VfEdpfi-1qPmJU85_jjQ6aFDy_Oe6dSfn4qWkjg8F_fpqkEbN4jY43qUl8rhNJKbIU7HKN1x9ZBkn9Yi1GqZgwIDlW-2xtVj2AQuxtBSj_o4xsqjRCIVb_kePYUjb8P03ROfP2v81wiLWhwyfLXGxcODGL8z2wj0l3KvqgV4hltSNbhEMsyNhRVNncF0"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-xl px-container-padding md:ml-64 md:px-xl md:pt-32 max-w-[1280px] mx-auto min-h-screen">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-lg gap-sm">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Catalogue Produits</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Gérez votre inventaire et vos fiches produits.</p>
+</div>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-md py-sm rounded-lg flex items-center gap-xs hover:bg-primary/90 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                Ajouter un Produit
+            </button>
+</div>
+<!-- Product Table Canvas (Bento-style container) -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl overflow-hidden shadow-[0_4px_24px_rgba(51,69,13,0.02)]">
+<!-- Filters & Actions Bar -->
+<div class="p-sm md:p-md border-b border-surface-variant flex flex-wrap gap-sm items-center justify-between bg-surface-bright">
+<div class="flex gap-sm">
+<button class="px-sm py-xs bg-tertiary-fixed text-on-tertiary-fixed font-label-md text-label-md rounded-md border border-outline-variant">Tous</button>
+<button class="px-sm py-xs bg-surface text-on-surface-variant font-label-md text-label-md rounded-md border border-outline-variant hover:bg-surface-variant transition-colors">Cheveux</button>
+<button class="px-sm py-xs bg-surface text-on-surface-variant font-label-md text-label-md rounded-md border border-outline-variant hover:bg-surface-variant transition-colors">Corps</button>
+</div>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-surface-variant bg-surface-container-low text-on-surface-variant font-label-md text-label-md">
+<th class="p-sm md:p-md font-semibold">Produit</th>
+<th class="p-sm md:p-md font-semibold">Catégorie</th>
+<th class="p-sm md:p-md font-semibold">Prix</th>
+<th class="p-sm md:p-md font-semibold">Stock</th>
+<th class="p-sm md:p-md font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md">
+<!-- Row 1 -->
+<tr class="border-b border-surface-variant hover:bg-surface-container-lowest transition-colors group">
+<td class="p-sm md:p-md">
+<div class="flex items-center gap-sm">
+<div class="w-12 h-12 rounded-md overflow-hidden bg-surface-variant shrink-0 border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="A minimalist flat lay of a glass bottle containing golden hair serum, placed on a textured beige linen fabric. Beside it is a fresh green botanical leaf. The lighting is bright, soft, and natural, creating a premium, organic skincare aesthetic synonymous with slow beauty and earthy elegance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFd9_Ko9tSFKGwSYh9v_Rt2ONekFUvvkMO73O1Rqg0XLIGoID8m8APTkHqoiXdlp3ZiIyv2GqOtHYczLCGegz6HXudowRSjb7VxaA-Hvg-9kEEZhBV8lJOZ1-PWSIadHvlg5v6Oi-I2glhpviDmcciAe3DdvT2DiBJEc0kMHGUbLAxNeNye0uW0kGQvTR_rNYlHfK6vx21yFKpLngStbdouJ3ZYKMs2tu5RwLU8QEXzjooEAuMOQO8"/>
+</div>
+<div>
+<p class="font-semibold text-on-surface">Sérum Revitalisant</p>
+<p class="font-caption text-caption text-on-surface-variant">Huile de Baobab</p>
+</div>
+</div>
+</td>
+<td class="p-sm md:p-md text-on-surface-variant">Cheveux</td>
+<td class="p-sm md:p-md font-semibold text-on-surface">35,00 €</td>
+<td class="p-sm md:p-md">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-primary-container/20 text-primary font-caption text-caption">
+<span class="w-2 h-2 rounded-full bg-primary mr-2"></span> 42
+                                </span>
+</td>
+<td class="p-sm md:p-md text-right">
+<div class="flex justify-end gap-xs opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors rounded-full hover:bg-surface-variant"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="p-xs text-on-surface-variant hover:text-error transition-colors rounded-full hover:bg-error-container"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="border-b border-surface-variant hover:bg-surface-container-lowest transition-colors group">
+<td class="p-sm md:p-md">
+<div class="flex items-center gap-sm">
+<div class="w-12 h-12 rounded-md overflow-hidden bg-surface-variant shrink-0 border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="A smooth, round jar of rich body butter sitting on a rustic wooden surface, surrounded by soft, diffused morning light. The creamy texture of the product is visible, embodying a luxurious, natural, and tactile minimal aesthetic consistent with high-end botanical cosmetics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWG-Y3pwaf10aGLC6h6Sk7WyE_cp9JFuagYzm-d8rAx1LC6ogm--LGvCpfonoOR3zXINj8t05TTOMwPHW72yQIgZO5Z_ClwT3E7_TvODOTYXXiTX0iP3iGYPW-j9-FnM6GBgs5oDfaGE6n3K1u2CtqmJdLyM6BvmSNxHb71JKcw3WrQLCJ4CJ_MsUe4zYDJwd-MPqiZK5RjMdKxSqjI9hArnDO8KWEqDShjiTg9n0-5DueMSWmvVCU"/>
+</div>
+<div>
+<p class="font-semibold text-on-surface">Crème Karité Intense</p>
+<p class="font-caption text-caption text-on-surface-variant">Hydratation profonde</p>
+</div>
+</div>
+</td>
+<td class="p-sm md:p-md text-on-surface-variant">Corps</td>
+<td class="p-sm md:p-md font-semibold text-on-surface">28,00 €</td>
+<td class="p-sm md:p-md">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-error-container/50 text-error font-caption text-caption">
+<span class="w-2 h-2 rounded-full bg-error mr-2"></span> 3
+                                </span>
+</td>
+<td class="p-sm md:p-md text-right">
+<div class="flex justify-end gap-xs opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors rounded-full hover:bg-surface-variant"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="p-xs text-on-surface-variant hover:text-error transition-colors rounded-full hover:bg-error-container"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="p-sm md:p-md border-t border-surface-variant flex items-center justify-between bg-surface-bright">
+<span class="font-caption text-caption text-on-surface-variant">Affichage 1-10 sur 45 produits</span>
+<div class="flex gap-xs">
+<button class="p-xs text-on-surface-variant hover:bg-surface-variant rounded-md transition-colors"><span class="material-symbols-outlined text-[20px]">chevron_left</span></button>
+<button class="p-xs text-on-surface-variant hover:bg-surface-variant rounded-md transition-colors"><span class="material-symbols-outlined text-[20px]">chevron_right</span></button>
+</div>
+</div>
+</div>
+</main>
+<!-- Modal Overlay: Ajouter un Produit -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-container-padding">
+<!-- Backdrop -->
+<div class="absolute inset-0 bg-inverse-surface/40 backdrop-blur-[15px]"></div>
+<!-- Modal Content -->
+<div class="relative bg-surface rounded-xl shadow-2xl w-full max-w-2xl max-h-[921px] overflow-y-auto border border-outline-variant/50">
+<!-- Modal Header -->
+<div class="sticky top-0 bg-surface/90 backdrop-blur-md px-md py-sm border-b border-surface-variant flex justify-between items-center z-10">
+<h3 class="font-headline-md text-headline-md text-on-surface">Ajouter un Produit</h3>
+<button class="text-on-surface-variant hover:text-on-surface p-xs rounded-full hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Modal Body -->
+<div class="p-md space-y-lg">
+<!-- Image Upload Area -->
+<div class="w-full h-48 border-2 border-dashed border-outline-variant rounded-lg flex flex-col items-center justify-center bg-surface-container-lowest hover:bg-surface-container-low transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-outline group-hover:text-primary text-[32px] mb-xs transition-colors">add_a_photo</span>
+<p class="font-label-md text-label-md text-on-surface">Glissez une image ou cliquez pour parcourir</p>
+<p class="font-caption text-caption text-on-surface-variant mt-1">PNG, JPG jusqu'à 5MB</p>
+</div>
+<!-- Form Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Nom -->
+<div class="space-y-xs md:col-span-2">
+<label class="font-label-md text-label-md text-on-surface">Nom du produit</label>
+<input class="w-full bg-surface-container-low border border-outline-variant/50 rounded-md px-sm py-xs font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none" placeholder="Ex: Shampoing Solide Douceur" type="text"/>
+</div>
+<!-- Catégorie -->
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-on-surface">Catégorie</label>
+<div class="relative">
+<select class="w-full bg-surface-container-low border border-outline-variant/50 rounded-md px-sm py-xs font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none appearance-none">
+<option>Cheveux</option>
+<option>Corps</option>
+<option>Visage</option>
+<option>Accessoires</option>
+</select>
+<span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<!-- Prix -->
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-on-surface">Prix (€)</label>
+<input class="w-full bg-surface-container-low border border-outline-variant/50 rounded-md px-sm py-xs font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none" placeholder="0.00" step="0.01" type="number"/>
+</div>
+<!-- Stock -->
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-on-surface">Stock Initial</label>
+<input class="w-full bg-surface-container-low border border-outline-variant/50 rounded-md px-sm py-xs font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none" placeholder="0" type="number"/>
+</div>
+<!-- Status -->
+<div class="space-y-xs">
+<label class="font-label-md text-label-md text-on-surface">Statut</label>
+<div class="relative">
+<select class="w-full bg-surface-container-low border border-outline-variant/50 rounded-md px-sm py-xs font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none appearance-none">
+<option>Actif</option>
+<option>Brouillon</option>
+</select>
+<span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<!-- Description -->
+<div class="space-y-xs md:col-span-2">
+<label class="font-label-md text-label-md text-on-surface">Description</label>
+<textarea class="w-full bg-surface-container-low border border-outline-variant/50 rounded-md px-sm py-xs font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none resize-none" placeholder="Décrivez les bienfaits botaniques..." rows="4"></textarea>
+</div>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="sticky bottom-0 bg-surface/90 backdrop-blur-md px-md py-sm border-t border-surface-variant flex justify-end gap-sm z-10">
+<button class="px-md py-sm font-label-md text-label-md text-primary border-b border-transparent hover:border-primary transition-all">Annuler</button>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-md py-sm rounded-lg hover:bg-primary/90 transition-colors shadow-sm">Enregistrer</button>
+</div>
+</div>
+</div>
+</body></html>
