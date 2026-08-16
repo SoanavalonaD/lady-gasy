@@ -121,6 +121,7 @@ export async function signInUser(email: string, password: string) {
 
     const userName = userData ? `${userData.prenom} ${userData.nom}` : email.split("@")[0];
     const userPhone = userData ? userData.telephone : "";
+    const userRole = userData ? userData.role : "CLIENT";
 
     // Set session storage
     sessionStorage.setItem("isLoggedIn", "true");
@@ -128,8 +129,9 @@ export async function signInUser(email: string, password: string) {
     sessionStorage.setItem("userName", userName);
     sessionStorage.setItem("userEmail", email);
     sessionStorage.setItem("userPhone", userPhone);
+    sessionStorage.setItem("userRole", userRole);
 
-    return { success: true, user: authData.user };
+    return { success: true, user: authData.user, role: userRole };
   } catch (err: any) {
     console.error("Sign in failure:", err.message);
     return { success: false, error: err.message };

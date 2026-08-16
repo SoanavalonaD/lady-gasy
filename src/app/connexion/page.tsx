@@ -98,14 +98,19 @@ export default function ConnexionPage() {
     const result = await signInUser(loginEmail, loginPassword);
     
     if (result.success) {
-      setToastMessage("Connexion réussie ! Bienvenue sur Lady Gasy.");
+      const isAdmin = result.role === "ADMIN";
+      setToastMessage(isAdmin ? "Bienvenue sur l'espace Administration !" : "Connexion réussie ! Bienvenue sur Lady Gasy.");
       setLoginEmail("");
       setLoginPassword("");
       setTimeout(() => {
         setToastMessage(null);
         checkLoginStatus();
-        router.push("/");
-      }, 1500);
+        if (isAdmin) {
+          router.push("/admin");
+        } else {
+          router.push("/");
+        }
+      }, 1200);
     } else {
       // Detect unconfirmed email
       const isInvalidCreds = result.error?.toLowerCase().includes("invalid login credentials");
