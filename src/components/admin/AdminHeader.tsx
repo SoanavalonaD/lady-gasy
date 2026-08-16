@@ -57,14 +57,6 @@ export default function AdminHeader() {
         </div>
 
         <button
-          aria-label="Notifications"
-          className="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors p-2 rounded-full relative cursor-pointer"
-        >
-          <Bell size={20} />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full ring-2 ring-surface"></span>
-        </button>
-
-        <button
           aria-label="Paramètres"
           className="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors p-2 rounded-full hidden sm:block cursor-pointer"
         >

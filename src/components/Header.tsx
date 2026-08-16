@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
-import { Menu, X, Search, User, ShoppingBag, ArrowRight } from "lucide-react";
+import { Menu, X, Search, User, ShoppingBag, ArrowRight, LayoutDashboard } from "lucide-react";
 import { getDbProducts } from "@/data/queries";
 import { Product } from "@/data/types";
 
@@ -105,7 +105,19 @@ export default function Header() {
             })}
           </nav>
 
-          <div className="flex items-center gap-sm text-primary">
+          <div className="flex items-center gap-xs md:gap-sm text-primary">
+            <Link
+              href="/admin"
+              aria-label="Espace Admin"
+              title="Espace Administration"
+              className="hover:text-secondary transition-colors duration-300 p-2 flex items-center gap-1 group text-primary"
+            >
+              <LayoutDashboard size={22} />
+              <span className="hidden lg:inline text-xs font-label-md bg-primary/10 text-primary group-hover:bg-primary group-hover:text-on-primary px-2 py-0.5 rounded-full transition-all">
+                Admin
+              </span>
+            </Link>
+
             <Link
               href="/connexion"
               aria-label="Profile"
@@ -130,7 +142,7 @@ export default function Header() {
         </div>
 
         {/* Mobile Actions */}
-        <div className="flex md:hidden items-center gap-sm text-primary">
+        <div className="flex md:hidden items-center gap-xs text-primary">
           <button
             onClick={() => setSearchOpen(!searchOpen)}
             aria-label="Search"
@@ -138,6 +150,14 @@ export default function Header() {
           >
             <Search size={24} />
           </button>
+          <Link
+            href="/admin"
+            aria-label="Espace Admin"
+            title="Espace Administration"
+            className="hover:text-secondary p-2"
+          >
+            <LayoutDashboard size={22} />
+          </Link>
           <Link
             href="/panier"
             aria-label="Cart"
