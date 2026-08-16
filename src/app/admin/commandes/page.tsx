@@ -13,7 +13,8 @@ import {
   Phone,
   Mail,
   RefreshCw,
-  ShoppingBag
+  ShoppingBag,
+  Printer
 } from "lucide-react";
 import { getAllAdminOrders, updateOrderStatus } from "@/data/queries";
 
@@ -69,6 +70,134 @@ export default function AdminOrdersPage() {
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  const handlePrintDeliverySlip = (order: any) => {
+    const printWindow = window.open("", "_blank", "width=800,height=900");
+    if (!printWindow) return;
+
+    const dateStr = new Date(order.date_commande).toLocaleDateString("fr-FR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const subtotal = order.montant_total - (order.livraison?.frais_livraison || 0);
+
+    const itemsHtml = (order.items || [])
+      .map(
+        (item: any) => `
+        <tr>
+          <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;">${item.nom_produit}</td>
+          <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: center;">${item.quantite}</td>
+          <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: right;">${item.prix_unitaire_applique.toLocaleString()} Ar</td>
+          <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: bold;">${(item.quantite * item.prix_unitaire_applique).toLocaleString()} Ar</td>
+        </tr>
+      `
+      )
+      .join("");
+
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html lang="fr">
+      <head>
+        <meta charset="UTF-8">
+        <title>Bordereau de Livraison #${order.id.slice(0, 8)} - Lady Gasy</title>
+        <style>
+          body { font-family: 'Segoe UI', Arial, sans-serif; color: #1c1d1a; padding: 40px; margin: 0; }
+          .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #436418; padding-bottom: 15px; margin-bottom: 25px; }
+          .brand { font-size: 26px; font-style: italic; font-weight: bold; color: #436418; }
+          .title { font-size: 18px; text-align: right; color: #1c1d1a; font-weight: 600; }
+          .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+          .box { background: #f4f6f0; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; }
+          .box h3 { margin-top: 0; font-size: 13px; color: #436418; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+          .box p { margin: 4px 0; font-size: 13px; }
+          table { width: 100%; border-collapse: collapse; margin-bottom: 25px; }
+          th { background: #436418; color: #ffffff; padding: 10px; text-align: left; font-size: 12px; text-transform: uppercase; }
+          th.right, td.right { text-align: right; }
+          th.center, td.center { text-align: center; }
+          .totals { margin-left: auto; width: 300px; border-top: 1px solid #e5e7eb; padding-top: 10px; }
+          .totals-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13px; }
+          .totals-row.grand-total { font-size: 16px; font-weight: bold; color: #436418; border-top: 2px solid #436418; padding-top: 8px; margin-top: 5px; }
+          .footer { margin-top: 40px; text-align: center; font-size: 11px; color: #6b7280; border-top: 1px solid #e5e7eb; padding-top: 15px; }
+          @media print {
+            body { padding: 15px; }
+          }
+        </style>
+      </head>
+      <body>
+        <div className="header">
+          <div className="brand">Lady Gasy</div>
+          <div className="title">
+            BORDEREAU DE LIVRAISON<br>
+            <span style="font-size: 13px; font-weight: normal; color: #6b7280;">N° #${order.id.slice(0, 8)}</span>
+          </div>
+        </div>
+
+        <div className="info-grid">
+          <div className="box">
+            <h3>Informations Client</h3>
+            <p><strong>Nom :</strong> ${order.client?.nom || "Client Invité"}</p>
+            <p><strong>Téléphone :</strong> ${order.client?.telephone || "Non renseigné"}</p>
+            <p><strong>Email :</strong> ${order.client?.email || "Non renseigné"}</p>
+            <p><strong>Date de commande :</strong> ${dateStr}</p>
+          </div>
+          <div className="box">
+            <h3>Destination de Livraison</h3>
+            <p><strong>Adresse :</strong> ${order.livraison?.adresse_detaillee || "Livraison locale"}</p>
+            <p><strong>Zone :</strong> ${order.livraison?.zone_livraison || "Antananarivo"}</p>
+            <p><strong>Ville :</strong> ${order.livraison?.ville || "Antananarivo"}</p>
+            ${order.livraison?.repere ? `<p><strong>Repères :</strong> ${order.livraison.repere}</p>` : ""}
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Désignation du produit</th>
+              <th className="center">Qté</th>
+              <th className="right">Prix Unitaire</th>
+              <th className="right">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itemsHtml}
+          </tbody>
+        </table>
+
+        <div className="totals">
+          <div className="totals-row">
+            <span>Sous-total :</span>
+            <span>${subtotal.toLocaleString()} Ar</span>
+          </div>
+          <div className="totals-row">
+            <span>Frais de livraison :</span>
+            <span>${(order.livraison?.frais_livraison || 0).toLocaleString()} Ar</span>
+          </div>
+          <div className="totals-row grand-total">
+            <span>Total à encaisser :</span>
+            <span>${order.montant_total.toLocaleString()} Ar</span>
+          </div>
+        </div>
+
+        <div className="footer">
+          <p>Merci pour votre confiance envers Lady Gasy — Produits de Beauté Naturelle & Soins BIO</p>
+          <p style="margin-top: 3px;">Service Client : +261 34 00 000 00 | Antananarivo, Madagascar</p>
+        </div>
+
+        <script>
+          window.onload = function() {
+            window.print();
+          };
+        </script>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
   };
 
   const filteredOrders = orders.filter((o) => {
@@ -280,13 +409,21 @@ export default function AdminOrdersPage() {
                       </select>
                     </td>
 
-                    <td className="p-sm md:p-md text-right">
+                    <td className="p-sm md:p-md text-right space-x-1">
                       <button
                         onClick={() => setSelectedOrder(order)}
                         className="inline-flex items-center gap-xs px-2.5 py-1 rounded-md text-xs font-label-md text-primary hover:bg-primary/10 transition-colors cursor-pointer"
                       >
                         <Eye size={14} />
                         Détails
+                      </button>
+                      <button
+                        onClick={() => handlePrintDeliverySlip(order)}
+                        title="Imprimer Bordereau de Livraison / Reçu PDF"
+                        className="inline-flex items-center gap-xs px-2.5 py-1 rounded-md text-xs font-label-md bg-surface-container-high text-on-surface-variant hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
+                      >
+                        <Printer size={14} />
+                        Imprimer
                       </button>
                     </td>
                   </tr>
@@ -341,12 +478,21 @@ export default function AdminOrdersPage() {
                 </div>
               </div>
 
-              <button
-                onClick={() => setSelectedOrder(null)}
-                className="w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors cursor-pointer"
-              >
-                <X size={20} />
-              </button>
+              <div className="flex items-center gap-xs">
+                <button
+                  onClick={() => handlePrintDeliverySlip(selectedOrder)}
+                  className="inline-flex items-center gap-xs px-3 py-1.5 rounded-lg text-xs font-label-md bg-primary text-on-primary hover:bg-primary/90 transition-colors shadow-xs cursor-pointer font-medium"
+                >
+                  <Printer size={15} />
+                  Imprimer Bordereau PDF
+                </button>
+                <button
+                  onClick={() => setSelectedOrder(null)}
+                  className="w-9 h-9 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors cursor-pointer ml-1"
+                >
+                  <X size={20} />
+                </button>
+              </div>
             </header>
 
             {/* Panel Body */}
