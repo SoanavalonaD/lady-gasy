@@ -11,9 +11,16 @@ import {
   LogOut,
   Store
 } from "lucide-react";
+import { supabase } from "@/data/supabase";
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    sessionStorage.clear();
+    window.location.href = "/connexion";
+  };
 
   const navItems = [
     { name: "Tableau de bord", href: "/admin", icon: LayoutDashboard },
@@ -62,13 +69,13 @@ export default function AdminSidebar() {
           <Store size={20} />
           <span>Voir la boutique</span>
         </Link>
-        <Link
-          href="/connexion"
-          className="flex items-center gap-sm px-md py-sm font-label-md text-label-md text-error hover:bg-error-container/30 rounded-full transition-colors"
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-sm px-md py-sm font-label-md text-label-md text-error hover:bg-error-container/30 rounded-full transition-colors cursor-pointer"
         >
           <LogOut size={20} />
           <span>Déconnexion</span>
-        </Link>
+        </button>
       </div>
     </aside>
   );

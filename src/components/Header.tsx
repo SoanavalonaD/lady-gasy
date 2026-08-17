@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { Menu, X, Search, User, ShoppingBag, ArrowRight, LayoutDashboard } from "lucide-react";
+import { supabase } from "@/data/supabase";
 import { getDbProducts } from "@/data/queries";
 import { Product } from "@/data/types";
 
@@ -16,12 +17,67 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [dbProducts, setDbProducts] = useState<Product[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // Load products for live search suggestions
   useEffect(() => {
     getDbProducts()
       .then((data) => setDbProducts(data))
       .catch((err) => console.error("Search header products load error:", err));
+  }, []);
+
+  // Check if current logged in user has ADMIN role
+  useEffect(() => {
+    async function checkAdminStatus() {
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
+        if (!user) {
+          sessionStorage.removeItem("userRole");
+          sessionStorage.removeItem("isLoggedIn");
+          setIsAdmin(false);
+          return;
+        }
+
+        // Query Supabase DB directly to verify current role
+        const { data: userData } = await supabase
+          .from("utilisateurs")
+          .select("role")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (userData && userData.role === "ADMIN") {
+          sessionStorage.setItem("userRole", "ADMIN");
+          setIsAdmin(true);
+        } else {
+          sessionStorage.removeItem("userRole");
+          setIsAdmin(false);
+        }
+      } catch (err) {
+        console.error("Error checking admin status in Header:", err);
+        setIsAdmin(false);
+      }
+    }
+
+    checkAdminStatus();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session?.user) {
+        sessionStorage.removeItem("userRole");
+        sessionStorage.removeItem("isLoggedIn");
+        setIsAdmin(false);
+      } else {
+        checkAdminStatus();
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const navLinks = [
@@ -106,17 +162,19 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-xs md:gap-sm text-primary">
-            <Link
-              href="/admin"
-              aria-label="Espace Admin"
-              title="Espace Administration"
-              className="hover:text-secondary transition-colors duration-300 p-2 flex items-center gap-1 group text-primary"
-            >
-              <LayoutDashboard size={22} />
-              <span className="hidden lg:inline text-xs font-label-md bg-primary/10 text-primary group-hover:bg-primary group-hover:text-on-primary px-2 py-0.5 rounded-full transition-all">
-                Admin
-              </span>
-            </Link>
+            {isAdmin && (
+              <Link
+                href="/admin"
+                aria-label="Espace Admin"
+                title="Espace Administration"
+                className="hover:text-secondary transition-colors duration-300 p-2 flex items-center gap-1 group text-primary"
+              >
+                <LayoutDashboard size={22} />
+                <span className="hidden lg:inline text-xs font-label-md bg-primary/10 text-primary group-hover:bg-primary group-hover:text-on-primary px-2 py-0.5 rounded-full transition-all">
+                  Admin
+                </span>
+              </Link>
+            )}
 
             <Link
               href="/connexion"
@@ -150,14 +208,16 @@ export default function Header() {
           >
             <Search size={24} />
           </button>
-          <Link
-            href="/admin"
-            aria-label="Espace Admin"
-            title="Espace Administration"
-            className="hover:text-secondary p-2"
-          >
-            <LayoutDashboard size={22} />
-          </Link>
+          {isAdmin && (
+            <Link
+              href="/admin"
+              aria-label="Espace Admin"
+              title="Espace Administration"
+              className="hover:text-secondary p-2"
+            >
+              <LayoutDashboard size={22} />
+            </Link>
+          )}
           <Link
             href="/panier"
             aria-label="Cart"
