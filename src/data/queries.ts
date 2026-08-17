@@ -168,13 +168,32 @@ export async function createOrderReservation(orderDetails: {
   if (orderError) throw orderError;
   const orderId = orderData.id;
 
+  const dbProducts = await getDbProducts();
+
   // B. Insert into Table 'lignes_commande'
-  const lines = orderDetails.items.map((item) => ({
-    id_commande: orderId,
-    id_produit: item.product.id,
-    quantite: item.quantity,
-    prix_unitaire_applique: item.product.priceAr
-  }));
+  const isUuid = (id: string) =>
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+
+  const lines = orderDetails.items.map((item) => {
+    let productId = item.product.id;
+
+    // Fallback for legacy or invalid string product IDs
+    if (!isUuid(productId)) {
+      const match = dbProducts.find(
+        (p) => p.name.toLowerCase() === item.product.name.toLowerCase()
+      );
+      if (match) {
+        productId = match.id;
+      }
+    }
+
+    return {
+      id_commande: orderId,
+      id_produit: productId,
+      quantite: item.quantity,
+      prix_unitaire_applique: item.product.priceAr
+    };
+  });
 
   const { error: linesError } = await supabase
     .from("lignes_commande")
@@ -235,6 +254,7 @@ export async function getOrderHistory(userId: string | null): Promise<any[]> {
     const mappedItems = (order.lignes_commande || []).map((line: any) => {
       const prodMatch = dbProducts.find((p) => p.id === line.id_produit);
       return {
+        id_produit: line.id_produit,
         nom_produit: prodMatch?.name || "Produit Lady Gasy",
         image_url: prodMatch?.image || "/background-image.jpg",
         quantite: line.quantite,

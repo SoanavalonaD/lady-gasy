@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
-import { getOrderHistory } from "@/data/queries";
+import { getOrderHistory, updateOrderStatus } from "@/data/queries";
 import { supabase } from "@/data/supabase";
 import {
   Package,
@@ -35,6 +35,31 @@ export default function OrderHistoryPage() {
   const [activeTab, setActiveTab] = useState<"ALL" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED">("ALL");
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
+
+  // Cancel order function
+  const handleCancelOrder = async (orderId: string) => {
+    if (!window.confirm("Êtes-vous sûr de vouloir annuler cette commande ?")) {
+      return;
+    }
+    try {
+      setCancellingId(orderId);
+      await updateOrderStatus(orderId, "ANNULEE");
+      setOrders((prev) =>
+        prev.map((o) => (o.id === orderId ? { ...o, statut: "ANNULEE" } : o))
+      );
+      if (selectedOrder && selectedOrder.id === orderId) {
+        setSelectedOrder((prev: any) => (prev ? { ...prev, statut: "ANNULEE" } : null));
+      }
+      setToastMessage("La commande a été annulée avec succès.");
+      setTimeout(() => setToastMessage(null), 3000);
+    } catch (err) {
+      console.error("Erreur lors de l'annulation:", err);
+      alert("Erreur lors de l'annulation de la commande.");
+    } finally {
+      setCancellingId(null);
+    }
+  };
 
   // Check login & load order history
   useEffect(() => {
@@ -94,9 +119,12 @@ export default function OrderHistoryPage() {
   const handleReorder = (order: any) => {
     if (!order?.items) return;
     order.items.forEach((item: any) => {
+      const productId = item.id_produit;
+      if (!productId) return;
+
       addToCart(
         {
-          id: item.id_produit || `reorder-${item.nom_produit}`,
+          id: productId,
           name: item.nom_produit,
           description: "",
           priceEur: item.prix_unitaire_applique,
@@ -363,18 +391,30 @@ export default function OrderHistoryPage() {
                   </div>
 
                   {/* Card Footer: Article Count & Actions */}
-                  <div className="pt-sm border-t border-outline-variant/40 flex justify-between items-center mt-auto">
+                  <div className="pt-sm border-t border-outline-variant/40 flex justify-between items-center mt-auto gap-xs">
                     <span className="font-caption text-xs text-on-surface-variant flex items-center gap-xs">
                       <Package size={16} className="text-primary" />
                       {itemCount} {itemCount > 1 ? "articles" : "article"}
                     </span>
 
-                    <button
-                      onClick={() => setSelectedOrder(order)}
-                      className="font-label-md text-sm text-secondary border border-secondary px-md py-1.5 rounded hover:bg-secondary hover:text-on-secondary transition-colors duration-200 cursor-pointer shadow-sm"
-                    >
-                      Voir les détails
-                    </button>
+                    <div className="flex items-center gap-xs">
+                      {order.statut !== "ANNULEE" && order.statut !== "LIVREE" && (
+                        <button
+                          onClick={() => handleCancelOrder(order.id)}
+                          disabled={cancellingId === order.id}
+                          className="font-label-md text-xs text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 px-2.5 py-1.5 rounded transition-colors duration-200 cursor-pointer flex items-center gap-1 font-medium disabled:opacity-50"
+                        >
+                          <XCircle size={14} />
+                          {cancellingId === order.id ? "Annulation..." : "Annuler"}
+                        </button>
+                      )}
+                      <button
+                        onClick={() => setSelectedOrder(order)}
+                        className="font-label-md text-xs text-secondary border border-secondary px-md py-1.5 rounded hover:bg-secondary hover:text-on-secondary transition-colors duration-200 cursor-pointer shadow-sm font-medium"
+                      >
+                        Voir les détails
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
@@ -385,7 +425,7 @@ export default function OrderHistoryPage() {
         {/* Order Details Modal / Drawer */}
         {selectedOrder && (
           <div className="fixed inset-0 z-50 bg-on-surface/40 backdrop-blur-sm flex items-center justify-center p-md animate-fade-in">
-            <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-y-auto shadow-2xl p-lg relative">
+            <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-y-auto shadow-2xl p-lg relative max-w-lg w-full">
               {/* Close Button */}
               <button
                 onClick={() => setSelectedOrder(null)}
@@ -463,17 +503,27 @@ export default function OrderHistoryPage() {
               </div>
 
               {/* Modal Actions */}
-              <div className="flex gap-sm">
+              <div className="flex flex-col sm:flex-row gap-sm">
                 <button
                   onClick={() => {
                     handleReorder(selectedOrder);
                     setSelectedOrder(null);
                   }}
-                  className="flex-1 bg-primary text-on-primary font-label-md py-2.5 rounded-md hover:bg-surface-tint transition-colors flex items-center justify-center gap-xs cursor-pointer shadow-sm"
+                  className="flex-1 bg-primary text-on-primary font-label-md py-2.5 rounded-md hover:bg-surface-tint transition-colors flex items-center justify-center gap-xs cursor-pointer shadow-sm font-medium"
                 >
                   <ShoppingBag size={16} />
                   Recommander
                 </button>
+                {selectedOrder.statut !== "ANNULEE" && selectedOrder.statut !== "LIVREE" && (
+                  <button
+                    onClick={() => handleCancelOrder(selectedOrder.id)}
+                    disabled={cancellingId === selectedOrder.id}
+                    className="px-md py-2.5 border border-red-300 text-red-700 bg-red-50 hover:bg-red-100 font-label-md rounded-md transition-colors cursor-pointer flex items-center justify-center gap-xs font-medium disabled:opacity-50"
+                  >
+                    <XCircle size={16} />
+                    {cancellingId === selectedOrder.id ? "Annulation..." : "Annuler la commande"}
+                  </button>
+                )}
                 <button
                   onClick={() => setSelectedOrder(null)}
                   className="px-md py-2.5 border border-outline-variant text-on-surface-variant font-label-md rounded-md hover:bg-surface-container transition-colors cursor-pointer"
