@@ -425,7 +425,7 @@ export default function OrderHistoryPage() {
         {/* Order Details Modal / Drawer */}
         {selectedOrder && (
           <div className="fixed inset-0 z-50 bg-on-surface/40 backdrop-blur-sm flex items-center justify-center p-md animate-fade-in">
-            <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-y-auto shadow-2xl p-lg relative max-w-lg w-full">
+            <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-y-auto shadow-2xl p-lg relative">
               {/* Close Button */}
               <button
                 onClick={() => setSelectedOrder(null)}
