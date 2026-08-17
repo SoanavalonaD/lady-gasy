@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
 import { Product } from "@/data/types";
 import { getDbProducts } from "@/data/queries";
-import { CheckCircle2, Search } from "lucide-react";
+import { CheckCircle2, Search, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 
 export default function Catalogue() {
@@ -253,6 +253,13 @@ export default function Catalogue() {
                         <span className="font-label-md text-primary">
                           {product.priceAr.toLocaleString()} Ar
                         </span>
+                        <button
+                          onClick={() => handleAddToCart(product)}
+                          aria-label={`Ajouter ${product.name} au panier`}
+                          className="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high text-primary hover:bg-primary hover:text-on-primary transition-colors duration-300 cursor-pointer"
+                        >
+                          <ShoppingCart size={20} />
+                        </button>
                       </div>
                     </div>
                   </div>
