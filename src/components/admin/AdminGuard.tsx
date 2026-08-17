@@ -71,7 +71,7 @@ export default function AdminGuard({ children }: { children: React.ReactNode }) 
   if (errorMessage) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center p-lg text-center">
-        <div className="bg-surface-container-lowest border border-error/30 rounded-2xl p-xl max-w-md shadow-xl space-y-md">
+        <div className="bg-surface-container-lowest border border-error/30 rounded-2xl p-xl shadow-xl space-y-md">
           <div className="w-12 h-12 bg-error/10 text-error rounded-full flex items-center justify-center mx-auto">
             <ShieldAlert size={28} />
           </div>

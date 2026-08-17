@@ -164,6 +164,7 @@ export default function ConnexionPage() {
     sessionStorage.removeItem("userName");
     sessionStorage.removeItem("userEmail");
     sessionStorage.removeItem("userPhone");
+    sessionStorage.removeItem("userRole");
     
     setIsLoggedIn(false);
     setUserProfile({ name: "", email: "", phone: "" });
