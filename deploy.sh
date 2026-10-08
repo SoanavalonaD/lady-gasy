@@ -2,7 +2,7 @@
 set -e
 
 SERVER="ladygasy@46.182.5.79"
-REMOTE_PATH="/home/ladygasy/public_html/lady-gasy"
+REMOTE_PATH="/home/ladygasy/public_html"
 SSH_KEY="$HOME/.ssh/id-rsa"
 SSH="ssh -i $SSH_KEY"
 SCP="scp -i $SSH_KEY"
