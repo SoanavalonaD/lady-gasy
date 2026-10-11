@@ -21,21 +21,22 @@ function mapDbCategoryToLocal(cat: string): string {
 
 // 1. PRODUCTS RETRIEVAL
 export async function getDbProducts(): Promise<Product[]> {
-  const { data, error } = await supabase
-    .from("produits")
-    .select("*");
+  const res = await fetch("/api/products", { cache: "no-store" });
 
-  if (error) {
-    console.error("Error fetching products from Supabase:", error.message);
-    throw error;
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    console.error("Error fetching products from API:", errorData);
+    throw new Error(errorData.error || "Erreur lors de la récupération des produits");
   }
 
+  const data = await res.json();
+
   return (data || []).map((row: any) => ({
-    id: row.id, // Supabase UUID
+    id: row.id,
     name: row.nom_produit,
     description: row.description || "",
     priceAr: Number(row.prix),
-    priceEur: Number(row.prix), // Direct price from database
+    priceEur: Number(row.prix),
     image: row.image_url || "/background-image.jpg",
     needs: ["Hydratation Profonde"],
     categories: [mapDbCategoryToLocal(row.categorie), row.categorie],
