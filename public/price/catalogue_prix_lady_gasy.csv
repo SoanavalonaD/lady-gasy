@@ -1,0 +1,113 @@
+categorie,nom_produit,contenance,prix_ar
+HUILES_VEGETALES,Huile d'amande douce,100ml,11500
+HUILES_VEGETALES,Huile d'amande douce,250ml,23000
+HUILES_VEGETALES,Huile d'avocat,50ml,13000
+HUILES_VEGETALES,Huile d'avocat,100ml,20000
+HUILES_VEGETALES,Huile d'avocat,250ml,40000
+HUILES_VEGETALES,Huile de baobab,100ml,15000
+HUILES_VEGETALES,Huile de baobab,250ml,30000
+HUILES_VEGETALES,Huile de fenugrec,100ml,12500
+HUILES_VEGETALES,Huile de fenugrec,250ml,27000
+HUILES_VEGETALES,Huile de Jojoba,50ml,12500
+HUILES_VEGETALES,Huile de Jojoba,100ml,23000
+HUILES_VEGETALES,Huile de Jojoba,250ml,47000
+HUILES_VEGETALES,Huile de Moutarde,100ml,12000
+HUILES_VEGETALES,Huile de Moutarde,250ml,24000
+HUILES_VEGETALES,Huile d'olive,100ml,17000
+HUILES_VEGETALES,Huile d'olive,250ml,35000
+HUILES_VEGETALES,Huile de Pépin de raisin,100ml,16000
+HUILES_VEGETALES,Huile de Pépin de raisin,250ml,32000
+HUILES_VEGETALES,Huile de Ricin,100ml,10000
+HUILES_VEGETALES,Huile de Ricin,250ml,20000
+HUILES_VEGETALES,Huile de coco pressée à froid,100ml,20000
+HUILES_VEGETALES,Huile de coco pressée à froid,200ml,40000
+HUILES_VEGETALES,Huile d'argan,30ml,30000
+HUILES_VEGETALES,Huile de gingembre,50ml,10000
+HUILES_VEGETALES,Huile de gingembre,100ml,19000
+HUILES_VEGETALES,Huile de gingembre,250ml,34000
+HUILES_VEGETALES,Huile de sésame,100ml,11000
+HUILES_VEGETALES,Huile de sésame,250ml,22000
+HUILES_VEGETALES,Huile de macadamia,50ml,18000
+HUILES_VEGETALES,Huile de macadamia,100ml,34000
+HUILES_VEGETALES,Huile de nigelle,30ml,26000
+HUILES_VEGETALES,Huile de Souchet,20ml,22000
+HUILES_VEGETALES,Huile de Souchet,50ml,45000
+HUILES_VEGETALES,Huile de brocoli,50ml,12000
+HUILES_VEGETALES,Huile de brocoli,100ml,21000
+HUILES_VEGETALES,Huile de bourrache,50ml,33000
+HUILES_VEGETALES,Huile de rose musquée,30ml,38000
+HUILES_VEGETALES,Huile de carotte,50ml,13000
+HUILES_VEGETALES,Huile de Calophylle,50ml,10000
+HUILES_VEGETALES,Huile de figue de barbarie,10ml,25000
+HUILES_VEGETALES,Huile de Citron,30ml,12000
+HUILES_VEGETALES,Huile de romarin,50ml,10000
+HUILES_VEGETALES,Huile de romarin,100ml,19000
+HUILES_VEGETALES,Huile de romarin,250ml,34000
+HUILES_ESSENTIELLES,HE romarin,10ml,13500
+HUILES_ESSENTIELLES,HE ylang ylang,5ml,9500
+HUILES_ESSENTIELLES,HE ylang ylang,10ml,15000
+HUILES_ESSENTIELLES,HE orange douce,10ml,11500
+HUILES_ESSENTIELLES,HE lavande vraie,5ml,12000
+HUILES_ESSENTIELLES,HE lavande vraie,10ml,20000
+HUILES_ESSENTIELLES,HE tea tree,5ml,12000
+HUILES_ESSENTIELLES,HE tea tree,10ml,20000
+HUILES_ESSENTIELLES,HE menthe poivrée,5ml,14000
+HUILES_ESSENTIELLES,HE menthe poivrée,10ml,22500
+HUILES_ESSENTIELLES,HE citron,5ml,12000
+HUILES_ESSENTIELLES,HE citron,10ml,20000
+HUILES_ESSENTIELLES,HE cyprès,10ml,6000
+HUILES_ESSENTIELLES,HE citronnelle,10ml,12500
+HUILES_ESSENTIELLES,HE gingembre frais,10ml,12000
+HUILES_ESSENTIELLES,HE cannelle feuille,10ml,10000
+HUILES_ESSENTIELLES,HE cannelle écorce,5ml,15000
+HUILES_ESSENTIELLES,HE mandravasarotra (saro),10ml,10000
+HUILES_ESSENTIELLES,HE katrafay,10ml,10000
+HUILES_ESSENTIELLES,HE clou de girofle,10ml,10000
+HUILES_ESSENTIELLES,HE Ravintsara,10ml,6000
+HUILES_ESSENTIELLES,HE Ravintsara,30ml,15000
+SAVONS_POUDRES,Shampoing solide pousse cheveux,100g,12000
+SAVONS_POUDRES,Shampoing solide cheveux lisses / ondulés,100g,10000
+SAVONS_POUDRES,Shampoing solide cheveux crépus / frisés,100g,10000
+SAVONS_POUDRES,Savon anti-tache bonne mine,60g,13000
+SAVONS_POUDRES,Savon peau grasse anti acnéique,60g,13000
+SAVONS_POUDRES,Savon detox,125g,18000
+SAVONS_POUDRES,Savon pour peau atopique,125g,16000
+SAVONS_POUDRES,Savon gommage,50g,5000
+SAVONS_POUDRES,Graines de lin,100g,5000
+SAVONS_POUDRES,Graines de lin,250g,10000
+SAVONS_POUDRES,Argile,100g,7000
+SAVONS_POUDRES,Argile,250g,14000
+SAVONS_POUDRES,Poudres d'hibiscus,75g,11000
+SAVONS_POUDRES,Feuilles d'hibiscus séchées,50g,6500
+SAVONS_POUDRES,Rhassoul,75g,15000
+SAVONS_POUDRES,Rhassoul,200g,35000
+SERUMS_MELANGES,Cire coiffante repousse,100ml,22000
+SERUMS_MELANGES,Cire coiffante repousse,200ml,40000
+SERUMS_MELANGES,Huile après rasage / épilation,30ml,30000
+SERUMS_MELANGES,Huile fortifiante ongle,10ml,14000
+SERUMS_MELANGES,Huile anti-chute fortifiante Ninaka,100ml,20000
+SERUMS_MELANGES,Huile anti-chute fortifiante Ninaka,250ml,40000
+SERUMS_MELANGES,Huile oignon-ail,50ml,11000
+SERUMS_MELANGES,Huile oignon-ail,100ml,20000
+SERUMS_MELANGES,Huile oignon-ail,250ml,38000
+SERUMS_MELANGES,Sérum 2en1,50ml,30000
+SERUMS_MELANGES,Sérum hydratation,50ml,30000
+SERUMS_MELANGES,Sérum anti-rides,20ml,43000
+SERUMS_MELANGES,Boost cils&sourcils,10ml,17000
+SERUMS_MELANGES,Sérum protection cheveux,50ml,25000
+SERUMS_MELANGES,Sérum Activ'pousse,100ml,22000
+SERUMS_MELANGES,Chantilly karité-olive-avocat,100ml,30000
+SERUMS_MELANGES,Chantilly karité-olive-avocat,200ml,55000
+SERUMS_MELANGES,Chantilly karité-cacao-coco-amande,100ml,33000
+SERUMS_MELANGES,Chantilly karité-cacao-coco-amande,200ml,60000
+SERUMS_MELANGES,Chantilly de mangue-baobab-jojoba,100ml,30000
+SERUMS_MELANGES,Vitamine E,10ml,14000
+SERUMS_MELANGES,Vitamine E,50ml,60000
+SERUMS_MELANGES,Leave-in gel au lin,300ml,32000
+SERUMS_MELANGES,Lotion à l'hydrolat de géranium,200ml,17000
+SERUMS_MELANGES,Glycérine végétale pure,100ml,10000
+SERUMS_MELANGES,Cire d'abeille par pièce,15g,1500
+SERUMS_MELANGES,Cire d'abeille,100g,8000
+SERUMS_MELANGES,Gel aloe vera,200ml,13000
+SERUMS_MELANGES,Lait capillaire,300ml,40000
+SERUMS_MELANGES,Masque hydratant,300g,52000
