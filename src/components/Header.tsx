@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { Menu, X, Search, User, ShoppingBag, ArrowRight, LayoutDashboard } from "lucide-react";
-import { supabase } from "@/data/supabase";
 import { getDbProducts } from "@/data/queries";
 import { Product } from "@/data/types";
 
@@ -28,56 +27,15 @@ export default function Header() {
 
   // Check if current logged in user has ADMIN role
   useEffect(() => {
-    async function checkAdminStatus() {
-      try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-
-        if (!user) {
-          sessionStorage.removeItem("userRole");
-          sessionStorage.removeItem("isLoggedIn");
-          setIsAdmin(false);
-          return;
-        }
-
-        // Query Supabase DB directly to verify current role
-        const { data: userData } = await supabase
-          .from("utilisateurs")
-          .select("role")
-          .eq("id", user.id)
-          .maybeSingle();
-
-        if (userData && userData.role === "ADMIN") {
-          sessionStorage.setItem("userRole", "ADMIN");
-          setIsAdmin(true);
-        } else {
-          sessionStorage.removeItem("userRole");
-          setIsAdmin(false);
-        }
-      } catch (err) {
-        console.error("Error checking admin status in Header:", err);
-        setIsAdmin(false);
-      }
+    function checkAdminStatus() {
+      const role = sessionStorage.getItem("userRole");
+      const logged = sessionStorage.getItem("isLoggedIn") === "true";
+      setIsAdmin(logged && role === "ADMIN");
     }
 
     checkAdminStatus();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session?.user) {
-        sessionStorage.removeItem("userRole");
-        sessionStorage.removeItem("isLoggedIn");
-        setIsAdmin(false);
-      } else {
-        checkAdminStatus();
-      }
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
+    window.addEventListener("storage", checkAdminStatus);
+    return () => window.removeEventListener("storage", checkAdminStatus);
   }, []);
 
   const navLinks = [

@@ -7,7 +7,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
 import { getOrderHistory, updateOrderStatus } from "@/data/queries";
-import { supabase } from "@/data/supabase";
 import {
   Package,
   Truck,
@@ -64,31 +63,16 @@ export default function OrderHistoryPage() {
   // Check login & load order history
   useEffect(() => {
     const fetchOrders = async () => {
-      let userId = sessionStorage.getItem("userId");
+      const userId = sessionStorage.getItem("userId");
       const logged = sessionStorage.getItem("isLoggedIn") === "true";
 
-      // If not in sessionStorage, check Supabase auth
       if (!userId || !logged) {
-        try {
-          const { data: { user } } = await supabase.auth.getUser();
-          if (user) {
-            userId = user.id;
-            setIsLoggedIn(true);
-            sessionStorage.setItem("isLoggedIn", "true");
-            sessionStorage.setItem("userId", user.id);
-          } else {
-            setIsLoggedIn(false);
-            setLoading(false);
-            return;
-          }
-        } catch (e) {
-          setIsLoggedIn(false);
-          setLoading(false);
-          return;
-        }
-      } else {
-        setIsLoggedIn(true);
+        setIsLoggedIn(false);
+        setLoading(false);
+        return;
       }
+
+      setIsLoggedIn(true);
 
       if (userId) {
         try {

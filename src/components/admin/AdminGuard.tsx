@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/data/supabase";
 import { ShieldAlert, Loader2 } from "lucide-react";
 
 export default function AdminGuard({ children }: { children: React.ReactNode }) {
@@ -12,46 +11,29 @@ export default function AdminGuard({ children }: { children: React.ReactNode }) 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    async function checkAdminAccess() {
-      try {
-        // 1. Get authenticated user from Supabase Auth
-        const {
-          data: { user },
-          error: authError,
-        } = await supabase.auth.getUser();
+    function checkAdminAccess() {
+      const logged = sessionStorage.getItem("isLoggedIn") === "true";
+      const role = sessionStorage.getItem("userRole");
 
-        if (authError || !user) {
-          console.warn("Unauthorized access to Admin: No authenticated session found.");
-          router.push("/connexion");
-          return;
-        }
-
-        // 2. Fetch role from 'utilisateurs' table in Supabase
-        const { data: userData, error: userError } = await supabase
-          .from("utilisateurs")
-          .select("role")
-          .eq("id", user.id)
-          .maybeSingle();
-
-        if (userError || !userData || userData.role !== "ADMIN") {
-          console.warn("Forbidden access to Admin: User is not ADMIN.");
-          setErrorMessage(
-            "Accès refusé. Seuls les comptes administrateurs autorisés peuvent accéder à cet espace."
-          );
-          setTimeout(() => {
-            router.push("/");
-          }, 2500);
-          return;
-        }
-
-        // Access Granted!
-        setAuthorized(true);
-      } catch (err: any) {
-        console.error("Admin guard verification error:", err);
+      if (!logged) {
+        console.warn("Unauthorized access to Admin: No authenticated session found.");
         router.push("/connexion");
-      } finally {
-        setLoading(false);
+        return;
       }
+
+      if (role !== "ADMIN") {
+        console.warn("Forbidden access to Admin: User is not ADMIN.");
+        setErrorMessage(
+          "Accès refusé. Seuls les comptes administrateurs autorisés peuvent accéder à cet espace."
+        );
+        setTimeout(() => {
+          router.push("/");
+        }, 2500);
+        return;
+      }
+
+      setAuthorized(true);
+      setLoading(false);
     }
 
     checkAdminAccess();

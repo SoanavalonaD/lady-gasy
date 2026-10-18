@@ -6,8 +6,12 @@ import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
 import { Product } from "@/data/types";
 import { getDbProducts } from "@/data/queries";
-import { CheckCircle2, Search, ShoppingCart } from "lucide-react";
+import { CheckCircle2, ChevronLeft, ChevronRight, Layers, Search, ShoppingCart } from "lucide-react";
 import Link from "next/link";
+import ScrollReveal from "@/components/ScrollReveal";
+import { groupProductsByVariant, GroupedProduct } from "@/utils/productVariants";
+
+const PRODUCTS_PER_PAGE = 9;
 
 export default function Catalogue() {
   const { addToCart } = useCart();
@@ -18,6 +22,7 @@ export default function Catalogue() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Read ?q= URL parameter on load or change
   useEffect(() => {
@@ -39,6 +44,11 @@ export default function Catalogue() {
       });
   }, []);
 
+  // Reset to page 1 when filters or search change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedNeeds, selectedCategories]);
+
   const handleNeedChange = (need: string) => {
     setSelectedNeeds((prev) =>
       prev.includes(need) ? prev.filter((n) => n !== need) : [...prev, need]
@@ -53,9 +63,9 @@ export default function Catalogue() {
     );
   };
 
-  // Filter products based on search query, selected needs, and categories
+  // Filter products based on search query, selected needs, and categories, then group by variants
   const filteredProducts = useMemo(() => {
-    return dbProducts.filter((product) => {
+    const rawFiltered = dbProducts.filter((product) => {
       const matchesSearch =
         !searchQuery.trim() ||
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -82,7 +92,23 @@ export default function Catalogue() {
 
       return matchesSearch && matchesNeeds && matchesCategories;
     });
+
+    return groupProductsByVariant(rawFiltered);
   }, [dbProducts, searchQuery, selectedNeeds, selectedCategories]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE));
+
+  const currentProducts = useMemo(() => {
+    const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+    return filteredProducts.slice(startIndex, startIndex + PRODUCTS_PER_PAGE);
+  }, [filteredProducts, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   const handleAddToCart = (product: Product) => {
     addToCart(product, 1);
@@ -112,48 +138,52 @@ export default function Catalogue() {
         )}
 
         {/* Header Section */}
-        <div className="mb-xl text-center md:text-left">
-          <h1 className="font-headline-lg-mobile md:font-headline-lg text-primary mb-sm">
-            Notre Catalogue Botanique
-          </h1>
-          <p className="font-body-md text-on-surface-variant max-w-2xl">
-            Découvrez notre sélection de soins naturels conçus avec l&apos;expertise botanique Lady Gasy pour sublimer vos cheveux texturés.
-          </p>
-        </div>
+        <ScrollReveal direction="down">
+          <div className="mb-xl text-center md:text-left">
+            <h1 className="font-headline-lg-mobile md:font-headline-lg text-primary mb-sm">
+              Notre Catalogue Botanique
+            </h1>
+            <p className="font-body-md text-on-surface-variant max-w-2xl">
+              Découvrez notre sélection de soins naturels conçus avec l&apos;expertise botanique Lady Gasy pour sublimer vos cheveux texturés.
+            </p>
+          </div>
+        </ScrollReveal>
 
         <div className="flex flex-col md:flex-row gap-xl">
           {/* Sidebar Filters */}
           <aside className="w-full md:w-64 shrink-0">
-            <div className="sticky top-[120px] bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30">
-              <h2 className="font-label-md text-on-surface mb-md border-b border-outline-variant pb-2 tracking-wider">
-                FILTRER PAR
-              </h2>
-              <div className="space-y-md">
-                <div>
-                  <ul className="space-y-xs font-body-md text-on-surface-variant">
-                    {allCategories.map((cat) => (
-                      <li key={cat}>
-                        <label className="flex items-center gap-sm cursor-pointer group">
-                          <input
-                            type="checkbox"
-                            checked={selectedCategories.includes(cat)}
-                            onChange={() => handleCategoryChange(cat)}
-                            className="form-checkbox text-primary rounded-sm border-outline focus:ring-primary-container bg-transparent"
-                          />
-                          <span
-                            className={`group-hover:text-primary transition-colors ${
-                              selectedCategories.includes(cat) ? "text-primary font-medium" : ""
-                            }`}
-                          >
-                            {cat}
-                          </span>
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
+            <ScrollReveal direction="left" delay={100}>
+              <div className="sticky top-[120px] bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30">
+                <h2 className="font-label-md text-on-surface mb-md border-b border-outline-variant pb-2 tracking-wider">
+                  FILTRER PAR
+                </h2>
+                <div className="space-y-md">
+                  <div>
+                    <ul className="space-y-xs font-body-md text-on-surface-variant">
+                      {allCategories.map((cat) => (
+                        <li key={cat}>
+                          <label className="flex items-center gap-sm cursor-pointer group">
+                            <input
+                              type="checkbox"
+                              checked={selectedCategories.includes(cat)}
+                              onChange={() => handleCategoryChange(cat)}
+                              className="form-checkbox text-primary rounded-sm border-outline focus:ring-primary-container bg-transparent"
+                            />
+                            <span
+                              className={`group-hover:text-primary transition-colors ${
+                                selectedCategories.includes(cat) ? "text-primary font-medium" : ""
+                              }`}
+                            >
+                              {cat}
+                            </span>
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
           </aside>
 
           {/* Product Grid */}
@@ -216,55 +246,139 @@ export default function Catalogue() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-lg">
-                {filteredProducts.map((product) => (
-                  <div
-                    key={product.id}
-                    className="group flex flex-col bg-surface-container-lowest border border-[#E0D7CC] rounded-lg overflow-hidden hover:shadow-[0_20px_40px_rgba(51,69,13,0.1)] transition-all duration-300"
-                  >
-                    <div className="relative h-[300px] overflow-hidden">
-                      <Link href={`/catalogue/${product.id}`} className="absolute inset-0 cursor-pointer">
-                        <img
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          src={product.image}
-                          alt={product.name}
-                        />
-                      </Link>
-                      {/* Quick Add Overlay */}
-                      <div className="absolute inset-x-0 bottom-0 p-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-4 group-hover:translate-y-0 flex justify-center bg-gradient-to-t from-surface-container-lowest/90 via-surface-container-lowest/40 to-transparent pt-lg">
-                        <button
-                          onClick={() => handleAddToCart(product)}
-                          className="w-full bg-primary text-on-primary font-label-md py-3 rounded hover:bg-surface-tint transition-colors cursor-pointer shadow-sm hover:shadow-md"
-                        >
-                          Ajouter au Panier
-                        </button>
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-lg">
+                  {currentProducts.map((product, index) => (
+                    <ScrollReveal
+                      key={product.id}
+                      direction="up"
+                      delay={(index % 3) * 100}
+                    >
+                      <div className="h-full group flex flex-col bg-surface-container-lowest border border-[#E0D7CC] rounded-lg overflow-hidden hover:shadow-[0_20px_40px_rgba(51,69,13,0.1)] transition-all duration-300">
+                        <div className="relative h-[300px] overflow-hidden">
+                          <Link href={`/catalogue/${product.id}`} className="absolute inset-0 cursor-pointer">
+                            <img
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              src={product.image}
+                              alt={product.name}
+                            />
+                          </Link>
+
+                          {/* Multi-formats badge */}
+                          {product.hasMultipleVariants && (
+                            <div className="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-2.5 py-1 rounded-full border border-primary/20 flex items-center gap-1.5 shadow-sm">
+                              <Layers size={13} className="text-secondary" />
+                              <span className="text-[11px] font-label-md text-primary tracking-wide">
+                                {product.variants.length} formats ({product.variants.map((v) => v.size).join(" • ")})
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Quick Add Overlay */}
+                          <div className="absolute inset-x-0 bottom-0 p-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-4 group-hover:translate-y-0 flex justify-center bg-gradient-to-t from-surface-container-lowest/90 via-surface-container-lowest/40 to-transparent pt-lg">
+                            <button
+                              onClick={() => handleAddToCart(product)}
+                              className="w-full bg-primary text-on-primary font-label-md py-3 rounded hover:bg-surface-tint transition-colors cursor-pointer shadow-sm hover:shadow-md"
+                            >
+                              Ajouter au Panier
+                            </button>
+                          </div>
+                        </div>
+                        <div className="p-md flex flex-col flex-grow">
+                          <Link href={`/catalogue/${product.id}`} className="hover:text-primary transition-colors">
+                            <h3 className="font-headline-md text-primary mb-1">
+                              {product.name}
+                            </h3>
+                          </Link>
+                          <p className="font-caption text-on-surface-variant mb-md flex-grow">
+                            {product.description}
+                          </p>
+                          <div className="flex justify-between items-center mt-auto">
+                            <div className="flex flex-col">
+                              {product.hasMultipleVariants && (
+                                <span className="text-[11px] text-on-surface-variant font-label-md uppercase tracking-wider">
+                                  À partir de
+                                </span>
+                              )}
+                              <span className="font-label-md text-primary">
+                                {product.priceAr.toLocaleString()} Ar
+                              </span>
+                            </div>
+                            <button
+                              onClick={() => handleAddToCart(product)}
+                              aria-label={`Ajouter ${product.name} au panier`}
+                              className="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high text-primary hover:bg-primary hover:text-on-primary transition-colors duration-300 cursor-pointer"
+                            >
+                              <ShoppingCart size={20} />
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="p-md flex flex-col flex-grow">
-                      <Link href={`/catalogue/${product.id}`} className="hover:text-primary transition-colors">
-                        <h3 className="font-headline-md text-primary mb-1">
-                          {product.name}
-                        </h3>
-                      </Link>
-                      <p className="font-caption text-on-surface-variant mb-md flex-grow">
-                        {product.description}
-                      </p>
-                      <div className="flex justify-between items-center mt-auto">
-                        <span className="font-label-md text-primary">
-                          {product.priceAr.toLocaleString()} Ar
-                        </span>
-                        <button
-                          onClick={() => handleAddToCart(product)}
-                          aria-label={`Ajouter ${product.name} au panier`}
-                          className="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high text-primary hover:bg-primary hover:text-on-primary transition-colors duration-300 cursor-pointer"
-                        >
-                          <ShoppingCart size={20} />
-                        </button>
+                    </ScrollReveal>
+                  ))}
+                </div>
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <div className="mt-xl flex flex-col sm:flex-row items-center justify-between gap-md pt-lg border-t border-outline-variant/30">
+                    <p className="font-body-md text-sm text-on-surface-variant">
+                      Affichage de <strong className="text-primary">{(currentPage - 1) * PRODUCTS_PER_PAGE + 1}</strong> à{" "}
+                      <strong className="text-primary">{Math.min(currentPage * PRODUCTS_PER_PAGE, filteredProducts.length)}</strong> sur{" "}
+                      <strong className="text-primary">{filteredProducts.length}</strong> produits
+                    </p>
+
+                    <div className="flex items-center gap-xs">
+                      {/* Previous Page Arrow */}
+                      <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        aria-label="Page précédente"
+                        className={`flex items-center gap-1 px-3 py-2 rounded-lg font-label-md text-sm border transition-all cursor-pointer ${
+                          currentPage === 1
+                            ? "border-outline-variant/30 text-on-surface-variant/40 cursor-not-allowed bg-surface-container-low"
+                            : "border-outline-variant/50 text-primary hover:bg-primary hover:text-on-primary hover:border-primary active:scale-95"
+                        }`}
+                      >
+                        <ChevronLeft size={18} />
+                        <span className="hidden sm:inline">Précédent</span>
+                      </button>
+
+                      {/* Page Numbers */}
+                      <div className="flex items-center gap-1 mx-1">
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                          <button
+                            key={pageNum}
+                            onClick={() => handlePageChange(pageNum)}
+                            aria-label={`Aller à la page ${pageNum}`}
+                            className={`w-9 h-9 rounded-lg font-label-md text-sm transition-all cursor-pointer ${
+                              currentPage === pageNum
+                                ? "bg-primary text-on-primary shadow-sm"
+                                : "text-on-surface hover:bg-surface-container-high"
+                            }`}
+                          >
+                            {pageNum}
+                          </button>
+                        ))}
                       </div>
+
+                      {/* Next Page Arrow */}
+                      <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        aria-label="Page suivante"
+                        className={`flex items-center gap-1 px-3 py-2 rounded-lg font-label-md text-sm border transition-all cursor-pointer ${
+                          currentPage === totalPages
+                            ? "border-outline-variant/30 text-on-surface-variant/40 cursor-not-allowed bg-surface-container-low"
+                            : "border-outline-variant/50 text-primary hover:bg-primary hover:text-on-primary hover:border-primary active:scale-95"
+                        }`}
+                      >
+                        <span className="hidden sm:inline">Suivant</span>
+                        <ChevronRight size={18} />
+                      </button>
                     </div>
                   </div>
-                ))}
-              </div>
+                )}
+              </>
             )}
           </div>
         </div>

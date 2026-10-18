@@ -11,13 +11,11 @@ import {
   LogOut,
   Store
 } from "lucide-react";
-import { supabase } from "@/data/supabase";
 
 export default function AdminSidebar() {
   const pathname = usePathname();
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
+  const handleLogout = () => {
     sessionStorage.clear();
     window.location.href = "/connexion";
   };

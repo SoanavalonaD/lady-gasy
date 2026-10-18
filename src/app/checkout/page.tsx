@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { ShoppingBag, ArrowRight, Lock, LogIn, CheckCircle2 } from "lucide-react";
 import { createOrderReservation } from "@/data/queries";
-import { supabase } from "@/data/supabase";
 
 interface Neighborhood {
   name: string;
@@ -100,44 +99,16 @@ export default function CheckoutPage() {
 
   // Check login & auto-fill user data in background on load
   useEffect(() => {
-    const checkUser = async () => {
-      const loggedIn = sessionStorage.getItem("isLoggedIn") === "true";
-      setIsLoggedIn(loggedIn);
+    const loggedIn = sessionStorage.getItem("isLoggedIn") === "true";
+    setIsLoggedIn(loggedIn);
 
-      if (loggedIn) {
-        let storedName = sessionStorage.getItem("userName") || "";
-        let storedPhone = sessionStorage.getItem("userPhone") || "";
+    if (loggedIn) {
+      const storedName = sessionStorage.getItem("userName") || "";
+      const storedPhone = sessionStorage.getItem("userPhone") || "";
 
-        // If not found in sessionStorage, attempt to fetch from Supabase auth user profile
-        if (!storedName || !storedPhone) {
-          try {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-              const { data: profile } = await supabase
-                .from("utilisateurs")
-                .select("*")
-                .eq("id", user.id)
-                .maybeSingle();
-
-              if (profile) {
-                storedName = storedName || `${profile.prenom || ""} ${profile.nom || ""}`.trim();
-                storedPhone = storedPhone || profile.telephone || "";
-              } else if (user.user_metadata) {
-                storedName = storedName || `${user.user_metadata.prenom || ""} ${user.user_metadata.nom || ""}`.trim();
-                storedPhone = storedPhone || user.user_metadata.telephone || "";
-              }
-            }
-          } catch (err) {
-            console.error("Erreur lors de la récupération du profil utilisateur:", err);
-          }
-        }
-
-        if (storedName) setFullName(storedName);
-        if (storedPhone) setPhone(storedPhone);
-      }
-    };
-
-    checkUser();
+      if (storedName) setFullName(storedName);
+      if (storedPhone) setPhone(storedPhone);
+    }
   }, []);
 
   // Filter neighborhoods based on search query

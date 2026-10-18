@@ -1,4 +1,3 @@
-import { supabase } from "./supabase";
 import { Product } from "./types";
 
 // Helper to map DB categorie_produit to UI catalog filters
@@ -45,7 +44,7 @@ export async function getDbProducts(): Promise<Product[]> {
     usage: ["Appliquer sur cheveux propres."],
     rating: 4.7,
     reviewsCount: 100,
-    stock: Number(row.stock_disponible || 0)
+    stock: Number(row.stock_disponible || 0),
   }));
 }
 
@@ -58,42 +57,35 @@ export async function signUpUser(
   password: string
 ) {
   try {
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          nom,
-          prenom,
-          telephone
-        }
-      }
+    const res = await fetch("/api/auth/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nom, prenom, email, telephone, password }),
     });
 
-    if (authError) throw authError;
-    if (!authData.user) throw new Error("Impossible de créer l'utilisateur.");
+    const data = await res.json();
 
-    const userId = authData.user.id;
+    if (!res.ok) {
+      throw new Error(data.error || "Échec de l'inscription.");
+    }
 
-    // Attempt to pre-insert profile (may fail if trigger hasn't run yet, that's OK).
-    // The database trigger `on_auth_user_created` will handle the final insert.
-    await supabase
-      .from("utilisateurs")
-      .insert({
-        id: userId,
-        nom,
-        prenom,
-        email,
-        telephone,
-        role: "CLIENT"
-      })
-      .select()
-      .maybeSingle(); // Ignore duplicate errors — trigger might already have inserted
+    const user = data.user;
+    const userName = `${user.prenom || ""} ${user.nom || ""}`.trim() || user.email;
+    const userRole = user.role || "CLIENT";
 
-    // ⚠️ Do NOT set sessionStorage here.
-    // The user must confirm their email before they can log in.
-    // The session will be created by Supabase only after email confirmation.
-    return { success: true, emailConfirmationPending: true, user: authData.user };
+    sessionStorage.setItem("isLoggedIn", "true");
+    sessionStorage.setItem("userId", user.id);
+    sessionStorage.setItem("userName", userName);
+    sessionStorage.setItem("userEmail", user.email);
+    sessionStorage.setItem("userPhone", user.telephone || "");
+    sessionStorage.setItem("userRole", userRole);
+
+    return {
+      success: true,
+      emailConfirmationPending: false,
+      user,
+      role: userRole,
+    };
   } catch (err: any) {
     console.error("Sign up failure:", err.message);
     return { success: false, error: err.message };
@@ -103,36 +95,30 @@ export async function signUpUser(
 // 3. AUTHENTICATION: SIGN IN
 export async function signInUser(email: string, password: string) {
   try {
-    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
     });
 
-    if (authError) throw authError;
-    if (!authData.user) throw new Error("Aucun utilisateur retourné.");
+    const data = await res.json();
 
-    const userId = authData.user.id;
+    if (!res.ok) {
+      throw new Error(data.error || "Échec de la connexion.");
+    }
 
-    // Fetch details from utilisateurs table (maybeSingle to avoid crash if profile missing)
-    const { data: userData } = await supabase
-      .from("utilisateurs")
-      .select("*")
-      .eq("id", userId)
-      .maybeSingle();
+    const user = data.user;
+    const userName = `${user.prenom || ""} ${user.nom || ""}`.trim() || user.email;
+    const userRole = user.role || "CLIENT";
 
-    const userName = userData ? `${userData.prenom} ${userData.nom}` : email.split("@")[0];
-    const userPhone = userData ? userData.telephone : "";
-    const userRole = userData ? userData.role : "CLIENT";
-
-    // Set session storage
     sessionStorage.setItem("isLoggedIn", "true");
-    sessionStorage.setItem("userId", userId);
+    sessionStorage.setItem("userId", user.id);
     sessionStorage.setItem("userName", userName);
-    sessionStorage.setItem("userEmail", email);
-    sessionStorage.setItem("userPhone", userPhone);
+    sessionStorage.setItem("userEmail", user.email);
+    sessionStorage.setItem("userPhone", user.telephone || "");
     sessionStorage.setItem("userRole", userRole);
 
-    return { success: true, user: authData.user, role: userRole };
+    return { success: true, user, role: userRole };
   } catch (err: any) {
     console.error("Sign in failure:", err.message);
     return { success: false, error: err.message };
@@ -155,221 +141,94 @@ export async function createOrderReservation(orderDetails: {
   deliveryFee: number;
   total: number;
 }) {
-  // A. Insert into Table 'commandes'
-  const { data: orderData, error: orderError } = await supabase
-    .from("commandes")
-    .insert({
-      id_utilisateur: orderDetails.userId || null,
-      statut: "EN_ATTENTE",
-      montant_total: orderDetails.total
-    })
-    .select()
-    .single();
-
-  if (orderError) throw orderError;
-  const orderId = orderData.id;
-
   const dbProducts = await getDbProducts();
 
-  // B. Insert into Table 'lignes_commande'
-  const isUuid = (id: string) =>
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
-
-  const lines = orderDetails.items.map((item) => {
-    let productId = item.product.id;
-
-    // Fallback for legacy or invalid string product IDs
-    if (!isUuid(productId)) {
-      const match = dbProducts.find(
-        (p) => p.name.toLowerCase() === item.product.name.toLowerCase()
-      );
-      if (match) {
-        productId = match.id;
-      }
+  const formattedItems = orderDetails.items.map((item) => {
+    let prodId = item.product.id;
+    // Fallback si l'ID n'est pas un UUID valide
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(prodId);
+    if (!isUuid) {
+      const match = dbProducts.find((p) => p.name.toLowerCase() === item.product.name.toLowerCase());
+      if (match) prodId = match.id;
     }
 
     return {
-      id_commande: orderId,
-      id_produit: productId,
-      quantite: item.quantity,
-      prix_unitaire_applique: item.product.priceAr
+      productId: prodId,
+      quantity: item.quantity,
+      priceAr: item.product.priceAr,
     };
   });
 
-  const { error: linesError } = await supabase
-    .from("lignes_commande")
-    .insert(lines);
-
-  if (linesError) throw linesError;
-
-  // C. Insert into Table 'livraisons'
-  const { error: deliveryError } = await supabase
-    .from("livraisons")
-    .insert({
-      id_commande: orderId,
-      adresse_detaillee: orderDetails.deliveryLocation,
+  const res = await fetch("/api/orders", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      userId: orderDetails.userId,
+      items: formattedItems,
       ville: orderDetails.ville,
-      zone_livraison: orderDetails.quartier.name,
-      frais_livraison: orderDetails.deliveryFee,
-      repere: orderDetails.timeSlot
-    });
+      quartier: orderDetails.quartier,
+      deliveryLocation: orderDetails.deliveryLocation,
+      timeSlot: orderDetails.timeSlot,
+      deliveryFee: orderDetails.deliveryFee,
+      total: orderDetails.total,
+    }),
+  });
 
-  if (deliveryError) throw deliveryError;
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error || "Erreur lors de la réservation de commande.");
+  }
 
-  return orderId;
+  return data.orderId;
 }
 
 // 5. ORDER HISTORY
 export async function getOrderHistory(userId: string | null): Promise<any[]> {
   if (!userId) return [];
 
-  const { data, error } = await supabase
-    .from("commandes")
-    .select(`
-      id,
-      statut,
-      montant_total,
-      date_commande,
-      lignes_commande (
-        quantite,
-        prix_unitaire_applique,
-        id_produit
-      ),
-      livraisons (
-        adresse_detaillee,
-        ville,
-        zone_livraison,
-        statut
-      )
-    `)
-    .eq("id_utilisateur", userId)
-    .order("date_commande", { ascending: false });
-
-  if (error) throw error;
-
-  // Fetch all products to match names and images
-  const dbProducts = await getDbProducts();
-
-  // Map database order data
-  return (data || []).map((order: any) => {
-    const mappedItems = (order.lignes_commande || []).map((line: any) => {
-      const prodMatch = dbProducts.find((p) => p.id === line.id_produit);
-      return {
-        id_produit: line.id_produit,
-        nom_produit: prodMatch?.name || "Produit Lady Gasy",
-        image_url: prodMatch?.image || "/background-image.jpg",
-        quantite: line.quantite,
-        prix_unitaire_applique: Number(line.prix_unitaire_applique)
-      };
-    });
-
-    return {
-      id: order.id,
-      date_commande: order.date_commande,
-      statut: order.statut,
-      montant_total: Number(order.montant_total),
-      items: mappedItems,
-      livraison: order.livraisons ? {
-        adresse_detaillee: order.livraisons.adresse_detaillee,
-        ville: order.livraisons.ville,
-        zone_livraison: order.livraisons.zone_livraison,
-        statut: order.livraisons.statut
-      } : null
-    };
+  const res = await fetch(`/api/orders?userId=${encodeURIComponent(userId)}`, {
+    cache: "no-store",
   });
+
+  if (!res.ok) {
+    console.error("Error fetching order history");
+    return [];
+  }
+
+  return await res.json();
 }
 
 // 6. ADMIN FUNCTIONS
 
 // Fetch all orders for Admin
 export async function getAllAdminOrders(): Promise<any[]> {
-  const { data: ordersData, error } = await supabase
-    .from("commandes")
-    .select(`
-      id,
-      id_utilisateur,
-      statut,
-      montant_total,
-      date_commande,
-      lignes_commande (
-        quantite,
-        prix_unitaire_applique,
-        id_produit
-      ),
-      livraisons (
-        adresse_detaillee,
-        ville,
-        zone_livraison,
-        frais_livraison,
-        repere,
-        statut
-      )
-    `)
-    .order("date_commande", { ascending: false });
-
-  if (error) {
-    console.error("Error fetching admin orders:", error.message);
-    throw error;
-  }
-
-  // Fetch users & products to hydrate order info
-  const { data: usersData } = await supabase.from("utilisateurs").select("*");
-  const dbProducts = await getDbProducts();
-
-  return (ordersData || []).map((order: any) => {
-    const userMatch = (usersData || []).find((u: any) => u.id === order.id_utilisateur);
-    const mappedItems = (order.lignes_commande || []).map((line: any) => {
-      const prodMatch = dbProducts.find((p) => p.id === line.id_produit);
-      return {
-        id_produit: line.id_produit,
-        nom_produit: prodMatch?.name || "Produit Lady Gasy",
-        image_url: prodMatch?.image || "/background-image.jpg",
-        quantite: line.quantite,
-        prix_unitaire_applique: Number(line.prix_unitaire_applique)
-      };
-    });
-
-    return {
-      id: order.id,
-      date_commande: order.date_commande,
-      statut: order.statut,
-      montant_total: Number(order.montant_total),
-      client: userMatch ? {
-        nom: `${userMatch.prenom || ""} ${userMatch.nom || ""}`.trim(),
-        email: userMatch.email,
-        telephone: userMatch.telephone
-      } : {
-        nom: "Client Invité",
-        email: "Non renseigné",
-        telephone: "Non renseigné"
-      },
-      items: mappedItems,
-      livraison: order.livraisons ? {
-        adresse_detaillee: order.livraisons.adresse_detaillee,
-        ville: order.livraisons.ville,
-        zone_livraison: order.livraisons.zone_livraison,
-        frais_livraison: Number(order.livraisons.frais_livraison || 0),
-        repere: order.livraisons.repere,
-        statut: order.livraisons.statut
-      } : null
-    };
+  const res = await fetch(`/api/orders?admin=true`, {
+    cache: "no-store",
   });
+
+  if (!res.ok) {
+    console.error("Error fetching admin orders");
+    return [];
+  }
+
+  return await res.json();
 }
 
-// Update Order Status in Supabase
+// Update Order Status in Postgres
 export async function updateOrderStatus(orderId: string, newStatus: string): Promise<void> {
-  const { error } = await supabase
-    .from("commandes")
-    .update({ statut: newStatus })
-    .eq("id", orderId);
+  const res = await fetch("/api/orders", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ orderId, newStatus }),
+  });
 
-  if (error) {
-    console.error("Error updating order status:", error.message);
-    throw error;
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.error || "Erreur lors de la mise à jour du statut.");
   }
 }
 
-// Create Product in Supabase
+// Create Product in Postgres
 export async function createAdminProduct(productData: {
   nom_produit: string;
   description: string;
@@ -378,27 +237,21 @@ export async function createAdminProduct(productData: {
   stock_disponible: number;
   image_url: string;
 }): Promise<any> {
-  const { data, error } = await supabase
-    .from("produits")
-    .insert({
-      nom_produit: productData.nom_produit,
-      description: productData.description,
-      categorie: productData.categorie,
-      prix: productData.prix,
-      stock_disponible: productData.stock_disponible,
-      image_url: productData.image_url
-    })
-    .select()
-    .single();
+  const res = await fetch("/api/products/manage", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(productData),
+  });
 
-  if (error) {
-    console.error("Error creating product:", error.message);
-    throw error;
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error || "Erreur lors de la création du produit.");
   }
+
   return data;
 }
 
-// Update Product in Supabase
+// Update Product in Postgres
 export async function updateAdminProduct(
   id: string,
   productData: {
@@ -410,60 +263,34 @@ export async function updateAdminProduct(
     image_url?: string;
   }
 ): Promise<any> {
-  const { data, error } = await supabase
-    .from("produits")
-    .update(productData)
-    .eq("id", id)
-    .select()
-    .single();
+  const res = await fetch("/api/products/manage", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id, ...productData }),
+  });
 
-  if (error) {
-    console.error("Error updating product:", error.message);
-    throw error;
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error || "Erreur lors de la modification du produit.");
   }
+
   return data;
 }
 
-// Delete Product from Supabase
+// Delete Product from Postgres
 export async function deleteAdminProduct(id: string): Promise<void> {
-  const { error } = await supabase
-    .from("produits")
-    .delete()
-    .eq("id", id);
+  const res = await fetch(`/api/products/manage?id=${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
 
-  if (error) {
-    console.error("Error deleting product:", error.message);
-    throw error;
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || "Erreur lors de la suppression du produit.");
   }
 }
 
-// Upload Product Image to Supabase Storage Bucket ("produits")
+// Upload Product Image (Fallback / local public)
 export async function uploadProductImage(file: File): Promise<string> {
-  const fileExt = file.name.split(".").pop();
-  const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
-  const filePath = `${fileName}`;
-
-  const bucketName = "produits";
-  const { error: uploadError } = await supabase.storage
-    .from(bucketName)
-    .upload(filePath, file, {
-      cacheControl: "3600",
-      upsert: true,
-    });
-
-  if (uploadError) {
-    console.error("Supabase Storage upload error:", uploadError);
-    throw new Error(
-      `Impossible d'uploader l'image dans le bucket Supabase '${bucketName}'. Détail: ${uploadError.message}`
-    );
-  }
-
-  // Get Public URL
-  const { data: publicUrlData } = supabase.storage
-    .from(bucketName)
-    .getPublicUrl(filePath);
-
-  return publicUrlData.publicUrl;
+  // Par défaut, nous retournons une image standard ou le nom du fichier
+  return `/products/${file.name}`;
 }
-
-

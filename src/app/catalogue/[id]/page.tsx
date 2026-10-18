@@ -14,8 +14,10 @@ import {
   Heart,
   CheckCircle2,
   ChevronDown,
-  ArrowRight
+  ArrowRight,
+  Layers,
 } from "lucide-react";
+import { parseProductQuantity } from "@/utils/productVariants";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -25,6 +27,7 @@ export default function ProductDetailPage({ params }: PageProps) {
   const { id } = use(params);
   const { addToCart } = useCart();
   const [dbProducts, setDbProducts] = useState<any[]>([]);
+  const [selectedProductId, setSelectedProductId] = useState<string>(id);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -37,7 +40,44 @@ export default function ProductDetailPage({ params }: PageProps) {
     });
   }, []);
 
-  const product = dbProducts.find((p) => p.id === id);
+  // Synchronise si l'URL params id change
+  useEffect(() => {
+    setSelectedProductId(id);
+  }, [id]);
+
+  const rawProduct = dbProducts.find((p) => p.id === id);
+
+  // Trouver toutes les déclinaisons (variantes de contenance) du même produit
+  const variants = React.useMemo(() => {
+    if (!rawProduct || dbProducts.length === 0) return [];
+
+    const { baseName: currentBaseName } = parseProductQuantity(rawProduct.name);
+    const currentCategory = (rawProduct.rawCategory || "").toUpperCase();
+
+    const related = dbProducts.filter((p) => {
+      const { baseName } = parseProductQuantity(p.name);
+      const cat = (p.rawCategory || "").toUpperCase();
+      return (
+        baseName.toLowerCase() === currentBaseName.toLowerCase() &&
+        (!currentCategory || !cat || cat === currentCategory)
+      );
+    });
+
+    return [...related]
+      .sort((a, b) => a.priceAr - b.priceAr)
+      .map((p) => {
+        const { size } = parseProductQuantity(p.name);
+        return {
+          id: p.id,
+          size: size || `${p.priceAr.toLocaleString()} Ar`,
+          priceAr: p.priceAr,
+          product: p,
+        };
+      });
+  }, [rawProduct, dbProducts]);
+
+  // Produit actif (dépend de la déclinaison sélectionnée)
+  const product = dbProducts.find((p) => p.id === selectedProductId) || rawProduct;
 
   if (loading) {
     return (
@@ -155,6 +195,47 @@ export default function ProductDetailPage({ params }: PageProps) {
             <div className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
               <p>{product.description}</p>
             </div>
+
+            {/* Product Variants (Declinaisons / Formats de contenance) */}
+            {variants.length > 1 && (
+              <div className="flex flex-col gap-2 pt-2 pb-1 border-t border-surface-variant">
+                <div className="flex items-center justify-between">
+                  <span className="font-label-md text-on-surface flex items-center gap-1.5">
+                    <Layers size={16} className="text-secondary" />
+                    Choisir un format / contenance :
+                  </span>
+                  <span className="font-caption text-xs text-on-surface-variant">
+                    {variants.length} formats disponibles
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {variants.map((v) => {
+                    const isSelected = v.id === product.id;
+                    return (
+                      <button
+                        key={v.id}
+                        type="button"
+                        onClick={() => setSelectedProductId(v.id)}
+                        className={`px-4 py-2.5 rounded-lg border text-sm font-label-md transition-all flex flex-col items-center min-w-[90px] cursor-pointer ${
+                          isSelected
+                            ? "bg-primary text-on-primary border-primary shadow-sm scale-102"
+                            : "bg-surface-container-low text-on-surface border-outline-variant/60 hover:border-primary hover:bg-surface-container-high"
+                        }`}
+                      >
+                        <span className="font-semibold">{v.size}</span>
+                        <span
+                          className={`text-[12px] mt-0.5 ${
+                            isSelected ? "text-on-primary/90" : "text-primary"
+                          }`}
+                        >
+                          {v.priceAr.toLocaleString()} Ar
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Stock & Actions */}
             <div className="flex flex-col gap-sm pt-sm border-t border-surface-variant">
