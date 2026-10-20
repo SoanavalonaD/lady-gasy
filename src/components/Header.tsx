@@ -1,22 +1,37 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "@/context/CartContext";
-import { Menu, X, Search, User, ShoppingBag, ArrowRight, LayoutDashboard } from "lucide-react";
+import {
+  Menu,
+  X,
+  Search,
+  User,
+  ShoppingBag,
+  Heart,
+  Store,
+  ArrowRight,
+  LayoutDashboard,
+  Sparkles,
+} from "lucide-react";
 import { getDbProducts } from "@/data/queries";
 import { Product } from "@/data/types";
 
-export default function Header() {
+function HeaderContent() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentCat = (searchParams?.get("cat") || "").toUpperCase().replace(/\s+/g, "_");
   const router = useRouter();
   const { totalItems } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [dbProducts, setDbProducts] = useState<Product[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
 
   // Load products for live search suggestions
   useEffect(() => {
@@ -38,282 +53,415 @@ export default function Header() {
     return () => window.removeEventListener("storage", checkAdminStatus);
   }, []);
 
+  // Close live search dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(e.target as Node)
+      ) {
+        setIsSearchFocused(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // The 8 requested menu links
   const navLinks = [
-    { name: "Catalogue", href: "/catalogue" },
-    { name: "Le Salon", href: "#" },
-    { name: "À Propos", href: "#" },
-    { name: "Contact", href: "/contact" },
+    { name: "Top ventes", href: "/catalogue" },
+    { name: "Visage", href: "/catalogue?cat=VISAGE" },
+    { name: "Cheveux", href: "/catalogue?cat=CHEVEUX" },
+    { name: "Corps", href: "/catalogue?cat=CORPS" },
+    { name: "Huiles essentielles", href: "/catalogue?cat=HUILES_ESSENTIELLES" },
+    { name: "Ingrédients & DIY", href: "/diy" },
+    { name: "Accessoires", href: "/catalogue?cat=ACCESSOIRES" },
+    { name: "Conseils & recettes", href: "/contact" },
   ];
 
   // Filter products for live suggestions
   const liveResults = searchQuery.trim()
-    ? dbProducts.filter((product) =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (product.categories &&
-          product.categories.some((cat) =>
-            cat.toLowerCase().includes(searchQuery.toLowerCase())
-          ))
-      ).slice(0, 5)
+    ? dbProducts
+        .filter(
+          (product) =>
+            product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            product.description
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase()) ||
+            (product.categories &&
+              product.categories.some((cat) =>
+                cat.toLowerCase().includes(searchQuery.toLowerCase())
+              ))
+        )
+        .slice(0, 5)
     : [];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
     const query = searchQuery.trim();
-    setSearchOpen(false);
-    setSearchQuery("");
+    setIsSearchFocused(false);
+    setMobileSearchOpen(false);
     router.push(`/catalogue?q=${encodeURIComponent(query)}`);
   };
 
   return (
-    <header className="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant transition-all duration-300 ease-in-out">
-      <div className="flex justify-between items-center px-lg py-md max-w-[1280px] mx-auto w-full">
-        {/* Left: Mobile Menu & Search */}
-        <div className="flex-1 md:flex-none flex items-center">
+    <header className="fixed top-0 w-full z-50 bg-[#fffdfb] border-b border-[#e5dfd8] shadow-[0_2px_15px_-3px_rgba(0,0,0,0.04)]">
+
+      {/* Main Bar: Logo, Central Search Input, Actions */}
+      <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-4 md:gap-6">
+        {/* Left Mobile Menu Trigger */}
+        <div className="flex items-center gap-1 md:hidden">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle Menu"
-            className="md:hidden text-primary p-2 focus:outline-none hover:text-secondary transition-colors"
+            aria-label="Menu de navigation"
+            className="p-2 text-[#3e3b3e] hover:text-[#33450d] rounded-full hover:bg-[#f5f0e8] transition-colors"
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-
           <button
-            onClick={() => setSearchOpen(!searchOpen)}
-            aria-label="Search"
-            className="hidden md:flex text-primary hover:text-secondary transition-colors duration-300 p-2"
+            onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+            aria-label="Rechercher"
+            className="p-2 text-[#3e3b3e] hover:text-[#33450d] rounded-full hover:bg-[#f5f0e8] transition-colors"
           >
-            <Search size={24} />
+            <Search size={22} />
           </button>
         </div>
 
-        {/* Center: Brand Logo */}
-        <div className="flex-1 flex justify-center md:justify-start">
+        {/* Brand Logo */}
+        <div className="flex-shrink-0">
           <Link
             href="/"
-            className="font-display-lg text-display-lg text-primary italic hover:text-secondary transition-colors duration-300 whitespace-nowrap"
+            className="font-serif text-2xl sm:text-[28px] font-bold text-[#33450d] tracking-tight hover:opacity-90 transition-opacity flex items-center gap-1.5"
           >
-            Lady Gasy
+            <span className="italic">Lady Gasy</span>
           </Link>
         </div>
 
-        {/* Right: Navigation Links & Actions */}
-        <div className="flex-grow justify-end hidden md:flex items-center gap-md">
-          <nav className="flex gap-md font-body-md text-body-md">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className={`transition-colors duration-300 ${
-                    isActive
-                      ? "text-primary font-bold border-b-2 border-primary"
-                      : "text-on-surface-variant hover:text-secondary"
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
-          </nav>
-
-          <div className="flex items-center gap-xs md:gap-sm text-primary">
-            {isAdmin && (
-              <Link
-                href="/admin"
-                aria-label="Espace Admin"
-                title="Espace Administration"
-                className="hover:text-secondary transition-colors duration-300 p-2 flex items-center gap-1 group text-primary"
+        {/* Central Search Bar (Aroma-Zone style with rounded pill) */}
+        <div
+          ref={searchContainerRef}
+          className="hidden md:flex flex-1 max-w-[560px] relative mx-2"
+        >
+          <form
+            onSubmit={handleSearchSubmit}
+            className="w-full flex items-center h-10 rounded-full border border-[#d2d5da] bg-[#ffffff] px-4 hover:border-[#3e3b3e] focus-within:border-[#33450d] focus-within:ring-1 focus-within:ring-[#33450d] transition-all shadow-sm"
+          >
+            <input
+              type="search"
+              placeholder="Rechercher un soin, un ingrédient, une recette..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => setIsSearchFocused(true)}
+              className="w-full bg-transparent outline-none text-sm text-[#3e3b3e] placeholder:text-[#6c727f] pr-2"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="text-[#6c727f] hover:text-[#3e3b3e] p-1 mr-1 text-xs"
+                aria-label="Effacer"
               >
-                <LayoutDashboard size={22} />
-                <span className="hidden lg:inline text-xs font-label-md bg-primary/10 text-primary group-hover:bg-primary group-hover:text-on-primary px-2 py-0.5 rounded-full transition-all">
-                  Admin
-                </span>
-              </Link>
+                <X size={14} />
+              </button>
             )}
-
-            <Link
-              href="/connexion"
-              aria-label="Profile"
-              className="hover:text-secondary transition-colors duration-300 p-2"
+            <button
+              type="submit"
+              aria-label="Lancer la recherche"
+              className="text-[#3e3b3e] hover:text-[#33450d] flex-shrink-0 cursor-pointer"
             >
-              <User size={24} />
-            </Link>
+              <Search size={18} />
+            </button>
+          </form>
 
-            <Link
-              href="/panier"
-              aria-label="Cart"
-              className="hover:text-secondary transition-colors duration-300 relative p-2 flex items-center"
-            >
-              <ShoppingBag size={24} />
-              {totalItems > 0 && (
-                <span className="absolute top-1 right-1 bg-secondary text-on-secondary text-xs rounded-full w-4 h-4 flex items-center justify-center font-label-md animate-pulse">
-                  {totalItems}
-                </span>
+          {/* Live Search Suggestions Dropdown */}
+          {isSearchFocused && searchQuery.trim() !== "" && (
+            <div className="absolute top-[calc(100%+6px)] left-0 w-full bg-[#ffffff] rounded-2xl border border-[#e5dfd8] shadow-xl p-3 z-50 animate-in fade-in slide-in-from-top-1">
+              {liveResults.length > 0 ? (
+                <div className="space-y-1">
+                  <p className="text-[11px] font-semibold text-[#8f95a0] uppercase tracking-wider px-2 py-1">
+                    Suggestions produits ({liveResults.length})
+                  </p>
+                  {liveResults.map((product) => (
+                    <Link
+                      key={product.id}
+                      href={`/catalogue/${product.id}`}
+                      onClick={() => {
+                        setIsSearchFocused(false);
+                        setSearchQuery("");
+                      }}
+                      className="flex items-center gap-3 p-2 rounded-xl hover:bg-[#f8f4ef] transition-colors group cursor-pointer"
+                    >
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-10 h-10 object-cover rounded-lg flex-shrink-0 border border-[#e5dfd8]"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm font-medium text-[#3e3b3e] group-hover:text-[#33450d] truncate">
+                          {product.name}
+                        </h4>
+                        <p className="text-xs text-[#6c727f] truncate">
+                          {product.description}
+                        </p>
+                      </div>
+                      <span className="text-xs font-bold text-[#33450d] flex-shrink-0">
+                        {product.priceAr.toLocaleString()} Ar
+                      </span>
+                    </Link>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={handleSearchSubmit}
+                    className="w-full mt-2 pt-2 border-t border-[#f0e8dc] text-center text-xs font-semibold text-[#33450d] hover:text-[#8e4d33] flex items-center justify-center gap-1 cursor-pointer"
+                  >
+                    Voir tous les résultats
+                    <ArrowRight size={14} />
+                  </button>
+                </div>
+              ) : (
+                <div className="text-center py-4 text-xs text-[#6c727f] italic">
+                  Aucun produit ne correspond à &quot;{searchQuery}&quot;
+                </div>
               )}
-            </Link>
-          </div>
+            </div>
+          )}
         </div>
 
-        {/* Mobile Actions */}
-        <div className="flex md:hidden items-center gap-xs text-primary">
-          <button
-            onClick={() => setSearchOpen(!searchOpen)}
-            aria-label="Search"
-            className="hover:text-secondary p-2"
+        {/* Right Header Icons / Options: Boutiques, Favoris, Admin, Compte, Panier */}
+        <div className="flex items-center gap-1 sm:gap-2 text-[#3e3b3e]">
+          {/* Nos Boutiques (Aroma-Zone Store Locator style) */}
+          <Link
+            href="/contact"
+            title="Nos Boutiques"
+            className="flex items-center gap-1.5 p-2 rounded-full hover:bg-[#f5f0e8] hover:text-[#33450d] transition-colors group"
           >
-            <Search size={24} />
-          </button>
+            <Store size={22} className="text-[#3e3b3e] group-hover:text-[#33450d] transition-colors" />
+            <span className="hidden xl:inline text-xs font-medium text-[#3e3b3e] group-hover:text-[#33450d]">
+              Nos boutiques
+            </span>
+          </Link>
+
+          {/* Favoris (Heart icon - Aroma-Zone style) */}
+          <Link
+            href="/catalogue"
+            title="Mes Favoris"
+            className="flex items-center gap-1.5 p-2 rounded-full hover:bg-[#f5f0e8] hover:text-[#8e4d33] transition-colors group"
+          >
+            <Heart size={22} className="text-[#3e3b3e] group-hover:text-[#8e4d33] transition-colors" />
+            <span className="hidden xl:inline text-xs font-medium text-[#3e3b3e] group-hover:text-[#8e4d33]">
+              Favoris
+            </span>
+          </Link>
+
+          {/* Espace Admin (if role is admin) */}
           {isAdmin && (
             <Link
               href="/admin"
               aria-label="Espace Admin"
               title="Espace Administration"
-              className="hover:text-secondary p-2"
+              className="flex items-center gap-1 p-2 rounded-full hover:bg-[#f5f0e8] hover:text-[#33450d] transition-colors group"
             >
               <LayoutDashboard size={22} />
+              <span className="hidden lg:inline text-[10px] font-bold bg-[#33450d]/10 text-[#33450d] px-2 py-0.5 rounded-full">
+                Admin
+              </span>
             </Link>
           )}
+
+          {/* Mon Compte */}
+          <Link
+            href="/connexion"
+            aria-label="Mon Compte"
+            title="Mon Compte"
+            className="flex items-center gap-1.5 p-2 rounded-full hover:bg-[#f5f0e8] hover:text-[#33450d] transition-colors group"
+          >
+            <User size={22} className="text-[#3e3b3e] group-hover:text-[#33450d]" />
+            <span className="hidden xl:inline text-xs font-medium text-[#3e3b3e] group-hover:text-[#33450d]">
+              Connexion
+            </span>
+          </Link>
+
+          {/* Panier */}
           <Link
             href="/panier"
-            aria-label="Cart"
-            className="hover:text-secondary relative p-2 flex items-center"
+            aria-label="Panier"
+            title="Panier"
+            className="flex items-center gap-1.5 p-2 rounded-full hover:bg-[#f5f0e8] hover:text-[#33450d] transition-colors relative group"
           >
-            <ShoppingBag size={24} />
+            <ShoppingBag size={22} className="text-[#3e3b3e] group-hover:text-[#33450d]" />
             {totalItems > 0 && (
-              <span className="absolute top-1 right-1 bg-secondary text-on-secondary text-xs rounded-full w-4 h-4 flex items-center justify-center font-label-md">
+              <span className="absolute top-1 right-1 bg-[#8e4d33] text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center animate-pulse">
                 {totalItems}
               </span>
             )}
+            <span className="hidden xl:inline text-xs font-medium text-[#3e3b3e] group-hover:text-[#33450d]">
+              Panier
+            </span>
           </Link>
         </div>
       </div>
 
-      {/* Slide-out Search Overlay */}
-      {searchOpen && (
-        <div className="absolute top-full left-0 w-full bg-surface-container-lowest border-b border-outline-variant p-md shadow-xl transition-all duration-300 ease-in-out z-50">
-          <form onSubmit={handleSearchSubmit} className="max-w-[600px] mx-auto space-y-md">
-            <div className="flex gap-sm items-center border-b border-outline focus-within:border-primary py-xs">
-              <Search className="text-primary flex-shrink-0" size={24} />
+      {/* Mobile Search Overlay Bar */}
+      {mobileSearchOpen && (
+        <div className="md:hidden border-t border-[#e5dfd8] bg-[#ffffff] p-3 shadow-md animate-in fade-in">
+          <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
+            <div className="flex-1 flex items-center h-10 rounded-full border border-[#d2d5da] bg-[#ffffff] px-4">
+              <Search size={18} className="text-[#6c727f] mr-2 flex-shrink-0" />
               <input
-                type="text"
-                placeholder="Rechercher un soin, un ingrédient..."
+                type="search"
+                placeholder="Rechercher un soin..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent outline-none text-on-surface font-body-md"
                 autoFocus
+                className="w-full bg-transparent outline-none text-sm text-[#3e3b3e]"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="text-on-surface-variant hover:text-primary p-1 text-xs"
+                  className="text-[#6c727f] p-1 text-xs"
                 >
-                  <X size={16} />
+                  <X size={14} />
                 </button>
               )}
-              <button
-                type="button"
-                onClick={() => setSearchOpen(false)}
-                className="text-on-surface-variant hover:text-primary p-1"
-                aria-label="Fermer la recherche"
-              >
-                <X size={24} />
-              </button>
             </div>
-
-            {/* Live Search Suggestions */}
-            {searchQuery.trim() !== "" && (
-              <div className="space-y-xs max-h-[300px] overflow-y-auto pt-xs">
-                {liveResults.length > 0 ? (
-                  <>
-                    <p className="font-caption text-xs text-on-surface-variant uppercase tracking-wider mb-xs">
-                      Produits trouvés ({liveResults.length}) :
-                    </p>
-                    {liveResults.map((product) => (
-                      <Link
-                        key={product.id}
-                        href={`/catalogue/${product.id}`}
-                        onClick={() => {
-                          setSearchOpen(false);
-                          setSearchQuery("");
-                        }}
-                        className="flex items-center gap-md p-xs rounded-lg hover:bg-surface-container transition-colors group cursor-pointer border border-transparent hover:border-outline-variant/30"
-                      >
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="w-12 h-12 object-cover rounded"
-                        />
-                        <div className="flex-grow">
-                          <h4 className="font-label-md text-sm text-on-surface group-hover:text-primary font-medium">
-                            {product.name}
-                          </h4>
-                          <p className="font-caption text-xs text-on-surface-variant line-clamp-1">
-                            {product.description}
-                          </p>
-                        </div>
-                        <span className="font-label-md text-sm text-primary font-bold">
-                          {product.priceAr.toLocaleString()} Ar
-                        </span>
-                      </Link>
-                    ))}
-
-                    <button
-                      type="submit"
-                      className="w-full mt-sm py-2 text-center text-xs font-label-md text-primary hover:text-secondary flex items-center justify-center gap-xs border-t border-outline-variant/30 pt-sm cursor-pointer"
-                    >
-                      Voir tous les résultats dans le catalogue
-                      <ArrowRight size={14} />
-                    </button>
-                  </>
-                ) : (
-                  <div className="text-center py-md text-on-surface-variant italic text-sm">
-                    Aucun produit ne correspond à &quot;{searchQuery}&quot;
-                  </div>
-                )}
-              </div>
-            )}
+            <button
+              type="button"
+              onClick={() => setMobileSearchOpen(false)}
+              className="text-xs text-[#3e3b3e] font-medium px-2 py-1"
+            >
+              Fermer
+            </button>
           </form>
         </div>
       )}
 
-      {/* Mobile Drawer Navigation */}
+      {/* Horizontal Categories Nav Bar (Aroma-Zone Menu Bar style) */}
+      <nav
+        aria-label="Navigation principale"
+        className="hidden md:flex border-t border-[#ece7e1] bg-[#ffffff] overflow-x-auto scrollbar-none"
+      >
+        <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between gap-1 lg:gap-2">
+          {navLinks.map((link) => {
+            const isTopVentes = link.name === "Top ventes";
+
+            let isActive = false;
+            if (pathname === "/catalogue") {
+              if (link.href === "/catalogue") {
+                // Top ventes active only when no cat param
+                isActive = !currentCat;
+              } else if (link.href.includes("?cat=")) {
+                const linkCat = link.href.split("?cat=")[1]?.toUpperCase().replace(/\s+/g, "_");
+                if (linkCat === "HUILES_ESSENTIELLES" || linkCat === "HUILES") {
+                  isActive = currentCat === "HUILES_ESSENTIELLES" || currentCat === "HUILES";
+                } else {
+                  isActive = currentCat === linkCat;
+                }
+              }
+            } else if (pathname === "/diy" && link.href === "/diy") {
+              isActive = true;
+            } else if (pathname === "/contact" && link.href === "/contact") {
+              isActive = true;
+            }
+
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={`py-2.5 px-2.5 lg:px-3 text-[13px] lg:text-[14px] font-medium whitespace-nowrap transition-all border-b-2 ${
+                  isActive
+                    ? "border-[#33450d] text-[#33450d] font-bold"
+                    : isTopVentes
+                    ? "border-transparent text-[#8e4d33] font-semibold hover:text-[#783c24] hover:border-[#8e4d33]/40"
+                    : "border-transparent text-[#3e3b3e] hover:text-[#33450d] hover:border-[#33450d]/40"
+                }`}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+
+      {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 top-[104px] z-40 bg-surface-container-high transition-transform duration-300">
-          <nav className="flex flex-col p-lg gap-md font-body-lg text-body-lg">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`py-sm border-b border-outline-variant/30 ${
-                    isActive
-                      ? "text-primary font-bold"
-                      : "text-on-surface-variant"
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
+        <div className="md:hidden fixed inset-0 top-[110px] z-40 bg-white/95 backdrop-blur-md overflow-y-auto animate-in fade-in">
+          {/* Quick Shortcuts */}
+          <div className="p-4 bg-[#f8f4ef] border-b border-[#e5dfd8] flex justify-around text-center text-xs">
+            <Link
+              href="/contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex flex-col items-center gap-1 text-[#3e3b3e] hover:text-[#33450d]"
+            >
+              <Store size={22} className="text-[#33450d]" />
+              <span className="font-medium">Nos boutiques</span>
+            </Link>
+            <Link
+              href="/catalogue"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex flex-col items-center gap-1 text-[#3e3b3e] hover:text-[#8e4d33]"
+            >
+              <Heart size={22} className="text-[#8e4d33]" />
+              <span className="font-medium">Favoris</span>
+            </Link>
             <Link
               href="/connexion"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-sm text-primary py-sm border-b border-outline-variant/30"
+              className="flex flex-col items-center gap-1 text-[#3e3b3e] hover:text-[#33450d]"
             >
-              <User size={24} />
-              Mon Compte
+              <User size={22} className="text-[#33450d]" />
+              <span className="font-medium">Mon compte</span>
             </Link>
+          </div>
+
+          {/* Navigation Links */}
+          <nav className="flex flex-col p-4 divide-y divide-[#f0e8dc] text-sm">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`py-3 flex items-center justify-between font-medium ${
+                  link.name === "Top ventes"
+                    ? "text-[#8e4d33] font-bold"
+                    : "text-[#3e3b3e] hover:text-[#33450d]"
+                }`}
+              >
+                <span>{link.name}</span>
+                <ArrowRight size={16} className="text-[#8f95a0]" />
+              </Link>
+            ))}
+
+            {isAdmin && (
+              <Link
+                href="/admin"
+                onClick={() => setMobileMenuOpen(false)}
+                className="py-3 flex items-center justify-between text-[#33450d] font-bold"
+              >
+                <span className="flex items-center gap-2">
+                  <LayoutDashboard size={18} />
+                  Administration
+                </span>
+                <ArrowRight size={16} className="text-[#33450d]" />
+              </Link>
+            )}
           </nav>
         </div>
       )}
-    
     </header>
-    
   );
 }
+
+export default function Header() {
+  return (
+    <Suspense
+      fallback={
+        <header className="fixed top-0 left-0 right-0 z-50 bg-[#ffffff] border-b border-[#e5dfd8] shadow-xs h-[110px]" />
+      }
+    >
+      <HeaderContent />
+    </Suspense>
+  );
+}
+

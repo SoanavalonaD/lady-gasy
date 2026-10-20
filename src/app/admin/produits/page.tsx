@@ -40,7 +40,7 @@ export default function AdminProductsPage() {
   const [formName, setFormName] = useState("");
   const [formDescription, setFormDescription] = useState("");
   const [formCategory, setFormCategory] = useState<
-    "CHEVEUX" | "ONGLES" | "ACCESSOIRES" | "CILS" | "LEVRES"
+    "CHEVEUX" | "VISAGE" | "CORPS" | "HUILES_ESSENTIELLES" | "ACCESSOIRES" | "ONGLES" | "CILS" | "LEVRES"
   >("CHEVEUX");
   const [formPrice, setFormPrice] = useState<number>(25000);
   const [formStock, setFormStock] = useState<number>(50);
@@ -81,9 +81,9 @@ export default function AdminProductsPage() {
     setEditingProduct(product);
     setFormName(product.name);
     setFormDescription(product.description || "");
-    const raw = (product.rawCategory || product.categories?.[1] || product.categories?.[0] || "CHEVEUX").toUpperCase();
+    const raw = (product.rawCategory || product.categories?.[1] || product.categories?.[0] || "CHEVEUX").toUpperCase().replace(/\s+/g, "_");
     setFormCategory(
-      ["CHEVEUX", "ONGLES", "ACCESSOIRES", "CILS", "LEVRES"].includes(raw)
+      ["CHEVEUX", "VISAGE", "CORPS", "HUILES_ESSENTIELLES", "ACCESSOIRES", "ONGLES", "CILS", "LEVRES"].includes(raw)
         ? (raw as any)
         : "CHEVEUX"
     );
@@ -170,7 +170,14 @@ export default function AdminProductsPage() {
   };
 
   // Filtered Products
-  const categoriesList = ["TOUS", "CHEVEUX", "ONGLES", "ACCESSOIRES", "CILS", "LEVRES"];
+  const categoriesList = [
+    "TOUS",
+    "VISAGE",
+    "CHEVEUX",
+    "CORPS",
+    "HUILES_ESSENTIELLES",
+    "ACCESSOIRES",
+  ];
 
   const filteredProducts = products.filter((p) => {
     const matchesSearch =
@@ -401,9 +408,12 @@ export default function AdminProductsPage() {
                     onChange={(e) => setFormCategory(e.target.value as any)}
                     className="w-full bg-surface-bright border border-outline-variant rounded-lg px-sm py-2 text-sm text-on-surface focus:border-primary outline-none cursor-pointer"
                   >
+                    <option value="VISAGE">VISAGE</option>
                     <option value="CHEVEUX">CHEVEUX</option>
-                    <option value="ONGLES">ONGLES</option>
+                    <option value="CORPS">CORPS</option>
+                    <option value="HUILES_ESSENTIELLES">HUILES ESSENTIELLES</option>
                     <option value="ACCESSOIRES">ACCESSOIRES</option>
+                    <option value="ONGLES">ONGLES</option>
                     <option value="CILS">CILS</option>
                     <option value="LEVRES">LEVRES</option>
                   </select>

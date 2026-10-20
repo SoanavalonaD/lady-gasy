@@ -16,12 +16,35 @@ const beVietnam = Be_Vietnam_Pro({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://ladygasy.mg"),
   title: "Lady Gasy - Un havre de beauté naturelle",
   description: "Découvrez le pouvoir de la nature avec notre gamme de soins capillaires bio, conçue spécifiquement pour sublimer les cheveux texturés et naturels.",
   icons: {
     icon: "/logo2.png",
     shortcut: "/logo2.png",
     apple: "/logo2.png",
+  },
+  openGraph: {
+    title: "Lady Gasy - Un havre de beauté naturelle",
+    description: "Découvrez le pouvoir de la nature avec notre gamme de soins capillaires bio, conçue spécifiquement pour sublimer les cheveux texturés et naturels.",
+    url: "https://ladygasy.mg",
+    siteName: "Lady Gasy",
+    locale: "fr_MG",
+    type: "website",
+    images: [
+      {
+        url: "/background-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Lady Gasy - Un havre de beauté naturelle",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lady Gasy - Un havre de beauté naturelle",
+    description: "Découvrez le pouvoir de la nature avec notre gamme de soins capillaires bio, conçue spécifiquement pour sublimer les cheveux texturés et naturels.",
+    images: ["/background-image.jpg"],
   },
 };
 

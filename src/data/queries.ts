@@ -3,8 +3,14 @@ import { Product } from "./types";
 // Helper to map DB categorie_produit to UI catalog filters
 function mapDbCategoryToLocal(cat: string): string {
   switch (cat) {
+    case "VISAGE":
+      return "Visage";
     case "CHEVEUX":
-      return "Soins & Masques";
+      return "Cheveux";
+    case "CORPS":
+      return "Corps";
+    case "HUILES_ESSENTIELLES":
+      return "Huiles essentielles";
     case "ACCESSOIRES":
       return "Accessoires";
     case "ONGLES":
@@ -14,7 +20,7 @@ function mapDbCategoryToLocal(cat: string): string {
     case "LEVRES":
       return "Lèvres";
     default:
-      return "Soins & Masques";
+      return "Cheveux";
   }
 }
 
@@ -228,11 +234,21 @@ export async function updateOrderStatus(orderId: string, newStatus: string): Pro
   }
 }
 
+export type ProductCategory =
+  | "VISAGE"
+  | "CHEVEUX"
+  | "CORPS"
+  | "HUILES_ESSENTIELLES"
+  | "ACCESSOIRES"
+  | "ONGLES"
+  | "CILS"
+  | "LEVRES";
+
 // Create Product in Postgres
 export async function createAdminProduct(productData: {
   nom_produit: string;
   description: string;
-  categorie: "CHEVEUX" | "ONGLES" | "ACCESSOIRES" | "CILS" | "LEVRES";
+  categorie: ProductCategory;
   prix: number;
   stock_disponible: number;
   image_url: string;
@@ -257,7 +273,7 @@ export async function updateAdminProduct(
   productData: {
     nom_produit?: string;
     description?: string;
-    categorie?: "CHEVEUX" | "ONGLES" | "ACCESSOIRES" | "CILS" | "LEVRES";
+    categorie?: ProductCategory;
     prix?: number;
     stock_disponible?: number;
     image_url?: string;

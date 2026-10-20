@@ -194,7 +194,7 @@ export default function ContactPage() {
                         </div>
                         <div>
                           <h4 className="font-label-md text-label-md text-on-surface font-semibold">
-                            1- Ampasanimalo BOX 17
+                            Ampasanimalo BOX 17
                           </h4>
                           <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
                             Immeuble ANDRIAMANOHISOA (Ex galerie le colisée) Ampasanimalo BOX 17
@@ -224,7 +224,7 @@ export default function ContactPage() {
                         </div>
                         <div>
                           <h4 className="font-label-md text-label-md text-on-surface font-semibold">
-                            2- Salon Ankadifotsy
+                            Salon Ankadifotsy
                           </h4>
                           <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
                             Ankadifotsy ambany, route vers OKLG, en face de Zénith hôtel

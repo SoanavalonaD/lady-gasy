@@ -7,7 +7,7 @@ import { useCart } from "@/context/CartContext";
 import { Product } from "@/data/types";
 import { getDbProducts } from "@/data/queries";
 import Link from "next/link";
-import { CheckCircle2, ArrowRight, Leaf, Rabbit, Recycle, Heart, ShoppingCart } from "lucide-react";
+import { CheckCircle2, ArrowRight, Leaf, Rabbit, Recycle, Heart, ShoppingCart, Star, Quote } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
 
 export default function Home() {
@@ -172,6 +172,89 @@ export default function Home() {
               </a>
             </div>
           </ScrollReveal>
+        </section>
+
+        {/* Customer Recommendations / Avis clients Section */}
+        <section className="py-xl bg-surface-container-low border-t border-surface-variant">
+          <div className="max-w-[1280px] mx-auto px-container-padding md:px-lg">
+            <ScrollReveal direction="down">
+              <div className="text-center mb-xl">
+                <span className="font-label-md text-xs sm:text-sm text-secondary uppercase tracking-widest font-semibold block mb-2">
+                  Témoignages &amp; Avis
+                </span>
+                <h2 className="font-headline-lg text-headline-lg text-on-surface mb-sm">
+                  Ce que disent nos clientes
+                </h2>
+                <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl mx-auto">
+                  La satisfaction de notre communauté est notre plus belle récompense au quotidien.
+                </p>
+              </div>
+            </ScrollReveal>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-lg max-w-4xl mx-auto">
+              {/* Avis 1: Rayssah Ray */}
+              <ScrollReveal direction="up" delay={100}>
+                <div className="h-full bg-surface-container-lowest p-lg rounded-2xl border border-surface-variant/80 shadow-[0_4px_20px_-4px_rgba(51,69,13,0.06)] flex flex-col justify-between relative overflow-hidden group hover:border-primary/40 transition-all duration-300">
+                  <div className="absolute top-4 right-4 text-primary/10 group-hover:text-primary/20 transition-colors pointer-events-none">
+                    <Quote size={48} />
+                  </div>
+                  <div>
+                    {/* Stars */}
+                    <div className="flex items-center gap-1 text-[#e5a034] mb-md">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} size={18} fill="#e5a034" />
+                      ))}
+                    </div>
+                    <p className="font-body-lg text-base sm:text-lg text-on-surface leading-relaxed italic mb-lg">
+                      &quot;Afa-po amin&apos;ny fandraisana, amin&apos;ireo produits ho an&apos;ny volo sy tarehy. Je recommande vivement.&quot;
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-sm pt-md border-t border-surface-variant/60">
+                    
+                    <div>
+                      <h4 className="font-label-md text-sm font-semibold text-on-surface">
+                        Rayssah Ray
+                      </h4>
+                      <span className="text-xs text-on-surface-variant/80 block">
+                        Cliente vérifiée • Soins cheveux &amp; visage
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </ScrollReveal>
+
+              {/* Avis 2: Elysha Saphyra */}
+              <ScrollReveal direction="up" delay={200}>
+                <div className="h-full bg-surface-container-lowest p-lg rounded-2xl border border-surface-variant/80 shadow-[0_4px_20px_-4px_rgba(51,69,13,0.06)] flex flex-col justify-between relative overflow-hidden group hover:border-primary/40 transition-all duration-300">
+                  <div className="absolute top-4 right-4 text-primary/10 group-hover:text-primary/20 transition-colors pointer-events-none">
+                    <Quote size={48} />
+                  </div>
+                  <div>
+                    {/* Stars */}
+                    <div className="flex items-center gap-1 text-[#e5a034] mb-md">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} size={18} fill="#e5a034" />
+                      ))}
+                    </div>
+                    <p className="font-body-lg text-base sm:text-lg text-on-surface leading-relaxed italic mb-lg">
+                      &quot;Produits de bonne qualité. Je vous conseille de suivre la page pour plus d’information&quot;
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-sm pt-md border-t border-surface-variant/60">
+                    
+                    <div>
+                      <h4 className="font-label-md text-sm font-semibold text-on-surface">
+                        Elysha Saphyra
+                      </h4>
+                      <span className="text-xs text-on-surface-variant/80 block">
+                        Cliente vérifiée • Recommandation communauté
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </ScrollReveal>
+            </div>
+          </div>
         </section>
       </main>
       <Footer />

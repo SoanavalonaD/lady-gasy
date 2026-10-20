@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, Suspense } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCart } from "@/context/CartContext";
@@ -8,12 +8,13 @@ import { Product } from "@/data/types";
 import { getDbProducts } from "@/data/queries";
 import { CheckCircle2, ChevronLeft, ChevronRight, Layers, Search, ShoppingCart } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 import ScrollReveal from "@/components/ScrollReveal";
 import { groupProductsByVariant, GroupedProduct } from "@/utils/productVariants";
 
 const PRODUCTS_PER_PAGE = 9;
 
-export default function Catalogue() {
+function CatalogueContent() {
   const { addToCart } = useCart();
   const [dbProducts, setDbProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,12 +25,27 @@ export default function Catalogue() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Read ?q= URL parameter on load or change
+  const searchParams = useSearchParams();
+
+  // Read ?q= and ?cat= URL parameters on load or change
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const q = params.get("q");
+    const q = searchParams.get("q");
     if (q) setSearchQuery(q);
-  }, []);
+    else setSearchQuery("");
+
+    const cat = searchParams.get("cat");
+    if (cat) {
+      const upper = cat.toUpperCase().replace(/\s+/g, "_");
+      if (upper === "HUILES" || upper === "HUILE" || upper === "HUILES_ESSENTIELLES") {
+        setSelectedCategories(["HUILES ESSENTIELLES"]);
+      } else {
+        setSelectedCategories([upper]);
+      }
+    } else {
+      // Top ventes / Pas de catégorie spécifiée : affiche tous les produits
+      setSelectedCategories([]);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     getDbProducts()
@@ -55,12 +71,23 @@ export default function Catalogue() {
     );
   };
 
+  const router = useRouter();
+
   const handleCategoryChange = (category: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
+    setSelectedCategories((prev) => {
+      const next = prev.includes(category)
         ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
+        : [...prev, category];
+
+      if (next.length === 1) {
+        const catParam = next[0].replace(/\s+/g, "_");
+        router.push(`/catalogue?cat=${encodeURIComponent(catParam)}`, { scroll: false });
+      } else {
+        router.push("/catalogue", { scroll: false });
+      }
+
+      return next;
+    });
   };
 
   // Filter products based on search query, selected needs, and categories, then group by variants
@@ -82,11 +109,19 @@ export default function Catalogue() {
       const matchesCategories =
         selectedCategories.length === 0 ||
         (product.rawCategory &&
-          selectedCategories.includes(product.rawCategory.toUpperCase())) ||
+          selectedCategories.some((sel) => {
+            const normSel = sel.toUpperCase().replace(/\s+/g, "_");
+            const normRaw = product.rawCategory?.toUpperCase().replace(/\s+/g, "_");
+            return normSel === normRaw;
+          })) ||
         (product.categories &&
           product.categories.some(
             (cat) =>
-              selectedCategories.includes(cat.toUpperCase()) ||
+              selectedCategories.some((sel) => {
+                const normSel = sel.toUpperCase().replace(/\s+/g, "_");
+                const normCat = cat.toUpperCase().replace(/\s+/g, "_");
+                return normSel === normCat;
+              }) ||
               (cat === "Soins & Masques" && selectedCategories.includes("CHEVEUX"))
           ));
 
@@ -118,12 +153,21 @@ export default function Catalogue() {
 
   const allNeeds = ["Hydratation Profonde", "Définition des Boucles", "Volume & Densité"];
   const allCategories = [
+    "VISAGE",
     "CHEVEUX",
-    "ONGLES",
+    "CORPS",
+    "HUILES ESSENTIELLES",
     "ACCESSOIRES",
-    "CILS",
-    "LEVRES",
   ];
+
+  const categoryLabels: Record<string, string> = {
+    VISAGE: "Visage",
+    CHEVEUX: "Cheveux",
+    CORPS: "Corps",
+    "HUILES ESSENTIELLES": "Huiles essentielles",
+    HUILES_ESSENTIELLES: "Huiles essentielles",
+    ACCESSOIRES: "Accessoires",
+  };
 
   return (
     <>
@@ -141,25 +185,46 @@ export default function Catalogue() {
         <ScrollReveal direction="down">
           <div className="mb-xl text-center md:text-left">
             <h1 className="font-headline-lg-mobile md:font-headline-lg text-primary mb-sm">
-              Notre Catalogue Botanique
+              {selectedCategories.length === 1
+                ? categoryLabels[selectedCategories[0]] || selectedCategories[0]
+                : "Notre Catalogue Botanique"}
             </h1>
             <p className="font-body-md text-on-surface-variant max-w-2xl">
-              Découvrez notre sélection de soins naturels conçus avec l&apos;expertise botanique Lady Gasy pour sublimer vos cheveux texturés.
+              {selectedCategories.length === 1
+                ? `Découvrez tous nos soins et pépites botaniques pour la catégorie ${categoryLabels[selectedCategories[0]] || selectedCategories[0]}.`
+                : "Découvrez notre sélection complète de soins naturels conçus avec l'expertise botanique Lady Gasy."}
             </p>
           </div>
         </ScrollReveal>
 
         <div className="flex flex-col md:flex-row gap-xl">
-          {/* Sidebar Filters */}
+          {/* Sidebar Categories */}
           <aside className="w-full md:w-64 shrink-0">
             <ScrollReveal direction="left" delay={100}>
               <div className="sticky top-[120px] bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30">
-                <h2 className="font-label-md text-on-surface mb-md border-b border-outline-variant pb-2 tracking-wider">
-                  FILTRER PAR
-                </h2>
                 <div className="space-y-md">
                   <div>
                     <ul className="space-y-xs font-body-md text-on-surface-variant">
+                      <li key="ALL">
+                        <label className="flex items-center gap-sm cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={selectedCategories.length === 0}
+                            onChange={() => {
+                              setSelectedCategories([]);
+                              router.push("/catalogue", { scroll: false });
+                            }}
+                            className="form-checkbox text-primary rounded-sm border-outline focus:ring-primary-container bg-transparent"
+                          />
+                          <span
+                            className={`group-hover:text-primary transition-colors ${
+                              selectedCategories.length === 0 ? "text-primary font-bold" : ""
+                            }`}
+                          >
+                            Tous les produits (Top ventes)
+                          </span>
+                        </label>
+                      </li>
                       {allCategories.map((cat) => (
                         <li key={cat}>
                           <label className="flex items-center gap-sm cursor-pointer group">
@@ -174,7 +239,7 @@ export default function Catalogue() {
                                 selectedCategories.includes(cat) ? "text-primary font-medium" : ""
                               }`}
                             >
-                              {cat}
+                              {categoryLabels[cat] || cat}
                             </span>
                           </label>
                         </li>
@@ -385,5 +450,23 @@ export default function Catalogue() {
       </main>
       <Footer />
     </>
+  );
+}
+
+export default function Catalogue() {
+  return (
+    <Suspense
+      fallback={
+        <>
+          <Header />
+          <main className="flex-grow w-full max-w-[1280px] mx-auto px-container-padding md:px-lg py-xl pt-[120px]">
+            <div className="py-20 text-center text-on-surface-variant">Chargement du catalogue...</div>
+          </main>
+          <Footer />
+        </>
+      }
+    >
+      <CatalogueContent />
+    </Suspense>
   );
 }
