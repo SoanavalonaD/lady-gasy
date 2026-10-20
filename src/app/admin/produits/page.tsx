@@ -104,7 +104,7 @@ export default function AdminProductsPage() {
     try {
       const url = await uploadProductImage(file);
       setFormImageUrl(url);
-      showToast("Image enregistrée dans Supabase Storage !");
+      showToast("Image chargée avec succès !");
     } catch (err: any) {
       console.error("Upload error:", err);
       setUploadError(err.message || "Erreur d'envoi de l'image.");
@@ -513,7 +513,7 @@ export default function AdminProductsPage() {
                         Cliquez pour choisir une image sur votre ordinateur
                       </span>
                       <span className="text-[11px] text-on-surface-variant">
-                        Formats acceptés : PNG, JPG, WEBP (stocké auto sur Supabase Storage)
+                        Formats acceptés : PNG, JPG, WEBP (stockage direct en base de données)
                       </span>
                     </label>
                   )}
@@ -534,19 +534,6 @@ export default function AdminProductsPage() {
                   </p>
                 )}
 
-                {/* Optional Manual URL Link */}
-                <details className="mt-xs">
-                  <summary className="text-[11px] text-on-surface-variant hover:text-primary cursor-pointer">
-                    Ou coller un lien URL manuel...
-                  </summary>
-                  <input
-                    type="url"
-                    value={formImageUrl}
-                    onChange={(e) => setFormImageUrl(e.target.value)}
-                    placeholder="https://..."
-                    className="w-full mt-xs bg-surface-bright border border-outline-variant rounded-lg px-sm py-1.5 text-xs text-on-surface focus:border-primary outline-none"
-                  />
-                </details>
               </div>
 
               {/* Actions */}

@@ -305,8 +305,26 @@ export async function deleteAdminProduct(id: string): Promise<void> {
   }
 }
 
-// Upload Product Image (Fallback / local public)
+// Upload Product Image: convertit l'image locale en base64 pour stockage direct en BDD dans la colonne TEXT
 export async function uploadProductImage(file: File): Promise<string> {
-  // Par défaut, nous retournons une image standard ou le nom du fichier
-  return `/products/${file.name}`;
+  return new Promise((resolve, reject) => {
+    // Vérification de la taille (max 4MB pour éviter de saturer la payload)
+    if (file.size > 4 * 1024 * 1024) {
+      reject(new Error("L'image est trop volumineuse (maximum 4 Mo)."));
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        resolve(reader.result);
+      } else {
+        reject(new Error("Échec de la lecture de l'image."));
+      }
+    };
+    reader.onerror = () => {
+      reject(new Error("Erreur lors de la lecture du fichier image."));
+    };
+    reader.readAsDataURL(file);
+  });
 }

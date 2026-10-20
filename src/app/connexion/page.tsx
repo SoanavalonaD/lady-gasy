@@ -12,10 +12,12 @@ import {
   ChevronRight,
   LogOut,
   Package,
-  User
+  User,
+  Eye,
+  EyeOff,
+  ArrowRight
 } from "lucide-react";
 import { signInUser, signUpUser, getOrderHistory } from "@/data/queries";
-import { ArrowRight } from "lucide-react";
 
 export default function ConnexionPage() {
   const router = useRouter();
@@ -55,12 +57,14 @@ export default function ConnexionPage() {
   // Form states
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
 
   const [signupNom, setSignupNom] = useState("");
   const [signupPrenom, setSignupPrenom] = useState("");
   const [signupEmail, setSignupEmail] = useState("");
   const [signupTelephone, setSignupTelephone] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
+  const [showSignupPassword, setShowSignupPassword] = useState(false);
 
   // Sync login status and load order history
   const checkLoginStatus = () => {
@@ -355,15 +359,25 @@ export default function ConnexionPage() {
                           Oublié ?
                         </a>
                       </div>
-                      <input
-                        className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
-                        id="login-password"
-                        type="password"
-                        placeholder="••••••••"
-                        value={loginPassword}
-                        onChange={(e) => setLoginPassword(e.target.value)}
-                        required
-                      />
+                      <div className="relative">
+                        <input
+                          className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm pr-10 font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
+                          id="login-password"
+                          type={showLoginPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          value={loginPassword}
+                          onChange={(e) => setLoginPassword(e.target.value)}
+                          required
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowLoginPassword((prev) => !prev)}
+                          className="absolute right-sm top-1/2 -translate-y-1/2 text-on-surface-variant/70 hover:text-primary transition-colors focus:outline-none p-1 cursor-pointer"
+                          aria-label={showLoginPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                        >
+                          {showLoginPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                      </div>
                     </div>
                     <button
                       className="w-full bg-primary text-on-primary font-label-md text-label-md py-sm rounded-DEFAULT hover:bg-on-primary-fixed-variant transition-colors flex items-center justify-center gap-xs mt-lg cursor-pointer focus:outline-none"
@@ -440,15 +454,25 @@ export default function ConnexionPage() {
                       <label className="font-label-md text-label-md text-on-surface block" htmlFor="signup-password">
                         Mot de passe
                       </label>
-                      <input
-                        className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
-                        id="signup-password"
-                        type="password"
-                        placeholder="Créez un mot de passe"
-                        value={signupPassword}
-                        onChange={(e) => setSignupPassword(e.target.value)}
-                        required
-                      />
+                      <div className="relative">
+                        <input
+                          className="w-full bg-surface-container border-0 rounded-DEFAULT p-sm pr-10 font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:outline-none transition-shadow"
+                          id="signup-password"
+                          type={showSignupPassword ? "text" : "password"}
+                          placeholder="Créez un mot de passe"
+                          value={signupPassword}
+                          onChange={(e) => setSignupPassword(e.target.value)}
+                          required
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowSignupPassword((prev) => !prev)}
+                          className="absolute right-sm top-1/2 -translate-y-1/2 text-on-surface-variant/70 hover:text-primary transition-colors focus:outline-none p-1 cursor-pointer"
+                          aria-label={showSignupPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                        >
+                          {showSignupPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                      </div>
                     </div>
                     <p className="font-caption text-caption text-on-surface-variant leading-relaxed pt-xs">
                       En créant un compte, vous acceptez nos{" "}
