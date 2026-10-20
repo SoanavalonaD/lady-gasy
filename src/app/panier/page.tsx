@@ -41,6 +41,14 @@ export default function CartPage() {
             >
               Découvrir nos produits
             </Link>
+
+            <Link
+              href="/commandes"
+              className="w-full bg-primary hover:bg-surface-tint text-on-primary py-md rounded-md font-label-md text-label-md transition-all duration-300 flex items-center justify-center gap-sm cursor-pointer shadow-sm hover:shadow-md"
+            >
+              Consulter mes commandes
+              <ArrowRight className="ml-2" size={18} />
+            </Link>
           </div>
         ) : (
           /* Grid Content */

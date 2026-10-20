@@ -22,6 +22,7 @@ import {
   uploadProductImage
 } from "@/data/queries";
 import { Product } from "@/data/types";
+import { groupProductsByVariant, parseProductQuantity, GroupedProduct } from "@/utils/productVariants";
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -77,9 +78,10 @@ export default function AdminProductsPage() {
     setModalOpen(true);
   };
 
-  const openEditModal = (product: Product) => {
+  const openEditModal = (product: Product | GroupedProduct) => {
     setEditingProduct(product);
-    setFormName(product.name);
+    const { baseName } = parseProductQuantity(product.name);
+    setFormName(baseName || product.name);
     setFormDescription(product.description || "");
     const raw = (product.rawCategory || product.categories?.[1] || product.categories?.[0] || "CHEVEUX").toUpperCase().replace(/\s+/g, "_");
     setFormCategory(
@@ -179,25 +181,30 @@ export default function AdminProductsPage() {
     "ACCESSOIRES",
   ];
 
-  const filteredProducts = products.filter((p) => {
-    const matchesSearch =
-      !searchQuery.trim() ||
-      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.description.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredProducts = React.useMemo(() => {
+    const rawFiltered = products.filter((p) => {
+      const matchesSearch =
+        !searchQuery.trim() ||
+        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.description.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesCategory =
-      selectedCategory === "TOUS" ||
-      p.rawCategory?.toUpperCase() === selectedCategory ||
-      (p.categories &&
-        p.categories.some(
-          (c) =>
-            c.toUpperCase() === selectedCategory ||
-            (selectedCategory === "CHEVEUX" &&
-              (c.toUpperCase() === "SOINS & MASQUES" || c.toUpperCase() === "CHEVEUX"))
-        ));
+      const matchesCategory =
+        selectedCategory === "TOUS" ||
+        p.rawCategory?.toUpperCase() === selectedCategory ||
+        (p.categories &&
+          p.categories.some(
+            (c) =>
+              c.toUpperCase() === selectedCategory ||
+              (selectedCategory === "CHEVEUX" &&
+                (c.toUpperCase() === "SOINS & MASQUES" || c.toUpperCase() === "CHEVEUX"))
+          ));
 
-    return matchesSearch && matchesCategory;
-  });
+      return matchesSearch && matchesCategory;
+    });
+
+    // Regroupement par variantes pour n'avoir qu'un seul élément par produit
+    return groupProductsByVariant(rawFiltered);
+  }, [products, searchQuery, selectedCategory]);
 
   return (
     <div className="space-y-lg pt-md">
@@ -303,11 +310,23 @@ export default function AdminProductsPage() {
                           </div>
                           <div>
                             <p className="font-semibold text-on-surface">
-                              {product.name}
+                              {product.baseName || product.name}
                             </p>
                             <p className="font-caption text-xs text-on-surface-variant line-clamp-1">
                               {product.description}
                             </p>
+                            {product.hasMultipleVariants && (
+                              <div className="flex flex-wrap gap-1 mt-1">
+                                {product.variants.map((v) => (
+                                  <span
+                                    key={v.id}
+                                    className="text-[10px] bg-surface-container px-1.5 py-0.5 rounded text-on-surface-variant font-medium"
+                                  >
+                                    {v.size}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         </div>
                       </td>

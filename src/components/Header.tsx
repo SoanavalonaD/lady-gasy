@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { getDbProducts } from "@/data/queries";
 import { Product } from "@/data/types";
+import { groupProductsByVariant, parseProductQuantity } from "@/utils/productVariants";
 
 function HeaderContent() {
   const pathname = usePathname();
@@ -79,22 +80,31 @@ function HeaderContent() {
     { name: "Conseils & recettes", href: "/contact" },
   ];
 
-  // Filter products for live suggestions
-  const liveResults = searchQuery.trim()
-    ? dbProducts
-        .filter(
-          (product) =>
-            product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            product.description
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase()) ||
-            (product.categories &&
-              product.categories.some((cat) =>
-                cat.toLowerCase().includes(searchQuery.toLowerCase())
-              ))
-        )
-        .slice(0, 5)
-    : [];
+  // Filter products for live suggestions (groupés par nom de produit sans quantité)
+  const liveResults = React.useMemo(() => {
+    if (!searchQuery.trim()) return [];
+
+    const query = searchQuery.trim().toLowerCase();
+    const matchedProducts = dbProducts.filter(
+      (product) =>
+        product.name.toLowerCase().includes(query) ||
+        product.description.toLowerCase().includes(query) ||
+        (product.categories &&
+          product.categories.some((cat) => cat.toLowerCase().includes(query)))
+    );
+
+    // Regrouper par variantes pour ne garder qu'un seul résultat par produit
+    // avec le nom de base épuré de toute contenance / quantité (ex: 50g, 100ml)
+    const grouped = groupProductsByVariant(matchedProducts);
+
+    return grouped.slice(0, 5).map((p) => {
+      const { baseName } = parseProductQuantity(p.name);
+      return {
+        ...p,
+        displayName: baseName || p.name,
+      };
+    });
+  }, [dbProducts, searchQuery]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -199,13 +209,14 @@ function HeaderContent() {
                       />
                       <div className="flex-1 min-w-0">
                         <h4 className="text-sm font-medium text-[#3e3b3e] group-hover:text-[#33450d] truncate">
-                          {product.name}
+                          {product.displayName}
                         </h4>
                         <p className="text-xs text-[#6c727f] truncate">
                           {product.description}
                         </p>
                       </div>
                       <span className="text-xs font-bold text-[#33450d] flex-shrink-0">
+                        {product.hasMultipleVariants ? "Dès " : ""}
                         {product.priceAr.toLocaleString()} Ar
                       </span>
                     </Link>
@@ -291,7 +302,7 @@ function HeaderContent() {
           >
             <ShoppingBag size={22} className="text-[#3e3b3e] group-hover:text-[#33450d]" />
             {totalItems > 0 && (
-              <span className="absolute top-1 right-1 bg-[#8e4d33] text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center animate-pulse">
+              <span className="absolute top-1 right-1 bg-[#8e4d33] text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
                 {totalItems}
               </span>
             )}
