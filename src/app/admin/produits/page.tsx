@@ -46,6 +46,10 @@ export default function AdminProductsPage() {
   const [formPrice, setFormPrice] = useState<number>(25000);
   const [formStock, setFormStock] = useState<number>(50);
   const [formImageUrl, setFormImageUrl] = useState("");
+  // État pour les variantes (prix et stock par contenance)
+  const [formVariants, setFormVariants] = useState<
+    Array<{ id: string; size: string; priceAr: number; stock: number }>
+  >([]);
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -73,6 +77,7 @@ export default function AdminProductsPage() {
     setFormPrice(25000);
     setFormStock(50);
     setFormImageUrl("");
+    setFormVariants([]);
     setUploadError(null);
     setUploadingImage(false);
     setModalOpen(true);
@@ -92,6 +97,22 @@ export default function AdminProductsPage() {
     setFormPrice(product.priceAr);
     setFormStock(product.stock !== undefined ? product.stock : 50);
     setFormImageUrl(product.image || "");
+
+    // Si le produit est groupé avec plusieurs formats/variantes
+    const grouped = product as GroupedProduct;
+    if (grouped.variants && grouped.variants.length > 0) {
+      setFormVariants(
+        grouped.variants.map((v) => ({
+          id: v.id,
+          size: v.size,
+          priceAr: v.priceAr,
+          stock: v.product.stock !== undefined ? v.product.stock : 50,
+        }))
+      );
+    } else {
+      setFormVariants([]);
+    }
+
     setUploadError(null);
     setUploadingImage(false);
     setModalOpen(true);
@@ -122,15 +143,33 @@ export default function AdminProductsPage() {
     setSubmitting(true);
     try {
       if (editingProduct) {
-        await updateAdminProduct(editingProduct.id, {
-          nom_produit: formName,
-          description: formDescription,
-          categorie: formCategory,
-          prix: formPrice,
-          stock_disponible: formStock,
-          image_url: formImageUrl,
-        });
-        showToast(`Produit "${formName}" mis à jour avec succès !`);
+        // Si le produit possède des variantes de contenance (ex: 5ml, 10ml, 30ml)
+        if (formVariants.length > 0) {
+          // Mettre à jour chaque variante avec sa contenance, son prix et son stock
+          await Promise.all(
+            formVariants.map((v) =>
+              updateAdminProduct(v.id, {
+                nom_produit: `${formName} ${v.size}`.trim(),
+                description: formDescription,
+                categorie: formCategory,
+                prix: v.priceAr,
+                stock_disponible: v.stock,
+                image_url: formImageUrl,
+              })
+            )
+          );
+          showToast(`Produit "${formName}" et ses ${formVariants.length} formats mis à jour avec succès !`);
+        } else {
+          await updateAdminProduct(editingProduct.id, {
+            nom_produit: formName,
+            description: formDescription,
+            categorie: formCategory,
+            prix: formPrice,
+            stock_disponible: formStock,
+            image_url: formImageUrl,
+          });
+          showToast(`Produit "${formName}" mis à jour avec succès !`);
+        }
       } else {
         await createAdminProduct({
           nom_produit: formName,
@@ -286,8 +325,6 @@ export default function AdminProductsPage() {
                 <tr className="border-b border-outline-variant/30 bg-surface-container-low/50 text-on-surface-variant font-label-md text-xs uppercase tracking-wider">
                   <th className="p-sm md:p-md font-semibold">Produit</th>
                   <th className="p-sm md:p-md font-semibold">Catégorie</th>
-                  <th className="p-sm md:p-md font-semibold">Prix</th>
-                  <th className="p-sm md:p-md font-semibold">Stock</th>
                   <th className="p-sm md:p-md font-semibold text-right">Actions</th>
                 </tr>
               </thead>
@@ -335,26 +372,6 @@ export default function AdminProductsPage() {
                         <span className="px-2.5 py-1 text-xs rounded-full font-label-md bg-secondary/10 text-secondary border border-secondary/20 font-semibold">
                           {product.rawCategory || product.categories?.[0] || "CHEVEUX"}
                         </span>
-                      </td>
-
-                      <td className="p-sm md:p-md font-bold text-primary">
-                        {product.priceAr.toLocaleString()} Ar
-                      </td>
-
-                      <td className="p-sm md:p-md">
-                        {stock <= 0 ? (
-                          <span className="px-2.5 py-1 text-xs rounded-full font-label-md bg-rose-100 text-rose-800 border border-rose-300">
-                            Rupture
-                          </span>
-                        ) : stock <= 5 ? (
-                          <span className="px-2.5 py-1 text-xs rounded-full font-label-md bg-amber-100 text-amber-800 border border-amber-300">
-                            {stock}
-                          </span>
-                        ) : (
-                          <span className="px-2.5 py-1 text-xs rounded-full font-label-md bg-emerald-100 text-emerald-800 border border-emerald-300">
-                            {stock}
-                          </span>
-                        )}
                       </td>
 
                       <td className="p-sm md:p-md text-right">
@@ -438,36 +455,118 @@ export default function AdminProductsPage() {
                   </select>
                 </div>
 
+                {formVariants.length === 0 && (
+                  <div>
+                    <label className="block font-label-md text-xs font-semibold text-on-surface mb-1">
+                      Prix (en Ariary) *
+                    </label>
+                    <input
+                      type="number"
+                      required
+                      min={100}
+                      step={100}
+                      value={formPrice}
+                      onChange={(e) => setFormPrice(Number(e.target.value))}
+                      className="w-full bg-surface-bright border border-outline-variant rounded-lg px-sm py-2 text-sm text-on-surface focus:border-primary outline-none"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Variants Section: Tailles / Contenances multiples avec prix et stocks dédiés */}
+              {formVariants.length > 0 ? (
+                <div className="bg-surface-container-low/70 border border-primary/20 rounded-xl p-md space-y-sm">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-label-md text-xs font-bold text-primary">
+                        Déclinaisons de contenance ({formVariants.length} formats disponibles)
+                      </p>
+                      <p className="text-[11px] text-on-surface-variant">
+                        Modifiez directement le libellé, le prix et le stock disponible pour chaque contenance.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-xs pt-xs">
+                    {formVariants.map((v, idx) => (
+                      <div
+                        key={v.id}
+                        className="grid grid-cols-1 sm:grid-cols-12 gap-xs items-center bg-surface-bright p-sm rounded-lg border border-outline-variant/40"
+                      >
+                        <div className="sm:col-span-4">
+                          <label className="block text-[10px] font-label-md text-on-surface-variant font-semibold">
+                            Format / Contenance
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={v.size}
+                            onChange={(e) => {
+                              const next = [...formVariants];
+                              next[idx] = { ...next[idx], size: e.target.value };
+                              setFormVariants(next);
+                            }}
+                            placeholder="ex: 10ml, 50g..."
+                            className="w-full bg-surface border border-outline-variant rounded px-2 py-1 text-xs font-medium text-on-surface focus:border-primary outline-none"
+                          />
+                        </div>
+
+                        <div className="sm:col-span-4">
+                          <label className="block text-[10px] font-label-md text-on-surface-variant font-semibold">
+                            Prix (Ariary)
+                          </label>
+                          <input
+                            type="number"
+                            required
+                            min={100}
+                            step={100}
+                            value={v.priceAr}
+                            onChange={(e) => {
+                              const next = [...formVariants];
+                              next[idx] = { ...next[idx], priceAr: Number(e.target.value) };
+                              setFormVariants(next);
+                            }}
+                            className="w-full bg-surface border border-outline-variant rounded px-2 py-1 text-xs font-bold text-primary focus:border-primary outline-none"
+                          />
+                        </div>
+
+                        <div className="sm:col-span-4">
+                          <label className="block text-[10px] font-label-md text-on-surface-variant font-semibold">
+                            Stock dispo
+                          </label>
+                          <input
+                            type="number"
+                            required
+                            min={0}
+                            value={v.stock}
+                            onChange={(e) => {
+                              const next = [...formVariants];
+                              next[idx] = { ...next[idx], stock: Number(e.target.value) };
+                              setFormVariants(next);
+                            }}
+                            className="w-full bg-surface border border-outline-variant rounded px-2 py-1 text-xs font-medium text-on-surface focus:border-primary outline-none"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                /* Stock unique si pas de déclinaison */
                 <div>
                   <label className="block font-label-md text-xs font-semibold text-on-surface mb-1">
-                    Prix (en Ariary) *
+                    Stock Disponible *
                   </label>
                   <input
                     type="number"
                     required
-                    min={100}
-                    step={100}
-                    value={formPrice}
-                    onChange={(e) => setFormPrice(Number(e.target.value))}
+                    min={0}
+                    value={formStock}
+                    onChange={(e) => setFormStock(Number(e.target.value))}
                     className="w-full bg-surface-bright border border-outline-variant rounded-lg px-sm py-2 text-sm text-on-surface focus:border-primary outline-none"
                   />
                 </div>
-              </div>
-
-              {/* Stock */}
-              <div>
-                <label className="block font-label-md text-xs font-semibold text-on-surface mb-1">
-                  Stock Disponible *
-                </label>
-                <input
-                  type="number"
-                  required
-                  min={0}
-                  value={formStock}
-                  onChange={(e) => setFormStock(Number(e.target.value))}
-                  className="w-full bg-surface-bright border border-outline-variant rounded-lg px-sm py-2 text-sm text-on-surface focus:border-primary outline-none"
-                />
-              </div>
+              )}
 
               {/* Description */}
               <div>
@@ -508,9 +607,6 @@ export default function AdminProductsPage() {
                         <div className="text-left">
                           <p className="text-xs font-semibold text-emerald-700 flex items-center gap-1">
                             <CheckCircle2 size={14} /> Image chargée
-                          </p>
-                          <p className="text-[11px] text-on-surface-variant line-clamp-1 max-w-[200px]">
-                            {formImageUrl}
                           </p>
                         </div>
                       </div>

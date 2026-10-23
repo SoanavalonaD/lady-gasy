@@ -75,9 +75,9 @@ function HeaderContent() {
     { name: "Cheveux", href: "/catalogue?cat=CHEVEUX" },
     { name: "Corps", href: "/catalogue?cat=CORPS" },
     { name: "Huiles essentielles", href: "/catalogue?cat=HUILES_ESSENTIELLES" },
-    { name: "Ingrédients & DIY", href: "/diy" },
+    { name: "Conseils & recettes", href: "/diy" },
     { name: "Accessoires", href: "/catalogue?cat=ACCESSOIRES" },
-    { name: "Conseils & recettes", href: "/contact" },
+    { name: "Contact", href: "/contact" },
   ];
 
   // Filter products for live suggestions (groupés par nom de produit sans quantité)

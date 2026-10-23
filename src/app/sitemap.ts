@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import pool from "@/data/db";
+import { ADVICE_CATEGORIES, ADVICE_ARTICLES } from "@/data/adviceData";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +35,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
+  // Catégories de conseils
+  const adviceCategoryRoutes: MetadataRoute.Sitemap = ADVICE_CATEGORIES.map((cat) => ({
+    url: `${baseUrl}/diy/categorie/${cat.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.7,
+  }));
+
+  // Articles de conseils
+  const adviceArticleRoutes: MetadataRoute.Sitemap = ADVICE_ARTICLES.map((art) => ({
+    url: `${baseUrl}/diy/article/${art.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.8,
+  }));
+
   // Pages dynamiques des produits
   let productRoutes: MetadataRoute.Sitemap = [];
   try {
@@ -61,5 +78,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("Erreur lors de la génération dynamique du sitemap des produits :", error);
   }
 
-  return [...staticRoutes, ...productRoutes];
+  return [...staticRoutes, ...adviceCategoryRoutes, ...adviceArticleRoutes, ...productRoutes];
 }

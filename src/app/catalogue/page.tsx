@@ -73,21 +73,15 @@ function CatalogueContent() {
 
   const router = useRouter();
 
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategories((prev) => {
-      const next = prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category];
-
-      if (next.length === 1) {
-        const catParam = next[0].replace(/\s+/g, "_");
-        router.push(`/catalogue?cat=${encodeURIComponent(catParam)}`, { scroll: false });
-      } else {
-        router.push("/catalogue", { scroll: false });
-      }
-
-      return next;
-    });
+  const handleCategorySelect = (category: string | null) => {
+    if (!category) {
+      setSelectedCategories([]);
+      router.push("/catalogue", { scroll: false });
+    } else {
+      setSelectedCategories([category]);
+      const catParam = category.replace(/\s+/g, "_");
+      router.push(`/catalogue?cat=${encodeURIComponent(catParam)}`, { scroll: false });
+    }
   };
 
   // Filter products based on search query, selected needs, and categories, then group by variants
@@ -208,13 +202,11 @@ function CatalogueContent() {
                       <li key="ALL">
                         <label className="flex items-center gap-sm cursor-pointer group">
                           <input
-                            type="checkbox"
+                            type="radio"
+                            name="category_filter"
                             checked={selectedCategories.length === 0}
-                            onChange={() => {
-                              setSelectedCategories([]);
-                              router.push("/catalogue", { scroll: false });
-                            }}
-                            className="form-checkbox text-primary rounded-sm border-outline focus:ring-primary-container bg-transparent"
+                            onChange={() => handleCategorySelect(null)}
+                            className="form-radio text-primary border-outline focus:ring-primary-container bg-transparent"
                           />
                           <span
                             className={`group-hover:text-primary transition-colors ${
@@ -229,10 +221,11 @@ function CatalogueContent() {
                         <li key={cat}>
                           <label className="flex items-center gap-sm cursor-pointer group">
                             <input
-                              type="checkbox"
+                              type="radio"
+                              name="category_filter"
                               checked={selectedCategories.includes(cat)}
-                              onChange={() => handleCategoryChange(cat)}
-                              className="form-checkbox text-primary rounded-sm border-outline focus:ring-primary-container bg-transparent"
+                              onChange={() => handleCategorySelect(cat)}
+                              className="form-radio text-primary border-outline focus:ring-primary-container bg-transparent"
                             />
                             <span
                               className={`group-hover:text-primary transition-colors ${
@@ -332,9 +325,8 @@ function CatalogueContent() {
                           {/* Multi-formats badge */}
                           {product.hasMultipleVariants && (
                             <div className="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-2.5 py-1 rounded-full border border-primary/20 flex items-center gap-1.5 shadow-sm">
-                              <Layers size={13} className="text-secondary" />
                               <span className="text-[11px] font-label-md text-primary tracking-wide">
-                                {product.variants.length} formats ({product.variants.map((v) => v.size).join(" • ")})
+                                {product.variants.length} formats ({product.variants.map((v) => v.size).join(" - ")})
                               </span>
                             </div>
                           )}

@@ -35,20 +35,21 @@ export default function CartPage() {
             <p className="font-body-md text-on-surface-variant mb-lg px-md">
               Découvrez notre gamme de soins botaniques formulés pour sublimer vos cheveux texturés et faites votre choix.
             </p>
-            <Link
-              href="/catalogue"
-              className="inline-flex items-center justify-center bg-primary text-on-primary font-label-md px-lg py-md rounded-md hover:bg-surface-tint transition-all duration-300 shadow-sm"
-            >
-              Découvrir nos produits
-            </Link>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-md">
+              <Link
+                href="/catalogue"
+                className="w-full sm:w-auto inline-flex items-center justify-center bg-primary text-on-primary font-label-md px-lg py-md rounded-md hover:bg-surface-tint transition-all duration-300 shadow-sm"
+              >
+                Découvrir nos produits
+              </Link>
 
-            <Link
-              href="/commandes"
-              className="w-full bg-primary hover:bg-surface-tint text-on-primary py-md rounded-md font-label-md text-label-md transition-all duration-300 flex items-center justify-center gap-sm cursor-pointer shadow-sm hover:shadow-md"
-            >
-              Consulter mes commandes
-              <ArrowRight className="ml-2" size={18} />
-            </Link>
+              <Link
+                href="/commandes"
+                className="w-full sm:w-auto inline-flex items-center justify-center bg-surface-container-high border border-outline-variant/60 text-primary hover:bg-surface-container-highest font-label-md px-lg py-md rounded-md transition-all duration-300 shadow-sm"
+              >
+                Consulter mes commandes
+              </Link>
+            </div>
           </div>
         ) : (
           /* Grid Content */
