@@ -326,7 +326,10 @@ function CatalogueContent() {
                           {product.hasMultipleVariants && (
                             <div className="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-2.5 py-1 rounded-full border border-primary/20 flex items-center gap-1.5 shadow-sm">
                               <span className="text-[11px] font-label-md text-primary tracking-wide">
-                                {product.variants.length} formats ({product.variants.map((v) => v.size).join(" - ")})
+                                {(() => {
+                                  const sizes = product.variants.map((v) => v.size).filter(Boolean);
+                                  return `${product.variants.length} formats${sizes.length > 0 ? ` (${sizes.join(" - ")})` : ""}`;
+                                })()}
                               </span>
                             </div>
                           )}

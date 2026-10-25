@@ -2,7 +2,7 @@ import { Product } from "@/data/types";
 
 export interface ProductVariant {
   id: string;
-  size: string; // Ex: "100ml", "250ml", "50g"
+  size: string; // Ex: "100ml", "250ml", "50g" — chaîne vide si la contenance n'est pas détectée dans le nom
   priceAr: number;
   product: Product;
 }
@@ -63,7 +63,7 @@ export function groupProductsByVariant(products: Product[]): GroupedProduct[] {
       const { size } = parseProductQuantity(p.name);
       return {
         id: p.id,
-        size: size || `${p.priceAr.toLocaleString()} Ar`,
+        size: size || "", // Ne jamais utiliser le prix comme format
         priceAr: p.priceAr,
         product: p,
       };

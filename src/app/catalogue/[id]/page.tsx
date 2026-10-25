@@ -69,7 +69,7 @@ export default function ProductDetailPage({ params }: PageProps) {
         const { size } = parseProductQuantity(p.name);
         return {
           id: p.id,
-          size: size || `${p.priceAr.toLocaleString()} Ar`,
+          size: size || "",
           priceAr: p.priceAr,
           product: p,
         };
@@ -222,7 +222,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                             : "bg-surface-container-low text-on-surface border-outline-variant/60 hover:border-primary hover:bg-surface-container-high"
                         }`}
                       >
-                        <span className="font-semibold">{v.size}</span>
+                        <span className="font-semibold">{v.size || "Standard"}</span>
                         <span
                           className={`text-[12px] mt-0.5 ${
                             isSelected ? "text-on-primary/90" : "text-primary"

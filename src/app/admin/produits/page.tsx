@@ -359,7 +359,7 @@ export default function AdminProductsPage() {
                                     key={v.id}
                                     className="text-[10px] bg-surface-container px-1.5 py-0.5 rounded text-on-surface-variant font-medium"
                                   >
-                                    {v.size}
+                                    {v.size || "Standard"}
                                   </span>
                                 ))}
                               </div>

@@ -68,7 +68,7 @@ function HeaderContent() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // The 8 requested menu links
+  // The 9 requested menu links
   const navLinks = [
     { name: "Top ventes", href: "/catalogue" },
     { name: "Visage", href: "/catalogue?cat=VISAGE" },
@@ -77,6 +77,7 @@ function HeaderContent() {
     { name: "Huiles essentielles", href: "/catalogue?cat=HUILES_ESSENTIELLES" },
     { name: "Conseils & recettes", href: "/diy" },
     { name: "Accessoires", href: "/catalogue?cat=ACCESSOIRES" },
+    { name: "Le Salon", href: "/salon" },
     { name: "Contact", href: "/contact" },
   ];
 
@@ -243,13 +244,13 @@ function HeaderContent() {
         <div className="flex items-center gap-1 sm:gap-2 text-[#3e3b3e]">
           {/* Nos Boutiques (Aroma-Zone Store Locator style) */}
           <Link
-            href="/contact"
-            title="Nos Boutiques"
+            href="/salon"
+            title="Notre salon"
             className="flex items-center gap-1.5 p-2 rounded-full hover:bg-[#f5f0e8] hover:text-[#33450d] transition-colors group"
           >
             <Store size={22} className="text-[#3e3b3e] group-hover:text-[#33450d] transition-colors" />
             <span className="hidden xl:inline text-xs font-medium text-[#3e3b3e] group-hover:text-[#33450d]">
-              Nos boutiques
+              Notre salon
             </span>
           </Link>
 
@@ -371,6 +372,8 @@ function HeaderContent() {
                 }
               }
             } else if (pathname === "/diy" && link.href === "/diy") {
+              isActive = true;
+            } else if (pathname === "/salon" && link.href === "/salon") {
               isActive = true;
             } else if (pathname === "/contact" && link.href === "/contact") {
               isActive = true;
