@@ -17,7 +17,10 @@ const beVietnam = Be_Vietnam_Pro({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ladygasy.mg"),
-  title: "Lady Gasy - Un havre de beauté naturelle",
+  title: {
+    default: "Lady Gasy - Un havre de beauté naturelle",
+    template: "%s | Lady Gasy",
+  },
   description: "Découvrez le pouvoir de la nature avec notre gamme de soins capillaires bio, conçue spécifiquement pour sublimer les cheveux texturés et naturels.",
   icons: {
     icon: "/logo2.png",
