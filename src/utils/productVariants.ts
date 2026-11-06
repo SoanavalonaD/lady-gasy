@@ -70,9 +70,16 @@ export function groupProductsByVariant(products: Product[]): GroupedProduct[] {
     });
 
     const { baseName } = parseProductQuantity(mainProduct.name);
+    const richestImagesVariant = sorted.reduce(
+      (best, curr) =>
+        (curr.images?.length || 0) > (best.images?.length || 0) ? curr : best,
+      mainProduct
+    );
 
     return {
       ...mainProduct,
+      image: richestImagesVariant.image || mainProduct.image,
+      images: richestImagesVariant.images || mainProduct.images,
       name: variants.length > 1 ? baseName : mainProduct.name, // Affiche le nom épuré si plusieurs formats
       baseName,
       variants,

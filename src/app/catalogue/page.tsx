@@ -24,6 +24,7 @@ function CatalogueContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [cardPhotoIndex, setCardPhotoIndex] = useState<Record<string, number>>({});
 
   const searchParams = useSearchParams();
 
@@ -306,7 +307,18 @@ function CatalogueContent() {
             ) : (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-lg">
-                  {currentProducts.map((product, index) => (
+                  {currentProducts.map((product, index) => {
+                    const prodImages =
+                      product.images && product.images.length > 0
+                        ? product.images
+                        : [product.image];
+                    const activeIdx = Math.min(
+                      cardPhotoIndex[product.id] ?? 0,
+                      Math.max(0, prodImages.length - 1)
+                    );
+                    const currentCardImage = prodImages[activeIdx] || product.image;
+
+                    return (
                     <ScrollReveal
                       key={product.id}
                       direction="up"
@@ -317,10 +329,71 @@ function CatalogueContent() {
                           <Link href={`/catalogue/${product.id}`} className="absolute inset-0 cursor-pointer">
                             <img
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                              src={product.image}
+                              src={currentCardImage}
                               alt={product.name}
+                              width={400}
+                              height={300}
+                              loading="lazy"
                             />
                           </Link>
+
+                          {prodImages.length > 1 && (
+                            <>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  setCardPhotoIndex((prev) => ({
+                                    ...prev,
+                                    [product.id]:
+                                      (activeIdx - 1 + prodImages.length) %
+                                      prodImages.length,
+                                  }));
+                                }}
+                                aria-label="Photo produit précédente"
+                                className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-surface-container-lowest/85 hover:bg-surface-container-lowest text-primary p-1.5 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                              >
+                                <ChevronLeft size={16} />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  setCardPhotoIndex((prev) => ({
+                                    ...prev,
+                                    [product.id]:
+                                      (activeIdx + 1) % prodImages.length,
+                                  }));
+                                }}
+                                aria-label="Photo produit suivante"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-surface-container-lowest/85 hover:bg-surface-container-lowest text-primary p-1.5 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                              >
+                                <ChevronRight size={16} />
+                              </button>
+                              <div className="absolute top-3 right-3 z-10 flex items-center gap-1 bg-black/50 px-2 py-1 rounded-full">
+                                {prodImages.map((_, dotIdx) => (
+                                  <button
+                                    key={dotIdx}
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      setCardPhotoIndex((prev) => ({
+                                        ...prev,
+                                        [product.id]: dotIdx,
+                                      }));
+                                    }}
+                                    aria-label={`Photo ${dotIdx + 1}`}
+                                    className={`w-1.5 h-1.5 rounded-full transition-all cursor-pointer ${
+                                      dotIdx === activeIdx ? "bg-white w-3" : "bg-white/50"
+                                    }`}
+                                  />
+                                ))}
+                              </div>
+                            </>
+                          )}
 
                           {/* Multi-formats badge */}
                           {product.hasMultipleVariants && (
@@ -375,7 +448,8 @@ function CatalogueContent() {
                         </div>
                       </div>
                     </ScrollReveal>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 {/* Pagination Controls */}

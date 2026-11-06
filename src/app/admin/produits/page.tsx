@@ -15,11 +15,14 @@ import {
   Loader2
 } from "lucide-react";
 import {
+  MAX_PRODUCT_PHOTOS,
   getDbProducts,
   createAdminProduct,
   updateAdminProduct,
   deleteAdminProduct,
-  uploadProductImage
+  uploadProductImages,
+  parseProductImages,
+  serializeProductImages,
 } from "@/data/queries";
 import { Product } from "@/data/types";
 import { groupProductsByVariant, parseProductQuantity, GroupedProduct } from "@/utils/productVariants";
@@ -45,7 +48,7 @@ export default function AdminProductsPage() {
   >("CHEVEUX");
   const [formPrice, setFormPrice] = useState<number>(25000);
   const [formStock, setFormStock] = useState<number>(50);
-  const [formImageUrl, setFormImageUrl] = useState("");
+  const [formImages, setFormImages] = useState<string[]>([]);
   // État pour les variantes (prix et stock par contenance)
   const [formVariants, setFormVariants] = useState<
     Array<{ id: string; size: string; priceAr: number; stock: number }>
@@ -76,7 +79,7 @@ export default function AdminProductsPage() {
     setFormCategory("CHEVEUX");
     setFormPrice(25000);
     setFormStock(50);
-    setFormImageUrl("");
+    setFormImages([]);
     setFormVariants([]);
     setUploadError(null);
     setUploadingImage(false);
@@ -96,7 +99,11 @@ export default function AdminProductsPage() {
     );
     setFormPrice(product.priceAr);
     setFormStock(product.stock !== undefined ? product.stock : 50);
-    setFormImageUrl(product.image || "");
+    const initialImages =
+      product.images && product.images.length > 0
+        ? product.images.slice(0, MAX_PRODUCT_PHOTOS)
+        : parseProductImages(product.image);
+    setFormImages(initialImages);
 
     // Si le produit est groupé avec plusieurs formats/variantes
     const grouped = product as GroupedProduct;
@@ -118,27 +125,51 @@ export default function AdminProductsPage() {
     setModalOpen(true);
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    slotIndex?: number
+  ) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     setUploadingImage(true);
     setUploadError(null);
     try {
-      const url = await uploadProductImage(file);
-      setFormImageUrl(url);
-      showToast("Image chargée avec succès !");
+      const uploadedUrls = await uploadProductImages(files);
+      setFormImages((prev) => {
+        const current = [...prev];
+        if (slotIndex !== undefined && uploadedUrls.length === 1) {
+          if (slotIndex < current.length) {
+            current[slotIndex] = uploadedUrls[0];
+            return current;
+          }
+          return [...current, uploadedUrls[0]].slice(0, MAX_PRODUCT_PHOTOS);
+        }
+        return [...current, ...uploadedUrls].slice(0, MAX_PRODUCT_PHOTOS);
+      });
+      showToast(
+        uploadedUrls.length > 1
+          ? `${uploadedUrls.length} photos chargées avec succès !`
+          : "Photo chargée avec succès !"
+      );
     } catch (err: any) {
       console.error("Upload error:", err);
       setUploadError(err.message || "Erreur d'envoi de l'image.");
     } finally {
       setUploadingImage(false);
+      e.target.value = "";
     }
+  };
+
+  const handleRemoveFormImage = (slotIndex: number) => {
+    setFormImages((prev) => prev.filter((_, i) => i !== slotIndex));
   };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formName.trim() || formPrice <= 0) return;
+
+    const serializedImages = serializeProductImages(formImages);
 
     setSubmitting(true);
     try {
@@ -154,7 +185,7 @@ export default function AdminProductsPage() {
                 categorie: formCategory,
                 prix: v.priceAr,
                 stock_disponible: v.stock,
-                image_url: formImageUrl,
+                image_url: serializedImages,
               })
             )
           );
@@ -166,7 +197,7 @@ export default function AdminProductsPage() {
             categorie: formCategory,
             prix: formPrice,
             stock_disponible: formStock,
-            image_url: formImageUrl,
+            image_url: serializedImages,
           });
           showToast(`Produit "${formName}" mis à jour avec succès !`);
         }
@@ -177,7 +208,7 @@ export default function AdminProductsPage() {
           categorie: formCategory,
           prix: formPrice,
           stock_disponible: formStock,
-          image_url: formImageUrl || "/background-image.jpg",
+          image_url: serializedImages,
         });
         showToast(`Nouveau produit "${formName}" ajouté avec succès !`);
       }
@@ -330,7 +361,10 @@ export default function AdminProductsPage() {
               </thead>
               <tbody className="font-body-md text-sm divide-y divide-outline-variant/20">
                 {filteredProducts.map((product) => {
-                  const stock = product.stock !== undefined ? product.stock : 50;
+                  const prodImages =
+                    product.images && product.images.length > 0
+                      ? product.images
+                      : [product.image];
                   return (
                     <tr
                       key={product.id}
@@ -338,17 +372,32 @@ export default function AdminProductsPage() {
                     >
                       <td className="p-sm md:p-md">
                         <div className="flex items-center gap-md">
-                          <div className="w-12 h-12 rounded-md overflow-hidden bg-surface-variant shrink-0 border border-outline-variant/30">
-                            <img
-                              src={product.image}
-                              alt={product.name}
-                              className="w-full h-full object-cover"
-                            />
+                          <div className="flex items-center gap-1 shrink-0">
+                            {prodImages.slice(0, MAX_PRODUCT_PHOTOS).map((imgUrl, i) => (
+                              <div
+                                key={i}
+                                className="w-12 h-12 rounded-md overflow-hidden bg-surface-variant border border-outline-variant/30 relative"
+                              >
+                                <img
+                                  src={imgUrl}
+                                  alt={`${product.name} (${i + 1})`}
+                                  width={48}
+                                  height={48}
+                                  loading="lazy"
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            ))}
                           </div>
                           <div>
-                            <p className="font-semibold text-on-surface">
-                              {product.baseName || product.name}
-                            </p>
+                            <div className="flex items-center gap-2">
+                              <p className="font-semibold text-on-surface">
+                                {product.baseName || product.name}
+                              </p>
+                              <span className="text-[10px] font-label-md px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">
+                                {prodImages.length}/{MAX_PRODUCT_PHOTOS} photo{prodImages.length > 1 ? "s" : ""}
+                              </span>
+                            </div>
                             <p className="font-caption text-xs text-on-surface-variant line-clamp-1">
                               {product.description}
                             </p>
@@ -583,72 +632,113 @@ export default function AdminProductsPage() {
                 />
               </div>
 
-              {/* Image Upload */}
+              {/* Image Upload (up to 3 photos per product) */}
               <div>
-                <label className="block font-label-md text-xs font-semibold text-on-surface mb-1">
-                  Image du Produit *
-                </label>
-
-                {/* Upload Area Box */}
-                <div className="border-2 border-dashed border-outline-variant/60 rounded-xl p-md text-center bg-surface-bright hover:border-primary transition-colors">
-                  {uploadingImage ? (
-                    <div className="flex flex-col items-center gap-xs py-sm text-primary">
-                      <Loader2 size={24} className="animate-spin" />
-                      <span className="text-xs font-label-md">Upload de l&apos;image dans Supabase...</span>
-                    </div>
-                  ) : formImageUrl ? (
-                    <div className="flex items-center justify-between gap-md">
-                      <div className="flex items-center gap-sm">
-                        <img
-                          src={formImageUrl}
-                          alt="Preview"
-                          className="w-14 h-14 object-cover rounded-lg border border-outline-variant shadow-xs shrink-0"
-                        />
-                        <div className="text-left">
-                          <p className="text-xs font-semibold text-emerald-700 flex items-center gap-1">
-                            <CheckCircle2 size={14} /> Image chargée
-                          </p>
-                        </div>
-                      </div>
-
-                      <label
-                        htmlFor="product-image-file"
-                        className="px-sm py-1.5 bg-surface-container border border-outline-variant rounded-md text-xs font-label-md text-primary hover:text-secondary cursor-pointer"
-                      >
-                        Changer
-                      </label>
-                    </div>
-                  ) : (
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block font-label-md text-xs font-semibold text-on-surface">
+                    Photos du Produit ({formImages.length}/{MAX_PRODUCT_PHOTOS} photos) *
+                  </label>
+                  {formImages.length < MAX_PRODUCT_PHOTOS && (
                     <label
-                      htmlFor="product-image-file"
-                      className="flex flex-col items-center gap-xs cursor-pointer py-xs"
+                      htmlFor="product-image-file-multi"
+                      className="text-xs font-label-md text-primary hover:underline cursor-pointer flex items-center gap-1"
                     >
-                      <UploadCloud size={32} className="text-primary" />
-                      <span className="text-xs font-semibold text-primary">
-                        Cliquez pour choisir une image sur votre ordinateur
-                      </span>
-                      <span className="text-[11px] text-on-surface-variant">
-                        Formats acceptés : PNG, JPG, WEBP (stockage direct en base de données)
-                      </span>
+                      <UploadCloud size={14} />
+                      Sélectionner jusqu&apos;à {MAX_PRODUCT_PHOTOS - formImages.length} photo(s)
                     </label>
                   )}
-
                   <input
-                    id="product-image-file"
+                    id="product-image-file-multi"
                     type="file"
                     accept="image/*"
-                    onChange={handleFileChange}
+                    multiple
+                    onChange={(e) => handleFileChange(e)}
                     disabled={uploadingImage}
                     className="hidden"
                   />
                 </div>
+
+                {uploadingImage ? (
+                  <div className="border-2 border-dashed border-outline-variant/60 rounded-xl p-md text-center bg-surface-bright flex flex-col items-center gap-xs py-md text-primary">
+                    <Loader2 size={24} className="animate-spin" />
+                    <span className="text-xs font-label-md">Chargement des photos en cours...</span>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-sm">
+                    {[0, 1, 2].map((slotIdx) => {
+                      const slotUrl = formImages[slotIdx];
+                      return (
+                        <div
+                          key={slotIdx}
+                          className="border-2 border-dashed border-outline-variant/60 rounded-xl p-sm text-center bg-surface-bright hover:border-primary transition-colors flex flex-col justify-between"
+                        >
+                          <span className="text-[11px] font-bold text-on-surface-variant mb-1.5 block">
+                            {slotIdx === 0 ? "Photo 1 (Principale)" : `Photo ${slotIdx + 1}`}
+                          </span>
+
+                          {slotUrl ? (
+                            <div className="space-y-xs">
+                              <div className="aspect-square rounded-lg overflow-hidden border border-outline-variant bg-surface-container-low">
+                                <img
+                                  src={slotUrl}
+                                  alt={`Photo produit ${slotIdx + 1}`}
+                                  width={180}
+                                  height={180}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                              <div className="flex items-center justify-center gap-xs pt-1">
+                                <label
+                                  htmlFor={`product-slot-file-${slotIdx}`}
+                                  className="px-2 py-1 bg-surface-container border border-outline-variant rounded text-[11px] font-label-md text-primary hover:text-secondary cursor-pointer inline-flex items-center gap-1"
+                                >
+                                  <UploadCloud size={12} />
+                                  Changer
+                                </label>
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveFormImage(slotIdx)}
+                                  className="px-2 py-1 bg-rose-50 border border-rose-200 rounded text-[11px] font-label-md text-rose-700 hover:bg-rose-100 cursor-pointer inline-flex items-center gap-1"
+                                  title="Supprimer cette photo"
+                                >
+                                  <Trash2 size={12} />
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <label
+                              htmlFor={`product-slot-file-${slotIdx}`}
+                              className="aspect-square flex flex-col items-center justify-center gap-1 cursor-pointer rounded-lg hover:bg-primary/5 transition-colors p-2"
+                            >
+                              <UploadCloud size={24} className="text-primary" />
+                              <span className="text-[11px] font-semibold text-primary">
+                                Ajouter Photo {slotIdx + 1}
+                              </span>
+                              <span className="text-[10px] text-on-surface-variant">
+                                PNG, JPG, WEBP
+                              </span>
+                            </label>
+                          )}
+
+                          <input
+                            id={`product-slot-file-${slotIdx}`}
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleFileChange(e, slotIdx)}
+                            disabled={uploadingImage}
+                            className="hidden"
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
 
                 {uploadError && (
                   <p className="mt-xs text-xs text-rose-700 bg-rose-50 p-2 rounded border border-rose-200">
                     ⚠️ {uploadError}
                   </p>
                 )}
-
               </div>
 
               {/* Actions */}

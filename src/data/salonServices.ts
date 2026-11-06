@@ -1,5 +1,6 @@
 export type SalonCategoryId =
   | "SOINS_CHEVEUX"
+  | "COUPE_CHEVEUX"
   | "TRESSES"
   | "EPILATION"
   | "MASSAGE"
@@ -29,10 +30,10 @@ export const SALON_SUBCATEGORIES: Record<string, { title: string; tagline?: stri
     description:
       "Un dégradé en cascade étudié pour décupler le volume, alléger les masses et donner du rebond à chaque boucle.",
   },
-  "COMPLÉMENTS COIFFURE": {
-    title: "Compléments",
-    tagline: "À ajouter à votre coupe",
-    description: "Prestations complémentaires pour préparer et chouchouter vos cheveux.",
+  "SOINS & STYLING CHEVEUX": {
+    title: "Soins naturels & Styling",
+    tagline: "Rituel capillaire",
+    description: "Prestations de soin, démêlage, lavage et mise en beauté naturelle de vos boucles.",
   },
 };
 
@@ -41,7 +42,13 @@ export const SALON_CATEGORIES: SalonCategory[] = [
   {
     id: "SOINS_CHEVEUX",
     label: "Soins naturels pour cheveux",
-    description: "Coupes, mises en forme et soins botaniques pour cheveux ondulés, bouclés, frisés et crépus.",
+    description: "Démêlage doux, lavage purifiant, soin complet botanique et styling pour cheveux ondulés, bouclés, frisés et crépus.",
+    groupBySubcategory: false,
+  },
+  {
+    id: "COUPE_CHEVEUX",
+    label: "Coupe cheveux",
+    description: "Coupes expertes sur-mesure : Shaping Cut – Mise en forme et Coupe Volume Max – Effet Cascade.",
     groupBySubcategory: true,
   },
   {
@@ -83,49 +90,16 @@ export interface SalonServiceItem {
   note?: string;
   description?: string;
   badge?: string;
+  image?: string;
+  images?: string[];
 }
 
 export const SALON_SERVICES: SalonServiceItem[] = [
-  // SOINS NATURELS POUR CHEVEUX (Coupe pro & shaping)
-  {
-    id: "coupe-shaping-courts",
-    category: "SOINS_CHEVEUX",
-    subcategory: "COUPE PRO - SHAPING CUT - MISE EN FORME",
-    service: "Cheveux courts et mi-longs",
-    price: "30 000 Ar",
-    description: "Diagnostic de texture, coupe sur cheveux secs ou humides respectant le tombant naturel et le dessin de vos boucles.",
-    badge: "Populaire",
-  },
-  {
-    id: "coupe-shaping-longs",
-    category: "SOINS_CHEVEUX",
-    subcategory: "COUPE PRO - SHAPING CUT - MISE EN FORME",
-    service: "Cheveux très longs ou denses",
-    price: "35 000 Ar",
-    description: "Harmonisation globale des volumes, allègement des masses et redéfinition du rebond pour chevelures épaisses.",
-  },
-  {
-    id: "coupe-volume-cascade-milongs",
-    category: "SOINS_CHEVEUX",
-    subcategory: "COUPE PRO - COUPE VOLUME MAX - EFFET CASCADE",
-    service: "Cheveux mi-longs",
-    price: "40 000 Ar",
-    description: "Technique de dégradé en cascade étudiée pour décupler le volume et dynamiser chaque mèche.",
-    badge: "Signature",
-  },
-  {
-    id: "coupe-volume-cascade-longs",
-    category: "SOINS_CHEVEUX",
-    subcategory: "COUPE PRO - COUPE VOLUME MAX - EFFET CASCADE",
-    service: "Cheveux très longs ou denses",
-    price: "45 000 Ar",
-    description: "Effet cascade spectaculaire et aéré, structuré pour offrir légèreté, mouvement et volume longue tenue.",
-    badge: "Tendance",
-  },
+  // 1. SOINS NATURELS POUR CHEVEUX
   {
     id: "demelage-salon",
     category: "SOINS_CHEVEUX",
-    subcategory: "COMPLÉMENTS COIFFURE",
+    subcategory: "SOINS & STYLING CHEVEUX",
     service: "Démêlage doux au salon",
     price: "+ 5 000 Ar",
     note: "En supplément",
@@ -134,11 +108,69 @@ export const SALON_SERVICES: SalonServiceItem[] = [
   {
     id: "lavage-demelage",
     category: "SOINS_CHEVEUX",
-    subcategory: "COMPLÉMENTS COIFFURE",
+    subcategory: "SOINS & STYLING CHEVEUX",
     service: "Lavage + Démêlage",
     price: "13 000 Ar",
     note: "À partir de",
     description: "Shampoing purifiant doux, soin démêlant hydratant et massage relaxant du cuir chevelu.",
+    badge: "Essentiel",
+  },
+  {
+    id: "soin-complet-cheveux",
+    category: "SOINS_CHEVEUX",
+    subcategory: "SOINS & STYLING CHEVEUX",
+    service: "Soin complet",
+    price: "Sur devis",
+    note: "Selon longueur & densité",
+    description: "Rituel profond 100% naturel (bain d'huiles, masque botanique sous vapeur douce, hydratation et scellage) pour régénérer la fibre capillaire.",
+    badge: "Rituel profond",
+  },
+  {
+    id: "styling-cheveux",
+    category: "SOINS_CHEVEUX",
+    subcategory: "SOINS & STYLING CHEVEUX",
+    service: "Styling",
+    price: "Sur devis",
+    note: "Selon longueur & technique",
+    description: "Définition et mise en forme des boucles (Wash & Go, Finger Coils, Twist-out, Braid-out) avec nos soins coiffants naturels.",
+    badge: "Définition",
+  },
+
+  // 2. COUPE CHEVEUX (Shaping Cut & Coupe Volume Max)
+  {
+    id: "coupe-shaping-courts",
+    category: "COUPE_CHEVEUX",
+    subcategory: "COUPE PRO - SHAPING CUT - MISE EN FORME",
+    service: "Cheveux courts et mi-longs",
+    price: "30 000 Ar",
+    description: "Diagnostic de texture, coupe sur cheveux secs ou humides respectant le tombant naturel et le dessin de vos boucles.",
+    badge: "Populaire",
+  },
+  {
+    id: "coupe-shaping-longs",
+    category: "COUPE_CHEVEUX",
+    subcategory: "COUPE PRO - SHAPING CUT - MISE EN FORME",
+    service: "Cheveux très longs ou denses",
+    price: "35 000 Ar",
+    description: "Harmonisation globale des volumes, allègement des masses et redéfinition du rebond pour chevelures épaisses.",
+  },
+  {
+    id: "coupe-volume-cascade-milongs",
+    category: "COUPE_CHEVEUX",
+    subcategory: "COUPE PRO - COUPE VOLUME MAX - EFFET CASCADE",
+    service: "Cheveux mi-longs",
+    price: "40 000 Ar",
+    description: "Technique de dégradé en cascade étudiée pour décupler le volume et dynamiser chaque mèche.",
+    badge: "Signature",
+  },
+  {
+    id: "coupe-volume-cascade-longs",
+    category: "COUPE_CHEVEUX",
+    subcategory: "COUPE PRO - COUPE VOLUME MAX - EFFET CASCADE",
+    service: "Cheveux très longs ou denses",
+    price: "45 000 Ar",
+    description: "Effet cascade spectaculaire et aéré, structuré pour offrir légèreté, mouvement et volume longue tenue.",
+    badge: "Tendance",
   },
 
   // ONGLERIE

@@ -5,6 +5,7 @@ export interface Product {
   priceEur: number;
   priceAr: number;
   image: string;
+  images?: string[];
   needs?: string[];
   categories?: string[];
   rawCategory?: string;

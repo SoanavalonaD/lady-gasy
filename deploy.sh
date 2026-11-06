@@ -26,6 +26,10 @@ cp -R .next/static/. "$TEMP_DIR/.next/static/"
 mkdir -p "$TEMP_DIR/public"
 cp -R public/. "$TEMP_DIR/public/"
 
+# 4. Data JSON stores for product & salon images
+mkdir -p "$TEMP_DIR/src/data"
+cp -f src/data/*.json "$TEMP_DIR/src/data/" 2>/dev/null || true
+
 # Create single tar.gz without macOS xattrs
 COPYFILE_DISABLE=1 tar -czf /tmp/lady-gasy-full.tar.gz -C "$TEMP_DIR" .
 rm -rf "$TEMP_DIR"

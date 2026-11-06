@@ -1,20 +1,54 @@
 import { NextResponse } from "next/server";
 import pool from "@/data/db";
+import {
+  parseImageArray,
+  saveProductImagesInCode,
+  removeProductImagesFromCode,
+} from "@/data/imageStore";
+
+function formatDbImageUrl(imagesInput: unknown): {
+  list: string[];
+  dbValue: string;
+} {
+  const list = parseImageArray(imagesInput);
+  if (list.length === 0) {
+    return { list: ["/background-image.jpg"], dbValue: "/background-image.jpg" };
+  }
+  if (list.length === 1) {
+    return { list, dbValue: list[0] };
+  }
+  return { list, dbValue: JSON.stringify(list) };
+}
 
 // POST: Créer un produit
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { nom_produit, description, categorie, prix, stock_disponible, image_url } = body;
+    const {
+      nom_produit,
+      description,
+      categorie,
+      prix,
+      stock_disponible,
+      image_url,
+      images,
+    } = body;
+
+    const { list, dbValue } = formatDbImageUrl(images !== undefined ? images : image_url);
 
     const result = await pool.query(
       `INSERT INTO produits (nom_produit, description, categorie, prix, stock_disponible, image_url)
        VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING *`,
-      [nom_produit, description, categorie, prix, stock_disponible || 0, image_url]
+      [nom_produit, description, categorie, prix, stock_disponible || 0, dbValue]
     );
 
-    return NextResponse.json(result.rows[0]);
+    const created = result.rows[0];
+    if (created?.id) {
+      await saveProductImagesInCode(created.id, list);
+    }
+
+    return NextResponse.json({ ...created, images: list });
   } catch (error: any) {
     console.error("Erreur POST admin produit:", error);
     return NextResponse.json(
@@ -28,7 +62,23 @@ export async function POST(req: Request) {
 export async function PATCH(req: Request) {
   try {
     const body = await req.json();
-    const { id, nom_produit, description, categorie, prix, stock_disponible, image_url } = body;
+    const {
+      id,
+      nom_produit,
+      description,
+      categorie,
+      prix,
+      stock_disponible,
+      image_url,
+      images,
+    } = body;
+
+    const rawImg = images !== undefined ? images : image_url;
+    const formatted = rawImg !== undefined ? formatDbImageUrl(rawImg) : null;
+
+    if (id && formatted) {
+      await saveProductImagesInCode(id, formatted.list);
+    }
 
     const result = await pool.query(
       `UPDATE produits 
@@ -40,10 +90,21 @@ export async function PATCH(req: Request) {
            image_url = COALESCE($6, image_url)
        WHERE id = $7
        RETURNING *`,
-      [nom_produit, description, categorie, prix, stock_disponible, image_url, id]
+      [
+        nom_produit,
+        description,
+        categorie,
+        prix,
+        stock_disponible,
+        formatted ? formatted.dbValue : null,
+        id,
+      ]
     );
 
-    return NextResponse.json(result.rows[0]);
+    return NextResponse.json({
+      ...(result.rows[0] || { id }),
+      images: formatted ? formatted.list : undefined,
+    });
   } catch (error: any) {
     console.error("Erreur PATCH admin produit:", error);
     return NextResponse.json(
@@ -63,6 +124,7 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: "Identifiant manquant." }, { status: 400 });
     }
 
+    await removeProductImagesFromCode(id);
     await pool.query("DELETE FROM produits WHERE id = $1", [id]);
 
     return NextResponse.json({ success: true });

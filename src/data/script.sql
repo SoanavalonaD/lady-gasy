@@ -27,6 +27,13 @@ CREATE TABLE produits (
 );
 
 
+CREATE TABLE IF NOT EXISTS prestations_salon (
+    id VARCHAR(150) PRIMARY KEY,
+    image_url TEXT,
+    mise_a_jour_le TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+
 CREATE TABLE commandes (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     id_utilisateur UUID REFERENCES utilisateurs(id) ON DELETE SET NULL,

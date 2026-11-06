@@ -14,6 +14,8 @@ import {
   Heart,
   CheckCircle2,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   ArrowRight,
   Layers,
 } from "lucide-react";
@@ -28,6 +30,7 @@ export default function ProductDetailPage({ params }: PageProps) {
   const { addToCart } = useCart();
   const [dbProducts, setDbProducts] = useState<any[]>([]);
   const [selectedProductId, setSelectedProductId] = useState<string>(id);
+  const [activeImageIdx, setActiveImageIdx] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -43,6 +46,7 @@ export default function ProductDetailPage({ params }: PageProps) {
   // Synchronise si l'URL params id change
   useEffect(() => {
     setSelectedProductId(id);
+    setActiveImageIdx(0);
   }, [id]);
 
   const rawProduct = dbProducts.find((p) => p.id === id);
@@ -123,6 +127,19 @@ export default function ProductDetailPage({ params }: PageProps) {
 
   const category = product.categories?.[0] || "Soins Capillaires";
 
+  const richestVariant = variants.find(
+    (v) => v.product?.images && v.product.images.length > 1
+  );
+  const productImages: string[] =
+    product.images && product.images.length > 0
+      ? product.images
+      : richestVariant?.product?.images
+        ? richestVariant.product.images
+        : [product.image || "/background-image.jpg"];
+
+  const safeImageIdx = Math.min(activeImageIdx, Math.max(0, productImages.length - 1));
+  const currentMainImage = productImages[safeImageIdx] || product.image;
+
   return (
     <>
       <Header />
@@ -136,15 +153,74 @@ export default function ProductDetailPage({ params }: PageProps) {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-lg md:gap-xl">
-          {/* Image Display */}
+          {/* Image Display (Gallery up to 3 photos) */}
           <div className="md:col-span-6 flex flex-col gap-sm">
-            <div className="aspect-[2/3] w-full relative rounded-lg overflow-hidden bg-surface-container-low border border-outline-variant/30">
+            <div className="aspect-[2/3] w-full relative rounded-lg overflow-hidden bg-surface-container-low border border-outline-variant/30 group">
               <img
-                alt={product.name}
-                className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                src={product.image}
+                alt={`${product.name} — Photo ${safeImageIdx + 1}`}
+                width={600}
+                height={900}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                src={currentMainImage}
               />
+
+              {productImages.length > 1 && (
+                <>
+                  <span className="absolute top-3 left-3 bg-black/60 text-white text-xs font-label-md px-2.5 py-1 rounded-full">
+                    {safeImageIdx + 1} / {productImages.length}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveImageIdx(
+                        (safeImageIdx - 1 + productImages.length) % productImages.length
+                      )
+                    }
+                    aria-label="Photo précédente"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 bg-surface-container-lowest/90 hover:bg-surface-container-lowest text-primary p-2 rounded-full shadow-md transition-all cursor-pointer"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveImageIdx((safeImageIdx + 1) % productImages.length)
+                    }
+                    aria-label="Photo suivante"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-surface-container-lowest/90 hover:bg-surface-container-lowest text-primary p-2 rounded-full shadow-md transition-all cursor-pointer"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </>
+              )}
             </div>
+
+            {/* Thumbnails selector when 2 or 3 photos exist */}
+            {productImages.length > 1 && (
+              <div className="grid grid-cols-3 gap-sm">
+                {productImages.map((imgUrl, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setActiveImageIdx(idx)}
+                    className={`aspect-square rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
+                      idx === safeImageIdx
+                        ? "border-primary shadow-sm"
+                        : "border-outline-variant/40 opacity-70 hover:opacity-100"
+                    }`}
+                  >
+                    <img
+                      src={imgUrl}
+                      alt={`${product.name} miniature ${idx + 1}`}
+                      width={160}
+                      height={160}
+                      loading="lazy"
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Product Details */}

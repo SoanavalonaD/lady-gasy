@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   ShoppingBag,
   Package,
+  Scissors,
   Users,
   LogOut,
   Store
@@ -24,6 +25,7 @@ export default function AdminSidebar() {
     { name: "Tableau de bord", href: "/admin", icon: LayoutDashboard },
     { name: "Commandes", href: "/admin/commandes", icon: ShoppingBag },
     { name: "Produits", href: "/admin/produits", icon: Package },
+    { name: "Prestations Salon", href: "/admin/salon", icon: Scissors },
   ];
 
   return (

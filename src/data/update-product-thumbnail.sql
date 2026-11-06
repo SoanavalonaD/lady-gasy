@@ -11,7 +11,7 @@ SET image_url = '/products/rhassoul.jpeg'
 WHERE nom_produit = 'Rhassoul 75g';
 
 UPDATE produits 
-SET image_url = '/prj'aioducts/huile-apres-rasage-ou-epilation.jpeg' 
+SET image_url = '/products/huile-apres-rasage-ou-epilation.jpeg' 
 WHERE nom_produit = 'Huile après rasage / épilation 30ml';
 
 UPDATE produits 
